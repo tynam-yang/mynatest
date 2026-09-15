@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>MynaTest</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <main class="sp-content" id="content"></main>
+
+  <aside class="sp-sidebar">
+    <nav class="sp-tabs" id="tabs"></nav>
+    <div class="sp-spacer"></div>
+    <button id="settingsBtn" class="sp-sidebar-btn" title="设置">⚙️</button>
+  </aside>
+
+  <!-- 顺序加载：先加载共享模块，再加载工具模块，最后框架 -->
+  <script src="core/storage.js"></script>
+  <script src="core/diff.js"></script>
+  <script src="core/utils.js"></script>
+  <script src="tools/request-diff.js"></script>
+  <script src="tools/stress-test.js"></script>
+  <script src="tools/timestamp.js"></script>
+  <script src="tools/json-formatter.js"></script>
+  <script src="tools/jwt-parser.js"></script>
+  <script src="tools/regex-tester.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>

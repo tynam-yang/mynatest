@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>MynaTest 设置</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <header class="app-header">
+      <div class="app-title">
+        <span class="app-logo">MT</span>
+        <div>
+          <h1>MynaTest</h1>
+          <span class="version">v0.2.0</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Tab 导航 -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="tools">🔧 工具</button>
+      <button class="tab-btn" data-tab="feedback">🐛 反馈</button>
+      <button class="tab-btn" data-tab="donate">☕ 支持</button>
+      <button class="tab-btn" data-tab="about">👨‍💻 关于</button>
+    </nav>
+
+    <main class="tab-content">
+      <!-- 🔧 工具 -->
+      <div class="tab-panel active" data-panel="tools">
+        <div class="panel-header">
+          <h2>选择要启用的测试工具</h2>
+          <p class="panel-hint">勾选的工具会出现在侧边栏中，至少选择一个</p>
+        </div>
+        <div id="toolList" class="tool-list"></div>
+        <div class="panel-footer">
+          <button id="saveBtn" class="btn-primary">保存设置</button>
+          <span id="saveStatus" class="status"></span>
+        </div>
+      </div>
+
+      <!-- 🐛 反馈 -->
+      <div class="tab-panel" data-panel="feedback">
+        <div class="panel-header">
+          <h2>问题反馈</h2>
+        </div>
+        <div class="feedback-card">
+          <div class="feedback-icon">🐞</div>
+          <div class="feedback-body">
+            <div class="feedback-title">发现 Bug？有功能建议？</div>
+            <div class="feedback-desc">欢迎到 GitHub 提交 Issue，我会尽快跟进处理。附上复现步骤或截图会更快解决。</div>
+            <a class="btn-github" href="https://github.com/tynam-yang/mynatest/issues/new" target="_blank" rel="noopener">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+              前往 GitHub 提交 Issue
+            </a>
+          </div>
+        </div>
+        <div class="feedback-links">
+          <a class="feedback-link" href="https://github.com/tynam-yang/mynatest" target="_blank" rel="noopener">
+            <span class="fl-icon">📦</span>
+            <span class="fl-text">
+              <span class="fl-title">项目仓库</span>
+              <span class="fl-sub">github.com/tynam-yang/mynatest</span>
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ☕ 支持 -->
+      <div class="tab-panel" data-panel="donate">
+        <div class="panel-header">
+          <h2>请我喝杯咖啡 ☕</h2>
+          <p class="panel-hint">如果 MynaTest 对你有帮助，欢迎打赏支持继续开发～</p>
+        </div>
+        <div class="donate-cards">
+          <div class="donate-card">
+            <div class="donate-img-wrap wechat">
+              <img src="assets/wechat-pay.jpg" alt="微信支付" onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex';">
+              <div class="donate-img-placeholder" style="display:none;">
+                <div class="ph-icon">📱</div>
+                <div class="ph-text">请放入<br>assets/wechat-pay.jpg</div>
+              </div>
+            </div>
+            <div class="donate-label">微信支付</div>
+          </div>
+          <div class="donate-card">
+            <div class="donate-img-wrap alipay">
+              <img src="assets/alipay.jpg" alt="支付宝" onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex';">
+              <div class="donate-img-placeholder" style="display:none;">
+                <div class="ph-icon">💳</div>
+                <div class="ph-text">请放入<br>assets/alipay.jpg</div>
+              </div>
+            </div>
+            <div class="donate-label">支付宝</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 👨‍💻 关于 -->
+      <div class="tab-panel" data-panel="about">
+        <div class="panel-header">
+          <h2>关于开发者</h2>
+        </div>
+        <div class="author-card">
+          <span class="author-avatar-lg">TY</span>
+          <div class="author-body">
+            <div class="author-name">tynam.yang</div>
+            <div class="author-role">MynaTest 作者 · 测试工程师</div>
+          </div>
+        </div>
+        <div class="contact-list">
+          <a class="contact-item" href="mailto:tynam.yang@gmail.com">
+            <span class="ci-icon">📧</span>
+            <div class="ci-body">
+              <span class="ci-label">Email</span>
+              <span class="ci-value">tynam.yang@gmail.com</span>
+            </div>
+          </a>
+          <a class="contact-item" href="https://github.com/tynam-yang" target="_blank" rel="noopener">
+            <span class="ci-icon">🐙</span>
+            <div class="ci-body">
+              <span class="ci-label">GitHub</span>
+              <span class="ci-value">github.com/tynam-yang</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <footer class="app-footer">
+      <p>Made with ❤️ by tynam.yang</p>
+    </footer>
+  </div>
+
+  <!-- 顺序加载 -->
+  <script src="core/storage.js"></script>
+  <script src="core/diff.js"></script>
+  <script src="core/utils.js"></script>
+  <script src="tools/request-diff.js"></script>
+  <script src="tools/stress-test.js"></script>
+  <script src="tools/timestamp.js"></script>
+  <script src="tools/json-formatter.js"></script>
+  <script src="tools/jwt-parser.js"></script>
+  <script src="tools/regex-tester.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>
