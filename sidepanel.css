@@ -2531,3 +2531,351 @@ html, body {
   background: var(--primary) !important;
   color: #fff !important;
 }
+
+
+/* ========== Mock 拦截器 ========== */
+.mi-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mi-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: linear-gradient(135deg, #8B5CF6, #6366F1);
+  border-radius: 6px;
+  color: #fff;
+}
+.mi-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.mi-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+.mi-toggle input {
+  display: none;
+}
+.mi-toggle-slider {
+  width: 32px;
+  height: 18px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.15s;
+}
+.mi-toggle-slider::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.15s;
+}
+.mi-toggle input:checked + .mi-toggle-slider {
+  background: #10B981;
+}
+.mi-toggle input:checked + .mi-toggle-slider::after {
+  transform: translateX(14px);
+}
+.mi-toggle-label {
+  font-size: 12px;
+}
+
+.mi-tip {
+  padding: 6px 10px;
+  background: #ECFDF5;
+  border: 1px dashed #6EE7B7;
+  border-radius: 4px;
+  color: #047857;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.mi-section {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+}
+.mi-section-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.mi-section-title > span:first-child {
+  flex-shrink: 0;
+}
+
+.mi-preset-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+}
+.mi-preset-btn {
+  padding: 8px 4px;
+  font-size: 11px;
+  border: 1px solid #8B5CF6;
+  background: #F5F3FF;
+  color: #6D28D9;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.mi-preset-btn:hover {
+  background: #8B5CF6;
+  color: #fff;
+}
+
+.mi-scene-select {
+  flex: 1;
+  min-width: 80px;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 12px;
+  background: #fff;
+}
+
+.mi-mini-btn {
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+}
+.mi-mini-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+}
+.mi-mini-danger {
+  color: var(--danger);
+  border-color: #FCA5A5;
+}
+.mi-mini-danger:hover {
+  background: #FEF2F2;
+  border-color: var(--danger);
+}
+
+.mi-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.mi-empty {
+  padding: 12px;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 12px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+.mi-rule-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  gap: 6px;
+}
+.mi-rule-card.mi-rule-disabled {
+  opacity: 0.5;
+  background: var(--bg-secondary);
+}
+.mi-rule-info {
+  flex: 1;
+  min-width: 0;
+}
+.mi-rule-url {
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+.mi-rule-meta {
+  display: flex;
+  gap: 4px;
+  margin-top: 3px;
+  flex-wrap: wrap;
+}
+.mi-tag {
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-size: 10px;
+  background: var(--bg-secondary);
+  color: var(--text-light);
+}
+.mi-tag.mi-method {
+  background: #DBEAFE;
+  color: #1E40AF;
+}
+.mi-tag.mi-type {
+  background: #FEF3C7;
+  color: #92400E;
+}
+.mi-tag.mi-delay {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+.mi-rule-actions {
+  display: flex;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.mi-add-btn {
+  width: 100%;
+  padding: 6px;
+  border: 1px dashed #8B5CF6;
+  background: #F5F3FF;
+  color: #6D28D9;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.mi-add-btn:hover {
+  background: #EDE9FE;
+}
+
+.mi-editor {
+  border: 1px solid #8B5CF6;
+  border-radius: 6px;
+  padding: 10px;
+  background: #FAFAFF;
+}
+.mi-editor-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6D28D9;
+  margin-bottom: 8px;
+}
+.mi-form-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.mi-form-row label {
+  width: 64px;
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--text-light);
+}
+.mi-form-row input[type="text"],
+.mi-form-row input[type="number"],
+.mi-form-row select,
+.mi-form-row textarea {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: inherit;
+  background: #fff;
+}
+.mi-form-row textarea {
+  resize: vertical;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+.mi-editor-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+.mi-save-btn {
+  flex: 1;
+  padding: 6px;
+  background: #8B5CF6;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.mi-save-btn:hover {
+  background: #7C3AED !important;
+  color: #fff !important;
+}
+.mi-cancel-btn {
+  flex: 1;
+  padding: 6px;
+  background: #fff;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/* 弹窗（替代 prompt） */
+.mi-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.mi-modal {
+  background: #fff;
+  border-radius: 6px;
+  padding: 12px;
+  width: 260px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.mi-modal-msg {
+  font-size: 12px;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+.mi-modal-input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+.mi-modal-actions {
+  display: flex;
+  gap: 6px;
+}
+.mi-modal-actions button {
+  flex: 1;
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}

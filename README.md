@@ -50,7 +50,9 @@ mynatest/
 │   ├── injected.js         # MAIN world：hook fetch/XHR，捕获请求/响应
 │   ├── content.js          # ISOLATED world：Port 长连接转发
 │   ├── env-banner-content.js  # 环境横幅：域名匹配 + 顶部横幅注入
-│   └── bug-report-content.js  # Bug 报告：框选 + Canvas 标注 + 环境采集
+│   ├── bug-report-content.js  # Bug 报告：框选 + Canvas 标注 + 环境采集
+│   ├── mock-interceptor-main.js    # Mock：MAIN world 独立 hook fetch/XHR
+│   └── mock-interceptor-bridge.js  # Mock：ISOLATED world 读 storage → postMessage 下发配置
 │
 ├── tools/                  # ⭐ 所有工具集中在这里（全局 IIFE 自注册）
 │   ├── request-diff.js     # 请求对比
@@ -62,7 +64,8 @@ mynatest/
 │   ├── jwt-parser.js       # JWT 解析
 │   ├── regex-tester.js     # 正则测试
 │   ├── env-banner.js       # 测试环境横幅
-│   └── bug-report.js       # Bug 报告助手
+│   ├── bug-report.js       # Bug 报告助手
+│   └── mock-interceptor.js  # 接口 Mock 拦截器
 │
 ├── icons/                  # 工具图标（16×16 PNG）
 ├── assets/                 # 静态资源（收款码等）
@@ -82,6 +85,7 @@ mynatest/
 | **Cookie/Storage 管理** | 开发工具 | 登录态快照切换 |
 | **正则测试** | 开发工具 | 实时匹配结果，内置邮箱/手机号/IP 等 18 个常用正则速查 |
 | **环境横幅** | 开发工具 | 域名规则匹配 + 页面顶部彩色横幅，区分 dev/test/pre 防误操作生产 |
+| **Mock 拦截器** | 测试工具 | 拦截指定 URL 返回自定义响应；多套场景一键切换（500 / 超时 / 空数据 / 自定义） |
 
 ## 新增工具（插件化）
 

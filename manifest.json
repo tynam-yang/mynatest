@@ -54,6 +54,19 @@
       "matches": ["http://*/*", "https://*/*"],
       "js": ["content/bug-report-content.js"],
       "run_at": "document_idle"
+    },
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content/mock-interceptor-main.js"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "world": "MAIN"
+    },
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content/mock-interceptor-bridge.js"],
+      "run_at": "document_start",
+      "all_frames": true
     }
   ],
 
