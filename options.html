@@ -20,6 +20,7 @@
     <!-- Tab 导航 -->
     <nav class="tab-nav">
       <button class="tab-btn active" data-tab="tools">🔧 工具</button>
+      <button class="tab-btn" data-tab="guide">📖 使用指南</button>
       <button class="tab-btn" data-tab="feedback">🐛 反馈</button>
       <button class="tab-btn" data-tab="donate">☕ 支持</button>
       <button class="tab-btn" data-tab="about">👨‍💻 关于</button>
@@ -39,7 +40,64 @@
         </div>
       </div>
 
-      <!-- 🐛 反馈 -->
+      <!-- � 使用指南 -->
+      <div class="tab-panel" data-panel="guide">
+        <div class="guide-step">
+          <div class="guide-num">1</div>
+          <div class="guide-body">
+            <div class="guide-title">加载扩展</div>
+            <div class="guide-desc">
+              打开 <code>chrome://extensions/</code>，右上角开启开发者模式，点击「加载已解压的扩展程序」，选择本项目根目录即可。
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-num">2</div>
+          <div class="guide-body">
+            <div class="guide-title">打开侧边栏</div>
+            <div class="guide-desc">
+              点击浏览器工具栏上的 MynaTest 图标，或右键图标选择「打开侧边栏」。侧边栏固定在浏览器右侧，随时可用。
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-num">3</div>
+          <div class="guide-body">
+            <div class="guide-title">启用需要的工具</div>
+            <div class="guide-desc">
+              右键扩展图标 → 选项，进入设置页勾选要启用的工具，保存后侧边栏立即生效。至少需要启用一个工具。
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-num">4</div>
+          <div class="guide-body">
+            <div class="guide-title">拖动排序</div>
+            <div class="guide-desc">
+              在侧边栏中按住任意工具图标，上下拖动即可调整顺序，松手后自动保存，下次打开保持新顺序。
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="guide-num">5</div>
+          <div class="guide-body">
+            <div class="guide-title">捕获接口请求</div>
+            <div class="guide-desc">
+              扩展会自动拦截当前页面的 fetch 和 XHR 请求。在「请求对比」或「轻量压测」工具中点击「捕获」按钮，下一个触发的接口请求会被自动填入。
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-tip">
+          💡 <strong>小提示：</strong>扩展重载后，需要刷新目标网页才能重新注入捕获脚本，否则新的接口请求不会被捕获。
+        </div>
+      </div>
+
+      <!-- �🐛 反馈 -->
       <div class="tab-panel" data-panel="feedback">
         <div class="panel-header">
           <h2>问题反馈</h2>
@@ -104,16 +162,40 @@
         <div class="author-card">
           <span class="author-avatar-lg">TY</span>
           <div class="author-body">
-            <div class="author-name">tynam.yang</div>
-            <div class="author-role">MynaTest 作者 · 测试工程师</div>
+            <div class="author-name">Tynam.Yang（杨定佳）</div>
+            <div class="author-role">高级软件测试工程师 · 博客园优秀博主 · 51讲堂特邀讲师</div>
           </div>
         </div>
+
+        <div class="about-section">
+          <div class="about-section-title">📖 著作</div>
+          <div class="about-list">
+            <a class="about-link" href="https://item.jd.com/12656245.html" target="_blank" rel="noopener">Python Web自动化测试入门与实战</a>
+            <a class="about-link" href="https://item.m.jd.com/product/12990661.html" target="_blank" rel="noopener">菜鸟轻松拿Offer：软件测试工程师面试秘笈</a>
+            <a class="about-link" href="https://item.jd.com/14351742.html" target="_blank" rel="noopener">软件自动化测试入门攻略</a>
+            <a class="about-link" href="https://item.jd.com/10205955087769.html" target="_blank" rel="noopener">软件测试策略——现代测试指南（主译）</a>
+          </div>
+        </div>
+
+        <div class="about-section">
+          <div class="about-section-title">🏆 荣誉</div>
+          <div class="about-text">2021 年度「51CTO · 最受读者喜爱的 IT 图书」奖</div>
+        </div>
+
+        <div class="about-section">
+          <div class="about-section-title">🛠 开源项目</div>
+          <div class="about-list">
+            <a class="about-link" href="https://github.com/tynam-yang/testoracle" target="_blank" rel="noopener">testoracle — Python 测试预言库</a>
+            <a class="about-link" href="https://github.com/tynam-yang/mynatest" target="_blank" rel="noopener">MynaTest — Chrome 测试辅助工具集</a>
+          </div>
+        </div>
+
         <div class="contact-list">
-          <a class="contact-item" href="mailto:tynam.yang@gmail.com">
-            <span class="ci-icon">📧</span>
+          <a class="contact-item" href="https://www.cnblogs.com/tynam" target="_blank" rel="noopener">
+            <span class="ci-icon">�</span>
             <div class="ci-body">
-              <span class="ci-label">Email</span>
-              <span class="ci-value">tynam.yang@gmail.com</span>
+              <span class="ci-label">博客园</span>
+              <span class="ci-value">cnblogs.com/tynam</span>
             </div>
           </a>
           <a class="contact-item" href="https://github.com/tynam-yang" target="_blank" rel="noopener">

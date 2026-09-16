@@ -32,7 +32,17 @@ async function init() {
     enabledIds = allTools.map(t => t.meta.id);
   }
 
-  currentTools = allTools.filter(t => enabledIds.includes(t.meta.id));
+  // 按用户自定义顺序排列
+  let order;
+  try {
+    order = await window.MynaStorage.getToolOrder(allTools);
+  } catch {
+    order = allTools.map(t => t.meta.id);
+  }
+
+  currentTools = order
+    .map(id => allTools.find(t => t.meta.id === id))
+    .filter(t => t && enabledIds.includes(t.meta.id));
 
   renderTabs();
   renderPanels();
@@ -87,11 +97,23 @@ async function init() {
   });
 
   chrome.storage.onChanged.addListener(async (changes, area) => {
-    if (area === 'local' && changes.enabledTools) {
+    if (area !== 'local') return;
+    if (changes.enabledTools || changes.toolOrder) {
       toolCleanups.forEach(fn => fn?.());
       toolCleanups.length = 0;
-      const enabledIds = changes.enabledTools.newValue;
-      currentTools = allTools.filter(t => enabledIds.includes(t.meta.id));
+      const enabledIds = changes.enabledTools ? changes.enabledTools.newValue : await window.MynaStorage.getEnabledTools(allTools);
+      let order;
+      if (changes.toolOrder) {
+        order = changes.toolOrder.newValue || [];
+      } else {
+        order = await window.MynaStorage.getToolOrder(allTools);
+      }
+      const known = order.filter(id => allTools.some(t => t.meta.id === id));
+      const newTools = allTools.filter(t => !known.includes(t.meta.id)).map(t => t.meta.id);
+      const fullOrder = [...known, ...newTools];
+      currentTools = fullOrder
+        .map(id => allTools.find(t => t.meta.id === id))
+        .filter(t => t && enabledIds.includes(t.meta.id));
       renderTabs();
       renderPanels();
       if (currentTools[0]) activateTab(currentTools[0].meta.id);
@@ -105,6 +127,7 @@ function renderTabs() {
   currentTools.forEach(tool => {
     const btn = document.createElement('button');
     btn.className = 'sp-tab';
+    btn.draggable = true;
     btn.dataset.id = tool.meta.id;
     btn.dataset.tooltip = tool.meta.name;
     if (tool.meta.iconUrl) {
@@ -118,6 +141,72 @@ function renderTabs() {
     btn.addEventListener('click', () => activateTab(tool.meta.id));
     tabsEl.appendChild(btn);
   });
+  bindTabDrag();
+}
+
+function bindTabDrag() {
+  const tabsEl = document.getElementById('tabs');
+  let draggingEl = null;
+
+  tabsEl.querySelectorAll('.sp-tab').forEach(el => {
+    el.addEventListener('dragstart', (e) => {
+      draggingEl = el;
+      el.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', el.dataset.id);
+    });
+
+    el.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      const rect = el.getBoundingClientRect();
+      const midY = rect.top + rect.height / 2;
+      el.classList.toggle('drag-over-top', e.clientY < midY);
+      el.classList.toggle('drag-over-bottom', e.clientY >= midY);
+    });
+
+    el.addEventListener('dragleave', () => {
+      el.classList.remove('drag-over-top', 'drag-over-bottom');
+    });
+
+    el.addEventListener('drop', (e) => {
+      e.preventDefault();
+      if (!draggingEl || draggingEl === el) return;
+
+      const rect = el.getBoundingClientRect();
+      const midY = rect.top + rect.height / 2;
+      const insertBefore = e.clientY < midY;
+
+      if (insertBefore) {
+        tabsEl.insertBefore(draggingEl, el);
+      } else {
+        tabsEl.insertBefore(draggingEl, el.nextSibling);
+      }
+
+      el.classList.remove('drag-over-top', 'drag-over-bottom');
+      saveTabOrder();
+    });
+
+    el.addEventListener('dragend', () => {
+      el.classList.remove('dragging');
+      tabsEl.querySelectorAll('.sp-tab').forEach(t => {
+        t.classList.remove('drag-over-top', 'drag-over-bottom');
+      });
+      draggingEl = null;
+    });
+  });
+}
+
+async function saveTabOrder() {
+  const ids = Array.from(document.querySelectorAll('.sp-tab')).map(el => el.dataset.id);
+  currentTools = ids
+    .map(id => currentTools.find(t => t.meta.id === id))
+    .filter(Boolean);
+  try {
+    await window.MynaStorage.setToolOrder(ids);
+  } catch (e) {
+    console.error('[mynatest] save order error:', e);
+  }
 }
 
 function activateTab(id) {

@@ -144,6 +144,39 @@ html, body {
   border-radius: 2px;
 }
 
+/* ========== 拖动排序 ========== */
+.sp-tab.dragging {
+  opacity: 0.4;
+  transform: scale(0.92);
+}
+
+.sp-tab.drag-over-top,
+.sp-tab.drag-over-bottom {
+  background: var(--primary-light);
+}
+
+.sp-tab.drag-over-top::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: -1px;
+  height: 2px;
+  background: var(--primary);
+  border-radius: 1px;
+}
+
+.sp-tab.drag-over-bottom::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  bottom: -1px;
+  height: 2px;
+  background: var(--primary);
+  border-radius: 1px;
+}
+
 /* ========== Tooltip ========== */
 .sp-tab,
 .sp-sidebar-btn {

@@ -254,6 +254,42 @@ body {
   background: #fafbfc;
 }
 
+/* —— 排序按钮 —— */
+.tool-order {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.tool-order-btn {
+  width: 24px;
+  height: 18px;
+  border: 1px solid #dcdfe6;
+  border-radius: 3px;
+  background: #fff;
+  color: #909399;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.tool-order-btn:hover:not(:disabled) {
+  background: #1a73e8;
+  color: #fff;
+  border-color: #1a73e8;
+}
+
+.tool-order-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 /* ========== Buttons ========== */
 .btn-primary {
   background: #1a73e8;
@@ -431,6 +467,65 @@ body {
   color: #34495e;
 }
 
+/* ========== Guide ========== */
+.guide-step {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.guide-num {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #1a73e8;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.guide-body {
+  flex: 1;
+  padding-top: 3px;
+}
+
+.guide-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: #2c3e50;
+  margin-bottom: 4px;
+}
+
+.guide-desc {
+  font-size: 12px;
+  color: #7f8c8d;
+  line-height: 1.7;
+}
+
+.guide-desc code {
+  background: #f0f2f5;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  color: #c0392b;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+}
+
+.guide-tip {
+  margin-top: 8px;
+  padding: 12px 14px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #7f5500;
+  background: #fff8e1;
+  border-left: 3px solid #f39c12;
+  border-radius: 0 6px 6px 0;
+}
+
 /* ========== Author ========== */
 .author-card {
   display: flex;
@@ -466,6 +561,52 @@ body {
 .author-role {
   font-size: 12px;
   color: #7f8c8d;
+  line-height: 1.5;
+}
+
+.about-section {
+  margin-bottom: 18px;
+}
+
+.about-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8px;
+  padding-left: 2px;
+}
+
+.about-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.about-link {
+  display: block;
+  padding: 9px 12px;
+  border: 1px solid #ebeef1;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 12px;
+  color: #2c3e50;
+  background: #fafbfc;
+  transition: all 0.15s;
+}
+
+.about-link:hover {
+  border-color: #1a73e8;
+  background: #f0f7ff;
+  color: #1a73e8;
+}
+
+.about-text {
+  font-size: 12px;
+  color: #7f8c8d;
+  padding: 9px 12px;
+  border-left: 3px solid #f39c12;
+  background: #fef9e7;
+  border-radius: 0 6px 6px 0;
 }
 
 .contact-list {

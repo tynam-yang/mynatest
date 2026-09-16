@@ -19,5 +19,22 @@ window.MynaStorage = {
     return new Promise((resolve) => {
       chrome.storage.local.set({ enabledTools: ids }, resolve);
     });
+  },
+
+  async getToolOrder(allTools) {
+    return new Promise((resolve) => {
+      chrome.storage.local.get(['toolOrder'], (result) => {
+        const stored = result.toolOrder || [];
+        const known = stored.filter(id => allTools.some(t => t.meta.id === id));
+        const newTools = allTools.filter(t => !known.includes(t.meta.id)).map(t => t.meta.id);
+        resolve([...known, ...newTools]);
+      });
+    });
+  },
+
+  async setToolOrder(ids) {
+    return new Promise((resolve) => {
+      chrome.storage.local.set({ toolOrder: ids }, resolve);
+    });
   }
 };
