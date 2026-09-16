@@ -31,6 +31,7 @@ mynatest/
 │   ├── stress-test.js      # 轻量压测（次数×并发 / 断言 / Markdown 报告）
 │   ├── timestamp.js        # 时间戳转换
 │   ├── json-formatter.js   # JSON 格式化
+│   ├── data-diff.js        # 数据对比
 │   ├── jwt-parser.js       # JWT 解析
 │   └── regex-tester.js     # 正则测试（含常用正则速查）
 │
@@ -48,6 +49,7 @@ mynatest/
 | **JWT 解析** | 网络工具 | 解码 JWT 的 Header / Payload |
 | **时间戳转换** | 开发工具 | 时间与时间戳互转，支持秒/毫秒级 |
 | **JSON 格式化** | 开发工具 | 格式化 / 压缩 / 转义 / 反转义 |
+| **数据对比** | 开发工具 | JSON / 文本行级 diff |
 | **正则测试** | 开发工具 | 实时匹配结果，内置邮箱/手机号/IP 等 18 个常用正则速查 |
 
 ## 新增工具（插件化）

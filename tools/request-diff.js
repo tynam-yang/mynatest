@@ -235,14 +235,12 @@
   }
 
   function runDiff(container) {
-    console.log('[MynaTest] runDiff called');
     const s1 = slots[0], s2 = slots[1];
-    console.log('[MynaTest] slots:', !!s1, !!s2);
     if (!s1 || !s2) { flashMessage('请先捕获两个请求', true); return; }
 
     const resultEl = container.querySelector('#diffResult');
     const sectionsEl = container.querySelector('#diffSections');
-    if (!resultEl || !sectionsEl) { console.error('[MynaTest] 找不到 diffResult/diffSections DOM'); return; }
+    if (!resultEl || !sectionsEl) return;
 
     try {
       const fields = ['url', 'requestBody', 'responseBody'];
@@ -254,7 +252,6 @@
         const v2 = s2[field] !== undefined && s2[field] !== null ? String(s2[field]) : '';
         const label = FIELD_LABELS[field] || field;
 
-        console.log('[MynaTest] diff field:', field, 'v1.len:', v1.length, 'v2.len:', v2.length);
         const section = buildDiffSection(label, v1, v2);
         totalDiffs += section.count;
         html += section.html;
@@ -269,9 +266,7 @@
       }
       resultEl.style.display = 'block';
       bindDiffEvents(container);
-      console.log('[MynaTest] runDiff done, totalDiffs:', totalDiffs);
     } catch (e) {
-      console.error('[MynaTest] runDiff ERROR:', e);
       flashMessage('对比出错：' + e.message, true);
     }
   }

@@ -1443,3 +1443,260 @@ html, body {
 ::-webkit-scrollbar-thumb:hover {
   background: #aaa;
 }
+
+/* ========== 数据对比 (data-diff) ========== */
+.dd-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.dd-toolbar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 选项行视觉弱化，与操作行区分 */
+.dd-options {
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+}
+
+.dd-options .dd-select,
+.dd-options .btn,
+.dd-options .dd-only {
+  font-size: 12px;
+}
+
+.dd-select {
+  padding: 6px 8px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--text);
+}
+
+.dd-only {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-light);
+  user-select: none;
+}
+
+.dd-only input {
+  margin: 0;
+  cursor: pointer;
+}
+
+.dd-workspace .dd-panes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  transition: grid-template-columns 0.2s;
+}
+
+.dd-workspace.layout-v .dd-panes {
+  grid-template-columns: 1fr;
+}
+
+.dd-pane-label {
+  font-size: 11px;
+  color: var(--text-light);
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.dd-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  height: 130px;
+  padding: 8px;
+  font-family: Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  resize: vertical;
+  background: var(--bg-secondary);
+  color: var(--text);
+  tab-size: 2;
+}
+
+.dd-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: #fff;
+}
+
+.layout-v .dd-textarea {
+  height: 110px;
+}
+
+.dd-status {
+  margin: 10px 0 6px;
+  font-size: 12px;
+  min-height: 16px;
+  color: var(--text-light);
+}
+
+.dd-status.ok {
+  color: var(--success);
+}
+
+.dd-status.diff {
+  color: var(--warning);
+  font-weight: 500;
+}
+
+/* ---- 结果区 ---- */
+.dd-result {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: auto;
+  max-height: 420px;
+  background: #fff;
+}
+
+.dd-empty-hint {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 12px;
+}
+
+/* 左右布局 */
+.dd-sx-head,
+.dd-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.dd-sx-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--bg-sidebar);
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+.dd-sx-head span {
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.dd-sx-head span:first-child {
+  border-right: 1px solid var(--border);
+}
+
+.dd-row {
+  font-family: Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.dd-cell {
+  display: flex;
+  align-items: flex-start;
+  padding: 0;
+  min-height: 20px;
+  border-bottom: 1px solid #f1f3f5;
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+.dd-row .dd-cell:first-child {
+  border-right: 1px solid var(--border);
+}
+
+.dd-gutter {
+  flex-shrink: 0;
+  width: 34px;
+  padding: 0 4px;
+  text-align: right;
+  color: #b2bec3;
+  background: rgba(0, 0, 0, 0.02);
+  user-select: none;
+}
+
+.dd-code {
+  padding: 0 6px;
+  flex: 1;
+}
+
+/* 差异底色 */
+.dd-row.del .dd-cell:first-child,
+.dd-row.mod .dd-cell:first-child {
+  background: #fdecea;
+}
+
+.dd-row.del .dd-cell:last-child,
+.dd-row.mod .dd-cell:last-child,
+.dd-row.add .dd-cell:last-child {
+  background: #e9f9ef;
+}
+
+.dd-row.add .dd-cell:first-child {
+  background: #fafbfc;
+}
+
+/* 行内词级加深高亮 */
+.dd-code .dt-del {
+  background: rgba(231, 76, 60, 0.28);
+  border-radius: 2px;
+}
+
+.dd-code .dt-add {
+  background: rgba(39, 174, 96, 0.28);
+  border-radius: 2px;
+}
+
+/* 上下（unified）布局 */
+.dd-un {
+  font-family: Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.dd-u-row {
+  display: flex;
+  align-items: flex-start;
+  min-height: 20px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.dd-u-row .dd-marker {
+  flex-shrink: 0;
+  width: 18px;
+  text-align: center;
+  user-select: none;
+  font-weight: 700;
+}
+
+.dd-u-row.del {
+  background: #fdecea;
+}
+
+.dd-u-row.del .dd-marker {
+  color: var(--danger);
+}
+
+.dd-u-row.add {
+  background: #e9f9ef;
+}
+
+.dd-u-row.add .dd-marker {
+  color: var(--success);
+}
+
+
