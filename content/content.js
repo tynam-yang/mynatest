@@ -30,6 +30,16 @@
   }
   connect();
 
+  // bfcache 恢复时重新连接 Port（页面被 Back/Forward 缓存后 IIFE 不会重跑）
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted) {
+      console.info('[MynaTest] 从 bfcache 恢复，重连 Port');
+      relayPort = null;
+      contextDead = false;
+      connect();
+    }
+  });
+
   // MAIN world → Content Script：监听 injected.js 发来的 network:*
   window.addEventListener('message', (event) => {
     if (event.source !== window) return;

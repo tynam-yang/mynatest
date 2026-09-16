@@ -10,8 +10,8 @@
     desc: '对选中接口发起多次请求，统计响应时间、成功率，支持响应断言',
     icon: '📈',
     iconUrl: 'icons/stress-test.png',
-    category: 'network',
-    categoryName: '网络工具'
+    category: 'test',
+    categoryName: '测试工具'
   };
 
   let running = false;

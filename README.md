@@ -37,30 +37,35 @@
 ```
 mynatest/
 ├── manifest.json           # MV3 清单（content_scripts 声明式注入 MAIN/ISOLATED world）
-├── background.js           # Service Worker：打开侧边栏 + Port 消息中转与缓冲
-├── content.js              # ISOLATED world：Port 长连接，转发页面捕获的请求
-├── injected.js             # MAIN world：hook fetch/XHR，捕获请求/响应
-├── env-banner-content.js   # 环境横幅内容脚本：域名匹配 + 顶部横幅注入
-├── icons/                  # 扩展与工具图标（16×16 PNG）
+├── background.js           # Service Worker：侧栏 + Port 中转 + 截图
+├── sidepanel.html/css/js   # 侧边栏 UI 框架
+├── options.html/css/js     # 设置页（Tab 式，按分类管理工具）
 │
 ├── core/                   # 共享核心模块（全局脚本，挂 window）
 │   ├── storage.js          # chrome.storage 封装 + 启用工具管理
 │   ├── diff.js             # diffJSON / diffLines / parseJSONRobust
 │   └── utils.js            # escapeHtml / flashMessage
 │
-├── tools/                  # ⭐ 所有工具集中在这里（每个文件自注册）
+├── content/                # ⭐ Content Scripts（注入页面，manifest 声明式）
+│   ├── injected.js         # MAIN world：hook fetch/XHR，捕获请求/响应
+│   ├── content.js          # ISOLATED world：Port 长连接转发
+│   ├── env-banner-content.js  # 环境横幅：域名匹配 + 顶部横幅注入
+│   └── bug-report-content.js  # Bug 报告：框选 + Canvas 标注 + 环境采集
+│
+├── tools/                  # ⭐ 所有工具集中在这里（全局 IIFE 自注册）
 │   ├── request-diff.js     # 请求对比
-│   ├── stress-test.js      # 轻量压测（次数×并发 / 断言 / Markdown 报告）
+│   ├── stress-test.js      # 轻量压测
 │   ├── timestamp.js        # 时间戳转换
 │   ├── json-formatter.js   # JSON 格式化
 │   ├── data-diff.js        # 数据对比
 │   ├── storage-manager.js  # Cookie/Storage 管理
 │   ├── jwt-parser.js       # JWT 解析
-│   ├── regex-tester.js     # 正则测试（含常用正则速查）
-│   └── env-banner.js       # 测试环境横幅（域名匹配 + 顶部彩色提示条）
+│   ├── regex-tester.js     # 正则测试
+│   ├── env-banner.js       # 测试环境横幅
+│   └── bug-report.js       # Bug 报告助手
 │
-├── sidepanel.html/css/js   # 侧边栏 UI 框架
-├── options.html/css/js     # 设置页（Tab 式，按分类管理工具）
+├── icons/                  # 工具图标（16×16 PNG）
+├── assets/                 # 静态资源（收款码等）
 └── README.md
 ```
 

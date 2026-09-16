@@ -2298,3 +2298,236 @@ html, body {
   font-family: "SF Mono", Menlo, Consolas, monospace;
   font-size: 10px;
 }
+
+/* ========== Bug 报告助手 (bug-report) ========== */
+.br-section {
+  margin-bottom: 12px;
+}
+
+.br-collect-btn {
+  padding: 5px 10px !important;
+  font-size: 11px !important;
+  border-radius: 5px !important;
+  margin-bottom: 6px;
+  gap: 2px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.br-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.br-shot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.12s, transform 0.12s, box-shadow 0.12s;
+  margin-bottom: 6px;
+  box-shadow: 0 1px 2px rgba(26, 115, 232, 0.3);
+}
+
+.br-shot:hover {
+  background: var(--primary-dark) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(26, 115, 232, 0.4);
+}
+
+.br-shot:active {
+  background: var(--primary) !important;
+  color: #fff !important;
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(26, 115, 232, 0.3);
+}
+
+.br-shot-icon {
+  font-size: 16px;
+}
+
+.br-hint {
+  font-size: 11px;
+  color: var(--text-light);
+  line-height: 1.5;
+  padding: 6px 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+.br-summary,
+.br-custom-tpl,
+.br-output {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: inherit;
+  background: #fff;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.br-summary {
+  min-height: 60px;
+}
+
+.br-custom-tpl {
+  min-height: 100px;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.br-output {
+  min-height: 120px;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  background: var(--bg-secondary);
+}
+
+.br-summary:focus,
+.br-custom-tpl:focus,
+.br-output:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.br-template-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.br-tpl-tab {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--text-light);
+  transition: all 0.12s;
+}
+
+.br-tpl-tab:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.br-tpl-tab.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.br-vars {
+  margin-top: 6px;
+  font-size: 10px;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+.br-vars code {
+  background: var(--bg-secondary);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  color: var(--primary);
+}
+
+.br-env-box {
+  padding: 8px 10px;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  border: 1px dashed var(--border);
+  margin-bottom: 8px;
+  min-height: 40px;
+}
+.br-screenshot-box {
+  padding: 8px 10px;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  border: 1px dashed var(--border);
+  margin-bottom: 8px;
+  min-height: 40px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.br-env-item {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 3px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.br-env-item:last-child {
+  margin-bottom: 0;
+}
+
+.br-env-k {
+  flex-shrink: 0;
+  color: var(--text-light);
+  font-weight: 500;
+  min-width: 42px;
+}
+
+.br-env-v {
+  flex: 1;
+  color: var(--text);
+  word-break: break-all;
+}
+
+.br-env-ua {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 10px;
+  color: var(--text-light);
+}
+
+.br-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.br-actions .btn {
+  flex: 1;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+
+.br-actions .btn-primary {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.br-actions .btn-primary:hover {
+  background: var(--primary-dark) !important;
+  color: #fff !important;
+}
+.br-actions .btn-primary:active {
+  background: var(--primary) !important;
+  color: #fff !important;
+}
