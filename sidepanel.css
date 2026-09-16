@@ -1700,3 +1700,346 @@ html, body {
 }
 
 
+
+/* ========== Cookie/Storage 管理器 (storage-manager) ========== */
+.sm-info {
+  font-size: 11px;
+  color: var(--text-light);
+  margin-bottom: 8px;
+  word-break: break-all;
+  line-height: 1.5;
+  padding: 6px 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+.sm-info.loading {
+  color: var(--primary);
+}
+
+.sm-info.error {
+  color: var(--danger);
+  background: #fdecea;
+}
+
+.sm-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.sm-subtabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sm-subtab {
+  padding: 6px 14px;
+  font-size: 12px;
+  border: none;
+  background: none;
+  color: var(--text-light);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.sm-subtab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  font-weight: 500;
+}
+
+.sm-search-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.sm-search {
+  flex: 1;
+  padding: 6px 8px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.sm-search:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.sm-table {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: auto;
+  max-height: 300px;
+  background: #fff;
+}
+
+.sm-empty {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 12px;
+}
+
+.sm-row {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  border-bottom: 1px solid #f1f3f5;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.sm-row:hover {
+  background: var(--bg-secondary);
+}
+
+.sm-row-key {
+  flex-shrink: 0;
+  width: 30%;
+  padding: 6px 8px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-right: 1px solid #f1f3f5;
+}
+
+.sm-meta {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 10px;
+  color: #b2bec3;
+  font-weight: 400;
+}
+
+.sm-row-val {
+  flex: 1;
+  padding: 6px 8px;
+  font-family: Menlo, Consolas, monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-light);
+}
+
+.sm-row-actions {
+  flex-shrink: 0;
+  display: flex;
+  gap: 2px;
+  padding: 0 4px;
+}
+
+.sm-icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  font-size: 13px;
+  border-radius: 3px;
+  transition: background 0.15s;
+}
+
+.sm-icon-btn:hover {
+  background: var(--primary-light);
+}
+
+/* —— 编辑弹窗 —— */
+.sm-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sm-modal {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.sm-modal-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.sm-modal-label {
+  display: block;
+  font-size: 11px;
+  color: var(--text-light);
+  margin-bottom: 4px;
+  margin-top: 10px;
+}
+
+.sm-modal-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  font-size: 13px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.sm-modal-input[readonly] {
+  background: var(--bg-secondary);
+  color: var(--text-light);
+}
+
+.sm-modal-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  height: 120px;
+  padding: 8px;
+  font-family: Menlo, Consolas, monospace;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  resize: vertical;
+}
+
+.sm-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* —— 快照区 —— */
+.sm-profiles {
+  margin-top: 14px;
+  border-top: 1px dashed var(--border);
+  padding-top: 12px;
+}
+
+.sm-profiles-head {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.sm-profile-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.sm-profile-input {
+  flex: 1;
+  padding: 6px 8px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.sm-profile-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sm-profile-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.sm-profile-name {
+  flex: 1;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sm-profile-time {
+  font-size: 10px;
+  color: var(--text-light);
+  flex-shrink: 0;
+}
+
+.sm-profile-empty {
+  padding: 12px;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 12px;
+}
+
+/* —— 登录态检测卡片 —— */
+.sm-login-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  flex-wrap: wrap;
+}
+
+.sm-login-badge {
+  flex-shrink: 0;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.sm-login-badge.yes {
+  background: var(--success);
+}
+
+.sm-login-badge.no {
+  background: var(--text-light);
+}
+
+.sm-login-badge.unknown {
+  background: #b2bec3;
+}
+
+.sm-login-detail {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  color: var(--text-light);
+  min-width: 0;
+}
+
+.sm-login-item {
+  font-family: Menlo, Consolas, monospace;
+  font-size: 11px;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.sm-login-more {
+  color: var(--primary);
+  font-weight: 500;
+  font-size: 11px;
+}

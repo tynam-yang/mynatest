@@ -51,7 +51,9 @@
     "storage",
     "sidePanel",
     "scripting",
-    "activeTab"
+    "activeTab",
+    "cookies",
+    "tabs"
   ],
 
   "host_permissions": [

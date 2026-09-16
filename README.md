@@ -32,6 +32,7 @@ mynatest/
 │   ├── timestamp.js        # 时间戳转换
 │   ├── json-formatter.js   # JSON 格式化
 │   ├── data-diff.js        # 数据对比
+│   ├── storage-manager.js  # Cookie/Storage 管理
 │   ├── jwt-parser.js       # JWT 解析
 │   └── regex-tester.js     # 正则测试（含常用正则速查）
 │
@@ -50,6 +51,7 @@ mynatest/
 | **时间戳转换** | 开发工具 | 时间与时间戳互转，支持秒/毫秒级 |
 | **JSON 格式化** | 开发工具 | 格式化 / 压缩 / 转义 / 反转义 |
 | **数据对比** | 开发工具 | JSON / 文本行级 diff |
+| **Cookie/Storage 管理** | 开发工具 | 登录态快照切换 |
 | **正则测试** | 开发工具 | 实时匹配结果，内置邮箱/手机号/IP 等 18 个常用正则速查 |
 
 ## 新增工具（插件化）
@@ -157,11 +159,13 @@ background.js ── Port 'sidepanel' 广播 ──→ sidepanel.js（eventBus�
 
 | 权限 | 用途 |
 |------|------|
-| `storage` | 持久化启用的工具列表 + 捕获消息兜底通道 |
+| `storage` | 持久化启用的工具列表 + 捕获消息兜底通道 + Storage 管理登录态快照 |
 | `sidePanel` | 打开侧边栏 |
-| `scripting` | 预留（当前注入由 manifest `content_scripts` 声明完成） |
-| `activeTab` | 预留 |
-| `<all_urls>` | host_permissions — 声明式注入捕获脚本 + 压测工具直接 fetch 任意 URL（绕过 CORS） |
+| `scripting` | Cookie/Storage 管理器注入 MAIN world 读写 localStorage/sessionStorage |
+| `activeTab` | 获取当前标签页 URL |
+| `cookies` | Cookie/Storage 管理器读写 Cookie |
+| `tabs` | 查询活动标签页 URL 和 ID |
+| `<all_urls>` | host_permissions — 声明式注入捕获脚本 + 压测工具直接 fetch 任意 URL（绕过 CORS） + Storage 管理注入 |
 
 ## License
 
