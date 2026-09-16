@@ -40,6 +40,7 @@ mynatest/
 ├── background.js           # Service Worker：打开侧边栏 + Port 消息中转与缓冲
 ├── content.js              # ISOLATED world：Port 长连接，转发页面捕获的请求
 ├── injected.js             # MAIN world：hook fetch/XHR，捕获请求/响应
+├── env-banner-content.js   # 环境横幅内容脚本：域名匹配 + 顶部横幅注入
 ├── icons/                  # 扩展与工具图标（16×16 PNG）
 │
 ├── core/                   # 共享核心模块（全局脚本，挂 window）
@@ -55,7 +56,8 @@ mynatest/
 │   ├── data-diff.js        # 数据对比
 │   ├── storage-manager.js  # Cookie/Storage 管理
 │   ├── jwt-parser.js       # JWT 解析
-│   └── regex-tester.js     # 正则测试（含常用正则速查）
+│   ├── regex-tester.js     # 正则测试（含常用正则速查）
+│   └── env-banner.js       # 测试环境横幅（域名匹配 + 顶部彩色提示条）
 │
 ├── sidepanel.html/css/js   # 侧边栏 UI 框架
 ├── options.html/css/js     # 设置页（Tab 式，按分类管理工具）
@@ -74,6 +76,7 @@ mynatest/
 | **数据对比** | 开发工具 | JSON / 文本行级 diff |
 | **Cookie/Storage 管理** | 开发工具 | 登录态快照切换 |
 | **正则测试** | 开发工具 | 实时匹配结果，内置邮箱/手机号/IP 等 18 个常用正则速查 |
+| **环境横幅** | 开发工具 | 域名规则匹配 + 页面顶部彩色横幅，区分 dev/test/pre 防误操作生产 |
 
 ## 新增工具（插件化）
 

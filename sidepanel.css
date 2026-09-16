@@ -2076,3 +2076,225 @@ html, body {
   font-weight: 500;
   font-size: 11px;
 }
+
+/* ========== 环境横幅 (env-banner) ========== */
+.eb-master {
+  margin-bottom: 14px;
+}
+
+.eb-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.eb-switch input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.eb-env-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.eb-env-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  background: var(--bg-secondary);
+}
+
+.eb-env-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.eb-env-switch {
+  flex: 1;
+  gap: 6px;
+}
+
+.eb-color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+.eb-label-input {
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 12px;
+  width: 80px;
+  background: #fff;
+  font-family: inherit;
+}
+
+.eb-label-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.eb-del {
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.12s;
+}
+
+.eb-del:hover:not(:disabled) {
+  background: var(--danger);
+  color: #fff;
+  border-color: var(--danger);
+}
+
+.eb-del:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.eb-color-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+.eb-color-row label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.eb-color-row input[type="color"] {
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.eb-preview {
+  flex: 1;
+  text-align: center;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.eb-patterns {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.eb-pattern-row {
+  display: flex;
+  gap: 4px;
+}
+
+.eb-pattern-input {
+  flex: 1;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  background: #fff;
+}
+
+.eb-pattern-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.eb-pattern-del {
+  width: 22px;
+  height: 24px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.eb-pattern-del:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+.eb-pattern-add {
+  align-self: flex-start;
+  padding: 3px 10px;
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+  background: none;
+  color: var(--primary);
+  font-size: 11px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.12s;
+}
+
+.eb-pattern-add:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+.eb-footer {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.eb-footer .btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  flex: 1;
+}
+
+.eb-tip {
+  margin-top: 10px;
+  padding: 8px 10px;
+  font-size: 11px;
+  color: var(--text-light);
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  line-height: 1.6;
+}
+
+.eb-tip code {
+  background: #f0f2f5;
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: var(--primary);
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 10px;
+}

@@ -44,6 +44,11 @@
       "js": ["content.js"],
       "run_at": "document_start",
       "all_frames": true
+    },
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["env-banner-content.js"],
+      "run_at": "document_start"
     }
   ],
 
