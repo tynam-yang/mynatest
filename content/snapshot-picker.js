@@ -60,8 +60,9 @@
     e.preventDefault();
     e.stopPropagation();
     if (!hoverEl) return;
-    const selector = cssPath(hoverEl);
-    const rect = hoverEl.getBoundingClientRect();
+    // 同时生成 CSS 和 XPath，默认用 XPath（更稳定）
+    const css = cssPath(hoverEl);
+    const xpath = xpathFromEl(hoverEl);
     deactivatePicker();
 
     // 滚动元素到视口中央，确保后续 capture 能拍到
@@ -72,7 +73,9 @@
       const r = hoverEl.getBoundingClientRect();
       chrome.runtime.sendMessage({
         type: 'snapshot:picked',
-        selector,
+        selector: xpath,
+        selectorType: 'xpath',
+        cssSelector: css,
         rect: { left: r.left, top: r.top, width: r.width, height: r.height },
         url: location.href,
         viewport: { w: window.innerWidth, h: window.innerHeight }
@@ -101,6 +104,39 @@
       cur = cur.parentElement;
     }
     return parts.join(' > ');
+  }
+
+  // 生成 XPath（绝对路径，//header/div[2]/a 形式）
+  function xpathFromEl(el) {
+    if (!(el instanceof Element)) return '';
+    const parts = [];
+    let cur = el;
+    while (cur && cur.nodeType === 1 && parts.length < 8) {
+      let part = cur.tagName.toLowerCase();
+      const parent = cur.parentNode;
+      if (parent) {
+        const siblings = Array.from(parent.children).filter(c => c.tagName === cur.tagName);
+        if (siblings.length > 1) { part += `[${siblings.indexOf(cur) + 1}]`; }
+      }
+      if (cur.id) { part = `*[@id="${cur.id}"]`; parts.unshift(part); break; }
+      parts.unshift(part);
+      cur = cur.parentElement;
+    }
+    return '//' + parts.join('/');
+  }
+
+  // XPath 查找元素
+  function findByXPath(xpath) {
+    try {
+      const result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+      return result.singleNodeValue;
+    } catch { return null; }
+  }
+
+  // 根据选择器查找元素（支持 css 和 xpath）
+  function findEl(selector, selectorType) {
+    if (selectorType === 'xpath') return findByXPath(selector);
+    try { return document.querySelector(selector); } catch { return null; }
   }
 
   function flashPickTip(msg) {
@@ -138,7 +174,7 @@
 
       for (const baseline of matched) {
         try {
-          const el = document.querySelector(baseline.selector);
+          const el = findEl(baseline.selector, baseline.selectorType || 'css');
           if (!el) continue;
           el.scrollIntoView({ block: 'center', inline: 'nearest' });
           const rect = el.getBoundingClientRect();
@@ -146,6 +182,7 @@
             type: 'snapshot:compare',
             baselineId: baseline.id,
             selector: baseline.selector,
+            selectorType: baseline.selectorType || 'css',
             rect: { left: rect.left, top: rect.top, width: rect.width, height: rect.height },
             url: currentUrl,
             viewport: { w: window.innerWidth, h: window.innerHeight }
@@ -189,15 +226,15 @@
   }
 
   // ========== 监听 sidepanel 请求 ==========
-  chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
     if (!msg || !msg.type) return;
     if (msg.type === 'snapshot:activate-picker') {
       activatePicker();
       sendResponse({ ok: true });
     }
     if (msg.type === 'snapshot:get-rect') {
-      // sidepanel 传入 selector，返回元素 rect
-      const el = document.querySelector(msg.selector);
+      // sidepanel 传入 selector + selectorType，返回元素 rect
+      const el = findEl(msg.selector, msg.selectorType || 'css');
       if (!el) { sendResponse({ ok: false, error: '元素不存在' }); return; }
       el.scrollIntoView({ block: 'center', inline: 'nearest' });
       const r = el.getBoundingClientRect();

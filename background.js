@@ -56,6 +56,19 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
   }
 
   // ========== 元素快照 ==========
+  if (msg.type === 'snapshot:activate-picker') {
+    // sidepanel → 转发给当前 tab 的 content script
+    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    if (!tab?.id) { sendResponse({ ok: false, error: '无活跃标签页' }); return; }
+    try {
+      await chrome.tabs.sendMessage(tab.id, { type: 'snapshot:activate-picker' });
+      sendResponse({ ok: true });
+    } catch (e) {
+      sendResponse({ ok: false, error: String(e?.message || e) });
+    }
+    return;
+  }
+
   if (msg.type === 'snapshot:capture') {
     // 从 sidepanel 触发：传入 tabId + rect → 截图裁剪
     captureElement(msg.tabId, msg.rect, msg.viewport).then(sendResponse).catch((e) => {
@@ -65,10 +78,16 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
   }
 
   if (msg.type === 'snapshot:picked') {
-    // 从 content script 触发：元素选择后截图裁剪 → 返回 dataURL
+    // 从 content script 触发：元素选择后截图裁剪 → 转发给 sidepanel
     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
     if (!tab?.id) { sendResponse({ ok: false, error: '无活跃标签页' }); return; }
-    captureElement(tab.id, msg.rect, msg.viewport).then(sendResponse).catch((e) => {
+    captureElement(tab.id, msg.rect, msg.viewport).then((result) => {
+      // 同时回给 content script 和转发给 sidepanel
+      sendResponse(result);
+      sidepanelPorts.forEach((p) => {
+        try { p.postMessage({ type: 'snapshot:picked', payload: { ...result, selector: msg.selector, pageUrl: msg.url } }); } catch (_) {}
+      });
+    }).catch((e) => {
       sendResponse({ ok: false, error: String(e?.message || e) });
     });
     return true;

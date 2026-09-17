@@ -3187,14 +3187,35 @@ html, body {
   gap: 6px;
   margin-bottom: 6px;
 }
+.sd-selector-type {
+  width: 70px;
+  flex-shrink: 0;
+  padding: 5px 4px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 12px;
+  background: #fff;
+}
 .sd-selector, .sd-input {
   flex: 1;
+  min-width: 0;
   padding: 5px 8px;
   border: 1px solid var(--border);
   border-radius: 4px;
   font-size: 12px;
   background: #fff;
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+.sd-pick-btn {
+  width: 32px;
+  flex-shrink: 0;
+  padding: 5px 0;
+  font-size: 14px;
+}
+.sd-save-btn {
+  width: 80px;
+  flex-shrink: 0;
+  padding: 5px 0;
 }
 
 .sd-actions {
@@ -3259,6 +3280,25 @@ html, body {
   font-size: 12px;
   font-weight: 600;
   margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.sd-baseline-tag {
+  display: inline-block;
+  padding: 0 6px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 14px;
+}
+.sd-tag-css {
+  background: #DBEAFE;
+  color: #1E40AF;
+}
+.sd-tag-xpath {
+  background: #FEF3C7;
+  color: #92400E;
 }
 .sd-baseline-url {
   font-size: 10px;

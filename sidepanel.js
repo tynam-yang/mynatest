@@ -71,8 +71,10 @@ async function init() {
     try {
       relayPort = chrome.runtime.connect({ name: 'sidepanel' });
       relayPort.onMessage.addListener((msg) => {
-        if (!msg || msg.type !== 'network:request') return;
-        eventBus.emit('network:request', msg.payload);
+        if (!msg || !msg.type) return;
+        if (msg.type === 'network:request') { eventBus.emit('network:request', msg.payload); return; }
+        if (msg.type === 'snapshot:picked') { eventBus.emit('snapshot:picked', msg.payload); return; }
+        if (msg.type === 'bug-report:screenshot-ready') { eventBus.emit('bug-report:screenshot-ready', msg.payload); return; }
       });
       relayPort.onDisconnect.addListener(() => {
         relayPort = null;
