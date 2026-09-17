@@ -25,14 +25,19 @@
         <div class="sd-section">
           <div class="sd-section-title">📌 当前页面</div>
           <div class="sd-row">
+            <label class="sd-label">类型</label>
             <select id="sd-selector-type" class="sd-selector-type">
               <option value="css">CSS</option>
               <option value="xpath">XPath</option>
             </select>
-            <input type="text" id="sd-selector" class="sd-selector" placeholder="选择器（点击右侧按钮获取）">
-            <button id="sd-pick" class="sd-btn sd-btn-secondary sd-pick-btn">🎯</button>
+            <button id="sd-pick" class="sd-btn sd-btn-secondary sd-pick-btn">🎯 选择</button>
           </div>
           <div class="sd-row">
+            <label class="sd-label">选择器</label>
+            <input type="text" id="sd-selector" class="sd-selector" placeholder="点击「选择」获取或手动输入">
+          </div>
+          <div class="sd-row">
+            <label class="sd-label">名称</label>
             <input type="text" id="sd-name" class="sd-input" placeholder="基线名称（如「登录按钮」）">
             <button id="sd-save" class="sd-btn sd-btn-primary sd-save-btn">💾 保存</button>
           </div>
@@ -143,7 +148,7 @@
         rect: rectRes.rect,
         viewport: rectRes.viewport
       });
-      if (!capture.ok) { flashMessage(capture.error || '截图失败'); return; }
+      if (!capture.ok) { flashMessage(capture.error || '截图失败', true); return; }
 
       const url = (tab.url || '').split('#')[0];
       await chrome.runtime.sendMessage({

@@ -36,7 +36,7 @@ chrome.runtime.onConnect.addListener((port) => {
 // ========== 截图（content script 发起 → background capture → 回传完整 dataURL） ==========
 // 裁剪由 content script 完成（它有 DOM 环境，可以用 Image/Canvas）
 // ========== 链接可用性检查 ==========
-chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (!msg || !msg.type) return;
 
   // 扫描当前页面所有 a 标签
@@ -58,15 +58,13 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
   // ========== 元素快照 ==========
   if (msg.type === 'snapshot:activate-picker') {
     // sidepanel → 转发给当前 tab 的 content script
-    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-    if (!tab?.id) { sendResponse({ ok: false, error: '无活跃标签页' }); return; }
-    try {
-      await chrome.tabs.sendMessage(tab.id, { type: 'snapshot:activate-picker' });
-      sendResponse({ ok: true });
-    } catch (e) {
-      sendResponse({ ok: false, error: String(e?.message || e) });
-    }
-    return;
+    chrome.tabs.query({ active: true, lastFocusedWindow: true }).then(([tab]) => {
+      if (!tab?.id) { sendResponse({ ok: false, error: '无活跃标签页' }); return; }
+      chrome.tabs.sendMessage(tab.id, { type: 'snapshot:activate-picker' })
+        .then(() => sendResponse({ ok: true }))
+        .catch((e) => sendResponse({ ok: false, error: String(e?.message || e) }));
+    });
+    return true; // 异步
   }
 
   if (msg.type === 'snapshot:capture') {
@@ -78,19 +76,14 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
   }
 
   if (msg.type === 'snapshot:picked') {
-    // 从 content script 触发：元素选择后截图裁剪 → 转发给 sidepanel
-    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-    if (!tab?.id) { sendResponse({ ok: false, error: '无活跃标签页' }); return; }
-    captureElement(tab.id, msg.rect, msg.viewport).then((result) => {
-      // 同时回给 content script 和转发给 sidepanel
-      sendResponse(result);
-      sidepanelPorts.forEach((p) => {
-        try { p.postMessage({ type: 'snapshot:picked', payload: { ...result, selector: msg.selector, pageUrl: msg.url } }); } catch (_) {}
-      });
-    }).catch((e) => {
-      sendResponse({ ok: false, error: String(e?.message || e) });
-    });
-    return true;
+    // 从 content script 触发：元素选择完成，只回传 selector 给 sidepanel，不做截图
+    const payload = { ok: true, selector: msg.selector, selectorType: msg.selectorType, cssSelector: msg.cssSelector, pageUrl: msg.url };
+    sendResponse(payload);
+    // 直接广播给所有扩展页面（sidepanel/options），不依赖 Port 或 storage
+    try {
+      chrome.runtime.sendMessage({ type: 'snapshot:picked', payload });
+    } catch (_) {}
+    return;
   }
 
   if (msg.type === 'snapshot:save-baseline') {
@@ -248,7 +241,9 @@ const SNAPSHOT_KEY = 'snapshotBaselines';
 async function captureElement(tabId, rect, viewport) {
   if (!tabId) return { ok: false, error: '无标签页' };
   try {
-    const dataUrl = await chrome.tabs.captureVisibleTab(tabId, { format: 'png' });
+    // captureVisibleTab 第一个参数是 windowId 而非 tabId，需先查 tab 拿到 windowId
+    const tab = await chrome.tabs.get(tabId);
+    const dataUrl = await chrome.tabs.captureVisibleTab(tab.windowId, { format: 'png' });
     // 裁剪：OffscreenCanvas 在 SW 中可用
     const cropped = await cropImageDataUrl(dataUrl, rect, viewport);
     return { ok: true, dataUrl: cropped, rect };
@@ -258,33 +253,44 @@ async function captureElement(tabId, rect, viewport) {
 }
 
 async function cropImageDataUrl(dataUrl, rect, viewport) {
-  const resp = await fetch(dataUrl);
-  const blob = await resp.blob();
+  // 直接解析 base64，避免 fetch(data:) 在 SW 中的兼容性问题
+  const m = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
+  if (!m) throw new Error('无效的截图数据');
+  const binary = atob(m[2]);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  const blob = new Blob([bytes], { type: m[1] });
   const imgBitmap = await createImageBitmap(blob);
 
   // 设备像素比适配：captureVisibleTab 返回物理像素，rect 是 CSS 像素
   const dpr = imgBitmap.width / (viewport?.w || imgBitmap.width);
-  const sx = Math.max(0, Math.floor(rect.left * dpr));
-  const sy = Math.max(0, Math.floor(rect.top * dpr));
-  const sw = Math.floor(rect.width * dpr);
-  const sh = Math.floor(rect.height * dpr);
+  let sx = Math.max(0, Math.floor(rect.left * dpr));
+  let sy = Math.max(0, Math.floor(rect.top * dpr));
+  let sw = Math.floor(rect.width * dpr);
+  let sh = Math.floor(rect.height * dpr);
+  // clamp 到图片边界，避免 drawImage 源矩形越界抛错
+  sw = Math.max(1, Math.min(sw, imgBitmap.width - sx));
+  sh = Math.max(1, Math.min(sh, imgBitmap.height - sy));
 
   const canvas = new OffscreenCanvas(sw, sh);
   const ctx = canvas.getContext('2d');
   ctx.drawImage(imgBitmap, sx, sy, sw, sh, 0, 0, sw, sh);
+  imgBitmap.close();
 
   const outBlob = await canvas.convertToBlob({ type: 'image/png' });
-  const outDataUrl = await blobToDataUrl(outBlob);
-  imgBitmap.close();
-  return outDataUrl;
+  return await blobToDataUrl(outBlob);
 }
 
-function blobToDataUrl(blob) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.readAsDataURL(blob);
-  });
+async function blobToDataUrl(blob) {
+  // MV3 Service Worker 中没有 FileReader，需用 arrayBuffer + btoa 转换
+  const buffer = await blob.arrayBuffer();
+  const bytes = new Uint8Array(buffer);
+  const CHUNK = 0x8000; // 分块避免 fromCharCode 栈溢出
+  let binary = '';
+  for (let i = 0; i < bytes.length; i += CHUNK) {
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + CHUNK));
+  }
+  return 'data:' + (blob.type || 'image/png') + ';base64,' + btoa(binary);
 }
 
 async function pixelDiff(baselineDataUrl, currentDataUrl, tolerance = 30) {

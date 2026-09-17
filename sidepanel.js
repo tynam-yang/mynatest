@@ -86,6 +86,28 @@ async function init() {
   }
   connectRelay();
 
+  // 接收 snapshot:picked（选择器回显）
+  // 注意：content script 调用 chrome.runtime.sendMessage 时，消息会同时到达 sidepanel 的
+  // onMessage（Chrome 机制：发给本扩展的消息会广播到除发送者外的所有帧）。
+  // 因此这里会收到两份：
+  //   1) content script 直接发的：{ type, selector, selectorType, cssSelector, url, ... }（无 payload）
+  //   2) background 广播的：{ type, payload: { ok, selector, ... } }
+  // 需统一格式，避免 onElementPicked 收到 undefined。
+  chrome.runtime.onMessage.addListener((msg) => {
+    if (!msg || !msg.type) return;
+    if (msg.type === 'snapshot:picked') {
+      const data = msg.payload || {
+        ok: true,
+        selector: msg.selector,
+        selectorType: msg.selectorType,
+        cssSelector: msg.cssSelector,
+        pageUrl: msg.url || msg.pageUrl
+      };
+      eventBus.emit('snapshot:picked', data);
+      return;
+    }
+  });
+
   // 回退通道：兼容扩展重载后「未刷新的旧页面」——
   // 旧版 content.js 仍走 chrome.storage 写入，这里兜底接收，避免整条链路中断
   chrome.storage.onChanged.addListener((changes, area) => {
@@ -93,8 +115,9 @@ async function init() {
     Object.entries(changes).forEach(([key, change]) => {
       if (!key.startsWith('__mynatest_msg_')) return;
       const val = change.newValue;
-      if (!val || val.type !== 'network:request') return;
-      eventBus.emit('network:request', val.payload);
+      if (!val || !val.type) return;
+      if (val.type === 'network:request') { eventBus.emit('network:request', val.payload); return; }
+      if (val.type === 'snapshot:picked') { eventBus.emit('snapshot:picked', val.payload); return; }
     });
   });
 

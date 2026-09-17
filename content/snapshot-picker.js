@@ -63,19 +63,21 @@
     // 同时生成 CSS 和 XPath，默认用 XPath（更稳定）
     const css = cssPath(hoverEl);
     const xpath = xpathFromEl(hoverEl);
+    // 先保存元素引用，deactivatePicker 会将 hoverEl 置为 null
+    const pickedEl = hoverEl;
     deactivatePicker();
 
     // 滚动元素到视口中央，确保后续 capture 能拍到
-    hoverEl.scrollIntoView({ block: 'center', inline: 'nearest' });
+    pickedEl.scrollIntoView({ block: 'center', inline: 'nearest' });
 
     // 等滚动完成再发消息
     setTimeout(() => {
-      const r = hoverEl.getBoundingClientRect();
+      const r = pickedEl.getBoundingClientRect();
       chrome.runtime.sendMessage({
         type: 'snapshot:picked',
-        selector: xpath,
-        selectorType: 'xpath',
-        cssSelector: css,
+        selector: css,
+        selectorType: 'css',
+        xpathSelector: xpath,
         rect: { left: r.left, top: r.top, width: r.width, height: r.height },
         url: location.href,
         viewport: { w: window.innerWidth, h: window.innerHeight }
@@ -87,14 +89,69 @@
     if (e.key === 'Escape') deactivatePicker();
   }
 
-  // 生成 CSS 路径选择器
+  // 生成 CSS 选择器：就近优先，尽量用元素自身唯一属性，避免长链路
   function cssPath(el) {
     if (!(el instanceof Element)) return '';
+    const esc = (s) => { try { return CSS.escape(s); } catch { return s; } };
+
+    // 判断某个选择器是否在 document 中唯一命中目标元素
+    function unique(sel, target) {
+      try {
+        const list = document.querySelectorAll(sel);
+        return list.length === 1 && list[0] === target;
+      } catch { return false; }
+    }
+
+    const tag = el.tagName.toLowerCase();
+
+    // 1) 优先：元素自身 id 唯一
+    if (el.id) {
+      const sel = `#${esc(el.id)}`;
+      if (unique(sel, el)) return sel;
+    }
+
+    // 2) 元素自身 class 组合唯一（tag + 全部 class）
+    if (el.classList && el.classList.length) {
+      const sel = tag + '.' + Array.from(el.classList).map(esc).join('.');
+      if (unique(sel, el)) return sel;
+    }
+
+    // 3) 元素自身 name 属性唯一
+    const nameAttr = el.getAttribute && el.getAttribute('name');
+    if (nameAttr) {
+      const sel = `${tag}[name="${esc(nameAttr)}"]`;
+      if (unique(sel, el)) return sel;
+    }
+
+    // 4) 其他常见唯一属性：data-testid / data-test / data-id / role + aria-label
+    for (const attr of ['data-testid', 'data-test', 'data-id', 'data-cy']) {
+      const v = el.getAttribute && el.getAttribute(attr);
+      if (v) {
+        const sel = `${tag}[${attr}="${esc(v)}"]`;
+        if (unique(sel, el)) return sel;
+      }
+    }
+    const role = el.getAttribute && el.getAttribute('role');
+    const ariaLabel = el.getAttribute && el.getAttribute('aria-label');
+    if (role && ariaLabel) {
+      const sel = `${tag}[role="${esc(role)}"][aria-label="${esc(ariaLabel)}"]`;
+      if (unique(sel, el)) return sel;
+    }
+
+    // 5) 回退：向上找最近的有唯一 id 的祖先，再用 tag + class + nth-of-type 向下定位
     const parts = [];
     let cur = el;
-    while (cur && cur.nodeType === 1 && parts.length < 6) {
-      let part = cur.tagName.toLowerCase();
-      if (cur.id) { part += '#' + cur.id; parts.unshift(part); break; }
+    let depth = 0;
+    while (cur && cur.nodeType === 1 && depth < 4) {
+      const t = cur.tagName.toLowerCase();
+      if (cur.id) {
+        const sel = `#${esc(cur.id)}`;
+        if (unique(sel, cur)) { parts.unshift(sel); break; }
+      }
+      let part = t;
+      if (cur.classList && cur.classList.length) {
+        part += '.' + Array.from(cur.classList).map(esc).join('.');
+      }
       const parent = cur.parentNode;
       if (parent) {
         const siblings = Array.from(parent.children).filter(c => c.tagName === cur.tagName);
@@ -102,6 +159,7 @@
       }
       parts.unshift(part);
       cur = cur.parentElement;
+      depth++;
     }
     return parts.join(' > ');
   }

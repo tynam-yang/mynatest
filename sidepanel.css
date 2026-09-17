@@ -3183,21 +3183,28 @@ html, body {
 }
 
 .sd-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 48px 1fr 80px;
   gap: 6px;
   margin-bottom: 6px;
+  align-items: center;
+}
+.sd-label {
+  font-size: 12px;
+  color: var(--text-light);
+  text-align: right;
+  line-height: 1.2;
 }
 .sd-selector-type {
-  width: 70px;
-  flex-shrink: 0;
   padding: 5px 4px;
   border: 1px solid var(--border);
   border-radius: 4px;
   font-size: 12px;
   background: #fff;
+  width: 100%;
 }
 .sd-selector, .sd-input {
-  flex: 1;
+  width: 100%;
   min-width: 0;
   padding: 5px 8px;
   border: 1px solid var(--border);
@@ -3205,17 +3212,12 @@ html, body {
   font-size: 12px;
   background: #fff;
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  box-sizing: border-box;
 }
-.sd-pick-btn {
-  width: 32px;
-  flex-shrink: 0;
+.sd-pick-btn, .sd-save-btn {
+  width: 100%;
   padding: 5px 0;
-  font-size: 14px;
-}
-.sd-save-btn {
-  width: 80px;
-  flex-shrink: 0;
-  padding: 5px 0;
+  font-size: 12px;
 }
 
 .sd-actions {
