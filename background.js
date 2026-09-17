@@ -36,7 +36,7 @@ chrome.runtime.onConnect.addListener((port) => {
 // ========== 截图（content script 发起 → background capture → 回传完整 dataURL） ==========
 // 裁剪由 content script 完成（它有 DOM 环境，可以用 Image/Canvas）
 // ========== 链接可用性检查 ==========
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (msg, sender, sendResponse) => {
   if (!msg || !msg.type) return;
 
   // 扫描当前页面所有 a 标签
@@ -53,6 +53,47 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       sendResponse({ ok: false, error: String(e?.message || e) });
     });
     return true; // 异步
+  }
+
+  // ========== 元素快照 ==========
+  if (msg.type === 'snapshot:capture') {
+    // 从 sidepanel 触发：传入 tabId + rect → 截图裁剪
+    captureElement(msg.tabId, msg.rect, msg.viewport).then(sendResponse).catch((e) => {
+      sendResponse({ ok: false, error: String(e?.message || e) });
+    });
+    return true;
+  }
+
+  if (msg.type === 'snapshot:picked') {
+    // 从 content script 触发：元素选择后截图裁剪 → 返回 dataURL
+    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    if (!tab?.id) { sendResponse({ ok: false, error: '无活跃标签页' }); return; }
+    captureElement(tab.id, msg.rect, msg.viewport).then(sendResponse).catch((e) => {
+      sendResponse({ ok: false, error: String(e?.message || e) });
+    });
+    return true;
+  }
+
+  if (msg.type === 'snapshot:save-baseline') {
+    saveBaseline(msg.baseline).then(sendResponse);
+    return true;
+  }
+
+  if (msg.type === 'snapshot:list-baselines') {
+    listBaselines().then(sendResponse);
+    return true;
+  }
+
+  if (msg.type === 'snapshot:delete-baseline') {
+    deleteBaseline(msg.id).then(sendResponse);
+    return true;
+  }
+
+  if (msg.type === 'snapshot:compare') {
+    compareWithBaseline(msg).then(sendResponse).catch((e) => {
+      sendResponse({ ok: false, error: String(e?.message || e) });
+    });
+    return true;
   }
 
   if (msg.type === 'bug-report:capture') {
@@ -180,4 +221,161 @@ async function captureFull(tab) {
   } catch (e) {
     return { ok: false, error: String(e?.message || e) };
   }
+}
+
+// ========== 元素快照辅助函数 ==========
+const SNAPSHOT_KEY = 'snapshotBaselines';
+
+async function captureElement(tabId, rect, viewport) {
+  if (!tabId) return { ok: false, error: '无标签页' };
+  try {
+    const dataUrl = await chrome.tabs.captureVisibleTab(tabId, { format: 'png' });
+    // 裁剪：OffscreenCanvas 在 SW 中可用
+    const cropped = await cropImageDataUrl(dataUrl, rect, viewport);
+    return { ok: true, dataUrl: cropped, rect };
+  } catch (e) {
+    return { ok: false, error: String(e?.message || e) };
+  }
+}
+
+async function cropImageDataUrl(dataUrl, rect, viewport) {
+  const resp = await fetch(dataUrl);
+  const blob = await resp.blob();
+  const imgBitmap = await createImageBitmap(blob);
+
+  // 设备像素比适配：captureVisibleTab 返回物理像素，rect 是 CSS 像素
+  const dpr = imgBitmap.width / (viewport?.w || imgBitmap.width);
+  const sx = Math.max(0, Math.floor(rect.left * dpr));
+  const sy = Math.max(0, Math.floor(rect.top * dpr));
+  const sw = Math.floor(rect.width * dpr);
+  const sh = Math.floor(rect.height * dpr);
+
+  const canvas = new OffscreenCanvas(sw, sh);
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(imgBitmap, sx, sy, sw, sh, 0, 0, sw, sh);
+
+  const outBlob = await canvas.convertToBlob({ type: 'image/png' });
+  const outDataUrl = await blobToDataUrl(outBlob);
+  imgBitmap.close();
+  return outDataUrl;
+}
+
+function blobToDataUrl(blob) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function pixelDiff(baselineDataUrl, currentDataUrl, tolerance = 30) {
+  // 加载两张图
+  const [bResp, cResp] = await Promise.all([fetch(baselineDataUrl), fetch(currentDataUrl)]);
+  const [bBlob, cBlob] = await Promise.all([bResp.blob(), cResp.blob()]);
+  const [bBitmap, cBitmap] = await Promise.all([createImageBitmap(bBlob), createImageBitmap(cBlob)]);
+
+  // 统一到较小尺寸
+  const w = Math.min(bBitmap.width, cBitmap.width);
+  const h = Math.min(bBitmap.height, cBitmap.height);
+
+  const canvasB = new OffscreenCanvas(w, h);
+  const ctxB = canvasB.getContext('2d');
+  ctxB.drawImage(bBitmap, 0, 0, w, h);
+  const dataB = ctxB.getImageData(0, 0, w, h).data;
+
+  const canvasC = new OffscreenCanvas(w, h);
+  const ctxC = canvasC.getContext('2d');
+  ctxC.drawImage(cBitmap, 0, 0, w, h);
+  const dataC = ctxC.getImageData(0, 0, w, h).data;
+
+  // 创建 diff 图（透明背景 + 红色高亮差异像素）
+  const diffCanvas = new OffscreenCanvas(w, h);
+  const diffCtx = diffCanvas.getContext('2d');
+  diffCtx.fillStyle = 'transparent';
+  diffCtx.fillRect(0, 0, w, h);
+  const diffData = diffCtx.getImageData(0, 0, w, h);
+
+  let diffCount = 0;
+  for (let i = 0; i < dataB.length; i += 4) {
+    const dr = Math.abs(dataB[i] - dataC[i]);
+    const dg = Math.abs(dataB[i + 1] - dataC[i + 1]);
+    const db = Math.abs(dataB[i + 2] - dataC[i + 2]);
+    const da = Math.abs(dataB[i + 3] - dataC[i + 3]);
+    const totalDiff = dr + dg + db + da;
+    if (totalDiff > tolerance) {
+      diffCount++;
+      // 红色高亮
+      diffData.data[i] = 239;
+      diffData.data[i + 1] = 68;
+      diffData.data[i + 2] = 68;
+      diffData.data[i + 3] = 180;
+    }
+  }
+  diffCtx.putImageData(diffData, 0, 0);
+
+  const diffBlob = await diffCanvas.convertToBlob({ type: 'image/png' });
+  const diffDataUrl = await blobToDataUrl(diffBlob);
+
+  bBitmap.close();
+  cBitmap.close();
+
+  const totalPixels = (w * h);
+  return {
+    diffCount,
+    diffRate: totalPixels > 0 ? diffCount / totalPixels : 0,
+    width: w,
+    height: h,
+    diffImageUrl: diffDataUrl
+  };
+}
+
+async function saveBaseline(baseline) {
+  const list = await listBaselinesInternal();
+  const exists = list.find(b => b.id === baseline.id);
+  if (exists) Object.assign(exists, baseline, { updatedAt: Date.now() });
+  else list.push({ ...baseline, id: baseline.id || ('s' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6)), createdAt: Date.now(), updatedAt: Date.now() });
+  await chrome.storage.local.set({ [SNAPSHOT_KEY]: list });
+  return { ok: true };
+}
+
+async function listBaselinesInternal() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get([SNAPSHOT_KEY], (r) => resolve(r[SNAPSHOT_KEY] || []));
+  });
+}
+
+async function listBaselines() {
+  const list = await listBaselinesInternal();
+  // 不返回 dataURL（避免消息过大），只返回元信息
+  return { ok: true, baselines: list.map(b => ({
+    id: b.id, name: b.name, pageUrl: b.pageUrl, selector: b.selector,
+    createdAt: b.createdAt, updatedAt: b.updatedAt,
+    hasImage: !!b.imageUrl
+  }))};
+}
+
+async function deleteBaseline(id) {
+  const list = await listBaselinesInternal();
+  const filtered = list.filter(b => b.id !== id);
+  await chrome.storage.local.set({ [SNAPSHOT_KEY]: filtered });
+  return { ok: true };
+}
+
+async function compareWithBaseline(msg) {
+  const { baselineId, rect, viewport } = msg;
+  const list = await listBaselinesInternal();
+  const baseline = list.find(b => b.id === baselineId);
+  if (!baseline) return { ok: false, error: '基线不存在' };
+  if (!baseline.imageUrl) return { ok: false, error: '基线图片缺失' };
+
+  // 截取当前元素
+  const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  if (!tab?.id) return { ok: false, error: '无活跃标签页' };
+
+  const capture = await captureElement(tab.id, rect, viewport);
+  if (!capture.ok) return capture;
+
+  // 像素比对
+  const diff = await pixelDiff(baseline.imageUrl, capture.dataUrl);
+  return { ok: true, ...diff, currentImageUrl: capture.dataUrl, baselineName: baseline.name };
 }

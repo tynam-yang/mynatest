@@ -52,7 +52,8 @@ mynatest/
 │   ├── env-banner-content.js  # 环境横幅：域名匹配 + 顶部横幅注入
 │   ├── bug-report-content.js  # Bug 报告：框选 + Canvas 标注 + 环境采集
 │   ├── mock-interceptor-main.js    # Mock：MAIN world 独立 hook fetch/XHR
-│   └── mock-interceptor-bridge.js  # Mock：ISOLATED world 读 storage → postMessage 下发配置
+│   ├── mock-interceptor-bridge.js  # Mock：ISOLATED world 读 storage → postMessage 下发配置
+│   └── snapshot-picker.js         # 快照：元素选择器 + 自动比对 + DOM 徽章
 │
 ├── tools/                  # ⭐ 所有工具集中在这里（全局 IIFE 自注册）
 │   ├── request-diff.js     # 请求对比
@@ -66,7 +67,8 @@ mynatest/
 │   ├── env-banner.js       # 测试环境横幅
 │   ├── bug-report.js       # Bug 报告助手
 │   ├── mock-interceptor.js  # 接口 Mock 拦截器
-│   └── link-checker.js      # 链接可用性检查
+│   ├── link-checker.js      # 链接可用性检查
+│   └── snapshot-diff.js     # 元素快照对比
 │
 ├── icons/                  # 工具图标（16×16 PNG）
 ├── assets/                 # 静态资源（收款码等）
@@ -88,6 +90,7 @@ mynatest/
 | **环境横幅** | 开发工具 | 域名规则匹配 + 页面顶部彩色横幅，区分 dev/test/pre 防误操作生产 |
 | **Mock 拦截器** | 测试工具 | 拦截指定 URL 返回自定义响应；多套场景一键切换（500 / 超时 / 空数据 / 自定义） |
 | **链接检查** | 测试工具 | 批量扫描页面 a 标签，校验可访问性与跳转地址；支持并发限流、重定向检测、跨域标记 |
+| **快照对比** | 测试工具 | 捕获元素基准图，自动像素比对 UI 变更；差异高亮红色标注，页面加载自动检测 |
 
 ## 新增工具（插件化）
 

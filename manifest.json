@@ -67,6 +67,11 @@
       "js": ["content/mock-interceptor-bridge.js"],
       "run_at": "document_start",
       "all_frames": true
+    },
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content/snapshot-picker.js"],
+      "run_at": "document_idle"
     }
   ],
 
