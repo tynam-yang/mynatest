@@ -210,6 +210,12 @@ html, body {
 }
 
 /* ========== Request Diff Tool ========== */
+.tool-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .tool-panel h2 {
   font-size: 14px;
   margin-bottom: 12px;
@@ -3413,6 +3419,7 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-height: 0;
 }
 
 .ipg-section {
@@ -3420,6 +3427,9 @@ html, body {
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .ipg-section-title {
@@ -3569,8 +3579,8 @@ html, body {
 }
 
 .ipg-result {
-  max-height: 160px;
-  min-height: 0;
+  flex: 1;
+  min-height: 80px;
   overflow-y: auto;
   border: 1px solid var(--border);
   border-radius: 4px;
@@ -3632,6 +3642,7 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-height: 0;
 }
 
 .uag-section {
@@ -3639,6 +3650,9 @@ html, body {
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .uag-section-title {
@@ -3746,8 +3760,8 @@ html, body {
 }
 
 .uag-result {
-  max-height: 200px;
-  min-height: 0;
+  flex: 1;
+  min-height: 80px;
   overflow-y: auto;
   border: 1px solid var(--border);
   border-radius: 4px;
