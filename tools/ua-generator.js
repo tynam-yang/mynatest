@@ -196,8 +196,8 @@
           <div class="uag-gen-row">
             <label class="uag-label">浏览器</label>
             <select id="uagBrowser" class="uag-select">
-              <option value="random">随机</option>
-              <option value="chrome" selected>Chrome</option>
+              <option value="random" selected>随机</option>
+              <option value="chrome">Chrome</option>
               <option value="safari">Safari</option>
               <option value="firefox">Firefox</option>
               <option value="edge">Edge</option>
