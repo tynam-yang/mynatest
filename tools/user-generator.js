@@ -9,6 +9,170 @@
     '程', '曹', '袁', '邓', '许', '傅', '沈', '曾', '彭', '吕',
     '苏', '卢', '蒋', '蔡', '贾', '丁', '魏', '薛', '叶', '阎'];
 
+  // 复姓
+  const COMPOUND_SUR = ['欧阳', '司马', '上官', '夏侯', '诸葛', '闻人', '东方', '赫连',
+    '皇甫', '尉迟', '公羊', '澹台', '公冶', '宗政', '濮阳', '淳于',
+    '单于', '太叔', '申屠', '公孙', '仲孙', '轩辕', '令狐', '钟离',
+    '宇文', '长孙', '慕容', '鲜于', '闾丘', '司徒', '司空', '亓官',
+    '司寇', '子车', '颛孙', '端木', '巫马', '公西', '漆雕', '乐正',
+    '壤驷', '公良', '拓跋', '夹谷', '宰父', '谷梁', '晋', '楚',
+    '阎', '法', '汝', '鄢', '涂', '钦', '段干', '百里', '东郭', '南门',
+    '呼延', '归海', '羊舌', '微生', '岳', '帅', '缑', '亢', '况', '后',
+    '有', '琴', '梁丘', '左丘', '东门', '西门', '南宫', '公'];
+
+  // 生成随机单字（Unicode CJK 基本区 U+4E00~U+9FFF）
+  function _randHan() {
+    const code = _randInt(0x4E00, 0x9FFF);
+    return String.fromCharCode(code);
+  }
+
+  // 生成随机英文名（用于昵称/邮箱）
+  const EN_ADJ = ['happy', 'cool', 'hot', 'smart', 'fast', 'slow', 'big', 'small',
+    'red', 'blue', 'green', 'black', 'white', 'gold', 'silver', 'dark',
+    'light', 'wild', 'cute', 'crazy', 'lazy', 'busy', 'young', 'old',
+    'super', 'ultra', 'mega', 'hyper', 'turbo', 'neo', 'pro', 'max',
+    'mini', 'tiny', 'huge', 'giant', 'tiny', 'quick', 'sharp', 'soft',
+    'hard', 'smooth', 'rough', 'clean', 'dirty', 'fresh', 'sweet', 'bitter'];
+  const EN_NOUN = ['cat', 'dog', 'fish', 'bird', 'tiger', 'lion', 'bear', 'wolf',
+    'fox', 'rabbit', 'mouse', 'panda', 'koala', 'whale', 'dolphin', 'shark',
+    'dragon', 'phoenix', 'unicorn', 'robot', 'ninja', 'pirate', 'wizard', 'ghost',
+    'alien', 'cyborg', 'hero', 'king', 'queen', 'prince', 'princess', 'warrior',
+    'knight', 'mage', 'archer', 'assassin', 'samurai', 'ronin', 'viking', 'cowboy',
+    'chef', 'artist', 'singer', 'dancer', 'writer', 'poet', 'thinker', 'dreamer'];
+  const EN_CHAR = 'abcdefghijklmnopqrstuvwxyz';
+
+  // 大学名称前缀/后缀
+  const SCHOOL_PREFIX = ['北京', '上海', '天津', '重庆', '广东', '山东', '江苏', '浙江',
+    '湖北', '湖南', '四川', '福建', '安徽', '河北', '河南', '辽宁',
+    '吉林', '黑龙江', '陕西', '山西', '江西', '云南', '贵州', '广西',
+    '海南', '甘肃', '内蒙古', '新疆', '西藏', '宁夏', '香港', '澳门',
+    '深圳', '大连', '青岛', '苏州', '厦门', '宁波', '佛山', '东莞',
+    '珠海', '无锡', '常州', '徐州', '温州', '绍兴', '金华', '台州',
+    '中山', '惠州', '汕头', '湛江', '江门', '肇庆', '清远', '韶关'];
+  const SCHOOL_MID = ['理工', '工业', '农业', '师范', '财经', '政法', '医科', '中医药',
+    '民族', '海洋', '财经政法', '农林科技', '科技', '交通', '邮电', '电子科技',
+    '语言', '外国语', '传媒', '艺术', '体育', '军事', '航空航天', '信息工程'];
+  const SCHOOL_SUFFIX = ['大学', '学院', '职业技术学院', '高等专科学校'];
+  const SCHOOL_ELITE = ['清华大学', '北京大学', '复旦大学', '上海交通大学', '浙江大学',
+    '南京大学', '中国科学技术大学', '武汉大学', '华中科技大学', '中山大学',
+    '四川大学', '哈尔滨工业大学', '西安交通大学', '同济大学', '北京航空航天大学',
+    '北京理工大学', '天津大学', '南开大学', '厦门大学', '山东大学',
+    '吉林大学', '中南大学', '东南大学', '大连理工大学', '华南理工大学',
+    '北京师范大学', '中国人民大学', '复旦大学', '上海财经大学', '北京邮电大学'];
+
+  // 学院名称
+  const COLLEGES = ['计算机学院', '软件学院', '信息工程学院', '电子工程学院', '通信工程学院',
+    '人工智能学院', '数据科学学院', '网络空间安全学院', '自动化学院', '机械工程学院',
+    '材料科学与工程学院', '化学化工学院', '物理学院', '数学学院', '生物科学学院',
+    '地质学院', '能源与动力工程学院', '环境科学学院', '土木工程学院', '建筑学院',
+    '经济学院', '管理学院', '金融学院', '会计学院', '法学院', '外国语学院',
+    '人文学院', '历史学院', '哲学学院', '教育学院', '马克思主义学院', '体育学院',
+    '艺术学院', '新闻传播学院', '音乐学院', '美术学院', '设计学院', '医学院',
+    '药学院', '护理学院', '口腔医学院', '公共卫生学院', '生命科学学院',
+    '大气科学学院', '海洋学院', '食品科学学院', '纺织学院', '轻工学院'];
+
+  // 专业名称
+  const MAJORS = ['计算机科学与技术', '软件工程', '人工智能', '数据科学与大数据技术', '网络安全',
+    '物联网工程', '信息安全', '电子信息工程', '通信工程', '自动化',
+    '电气工程及其自动化', '机械设计制造及其自动化', '材料成型及控制工程', '高分子材料与工程',
+    '化学工程与工艺', '应用化学', '生物工程', '生物技术', '生物科学',
+    '数学与应用数学', '信息与计算科学', '物理学', '应用物理学', '核工程与核技术',
+    '地质工程', '建筑学', '城乡规划', '土木工程', '环境工程', '给排水科学与工程',
+    '车辆工程', '航空航天工程', '能源与动力工程', '新能源科学与工程',
+    '经济学', '金融学', '国际经济与贸易', '工商管理', '市场营销', '会计学',
+    '财务管理', '人力资源管理', '物流管理', '电子商务', '旅游管理',
+    '法学', '英语', '日语', '法语', '德语', '俄语', '西班牙语',
+    '汉语言文学', '新闻学', '广播电视学', '广告学', '编辑出版学',
+    '音乐表演', '舞蹈表演', '戏剧影视文学', '绘画', '雕塑', '视觉传达设计',
+    '临床医学', '口腔医学', '预防医学', '药学', '中药学', '护理学'];
+
+  // 微信昵称字符池
+  const NICK_EMOJIS = ['😊', '😄', '😎', '🤖', '🐱', '🐶', '🦊', '🐼', '🐯', '🦁',
+    '🐸', '🦄', '🐙', '🌸', '🌙', '⭐', '🌈', '🔥', '💎', '🎮',
+    '🎯', '🎨', '🎵', '📚', '💻', '⚡', '🍀', '🍜', '🍰', '☕'];
+  const NICK_HAN = ['风', '雨', '云', '月', '星', '日', '山', '水', '花', '草',
+    '竹', '梅', '松', '雪', '冰', '火', '光', '影', '梦', '幻',
+    '灵', '仙', '神', '侠', '客', '友', '爱', '心', '情', '意',
+    '思', '念', '忆', '怀', '望', '归', '来', '去', '走', '飞'];
+
+  function _randQQ() {
+    // QQ 5-11 位数字（排除前导 0）
+    const len = _randInt(7, 10);
+    let qq = String(_randInt(1, 9));
+    for (let i = 1; i < len; i++) qq += _randInt(0, 9);
+    return qq;
+  }
+
+  function _randWechat() {
+    // 微信昵称：字母数字下划线 6-20 位，或中英文名+数字
+    const style = _randInt(0, 3);
+    let w = '';
+    if (style === 0) {
+      // 英文名 + 数字
+      const a = _r(EN_ADJ); const n = _r(EN_NOUN);
+      w = a + n + _randInt(1, 9999);
+    } else if (style === 1) {
+      // 全随机字母数字
+      w = EN_CHAR[_randInt(0, 25)].toUpperCase();
+      const pool = EN_CHAR + '_1234567890';
+      for (let i = 1; i < _randInt(7, 18); i++) w += pool[_randInt(0, pool.length - 1)];
+    } else if (style === 2) {
+      // 中文名拼音首字母 + 数字
+      w = EN_CHAR[_randInt(0, 25)].toUpperCase() + EN_CHAR[_randInt(0, 25)].toUpperCase() + _randInt(1000, 99999);
+    } else {
+      // 复姓拼音
+      w = EN_CHAR[_randInt(0, 25)] + EN_CHAR[_randInt(0, 25)] + EN_CHAR[_randInt(0, 25)] + _randInt(1, 999);
+    }
+    return w;
+  }
+
+  function _randNickname() {
+    // 昵称：中英文混合 + emoji + 数字后缀，尽量多样
+    const style = _randInt(0, 5);
+    let n = '';
+    if (style === 0) {
+      // 纯中文 2-5 字
+      const len = _randInt(2, 5);
+      for (let i = 0; i < len; i++) n += _r(NICK_HAN);
+    } else if (style === 1) {
+      // 中文 + 数字
+      const len = _randInt(1, 3);
+      for (let i = 0; i < len; i++) n += _r(NICK_HAN);
+      n += _randInt(0, 9999);
+    } else if (style === 2) {
+      // emoji + 中文
+      n += _r(NICK_EMOJIS);
+      const len = _randInt(1, 3);
+      for (let i = 0; i < len; i++) n += _r(NICK_HAN);
+      if (Math.random() < 0.5) n += _r(NICK_EMOJIS);
+    } else if (style === 3) {
+      // emoji + 英文 + 数字
+      n += _r(NICK_EMOJIS);
+      n += _r(EN_ADJ) + _r(EN_NOUN) + _randInt(0, 99);
+    } else if (style === 4) {
+      // 随机汉字 + 随机字母 + 数字
+      n += _randHan() + _randHan();
+      n += EN_CHAR[_randInt(0, 25)].toUpperCase() + _randInt(10, 999);
+    } else {
+      // 随机 ASCII 装饰符 + 中文
+      const deco = ['「', '『', '【', '☆', '★', '✿', '❀', '✧', '༺', '༻', '꧁', '꧂'];
+      n += _r(deco);
+      const len = _randInt(2, 4);
+      for (let i = 0; i < len; i++) n += _randHan();
+      n += _r(deco);
+    }
+    return n;
+  }
+
+  function _randSchool() {
+    if (Math.random() < 0.25) return _r(SCHOOL_ELITE);
+    // 组合生成：前缀 + 中间 + 后缀
+    const prefix = _r(SCHOOL_PREFIX);
+    const mid = _r(SCHOOL_MID);
+    const suffix = _r(SCHOOL_SUFFIX);
+    return prefix + mid + suffix;
+  }
+
   const GIVEN_NAMES = {
     male: ['伟', '强', '磊', '军', '洋', '勇', '艳', '杰', '涛', '明',
       '超', '秀', '兰', '平', '刚', '桂', '文', '辉', '华', '国',
@@ -179,7 +343,9 @@
         const sex = ctx.gender !== undefined ? ctx.gender : _randInt(0, 1);
         const pool = sex === 1 ? GIVEN_NAMES.male : GIVEN_NAMES.female;
         const gn = Math.random() < 0.35 ? _r(pool) + _r(pool) : _r(pool);
-        return _r(SUR_NAMES) + gn;
+        // 15% 概率使用复姓
+        const sur = Math.random() < 0.15 ? _r(COMPOUND_SUR) : _r(SUR_NAMES);
+        return sur + gn;
       }
     },
     {
@@ -249,6 +415,30 @@
           : 'user' + _randInt(1000, 9999);
         return namePart.toLowerCase() + '@' + _r(EMAIL_DOMAINS);
       }
+    },
+    {
+      id: 'qq', label: 'QQ号', defaultSelected: false,
+      gen: () => _randQQ()
+    },
+    {
+      id: 'wechat', label: '微信号', defaultSelected: false,
+      gen: () => _randWechat()
+    },
+    {
+      id: 'nickname', label: '昵称', defaultSelected: false,
+      gen: () => _randNickname()
+    },
+    {
+      id: 'school', label: '毕业学校', defaultSelected: false,
+      gen: () => _randSchool()
+    },
+    {
+      id: 'college', label: '学院', defaultSelected: false,
+      gen: () => _r(COLLEGES)
+    },
+    {
+      id: 'major', label: '专业', defaultSelected: false,
+      gen: () => _r(MAJORS)
     },
     {
       id: 'address', label: '地址', defaultSelected: true,
