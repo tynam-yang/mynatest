@@ -621,18 +621,22 @@
   }
 
   // ========== 工具定义 ==========
-  const UG_TOOL = {
+  const meta = {
     id: NAME,
     name: '用户信息生成',
+    desc: '28 字段可选随机生成（姓名/身份证/银行卡/统一社会信用代码等），支持文本/JSON/YAML 导出',
+    icon: '👤',
     iconUrl: 'icons/user-generator.png',
-    emoji: '👤',
     category: 'data-gen',
-    categoryName: '数据生成',
-    panelClass: 'ug-panel',
-    selectedFields: null,  // 用户选中的字段id列表
-    count: 1,              // 生成数量
-    // 字段级配置
+    categoryName: '数据生成'
+  };
+
+  const tool = {
+    meta,
     fieldConfig: { birthFmt: 'YYYY-MM-DD' },
+    _currentFmt: 'text',
+    _generated: null,
+    _toastTimer: null,
 
     render(root) {
       root.innerHTML = `
@@ -844,6 +848,6 @@
   };
 
   // 注册
-  if (!window.MynaTools) window.MynaTools = {};
-  window.MynaTools[NAME] = UG_TOOL;
+  window.MynaTools = window.MynaTools || [];
+  window.MynaTools.push(tool);
 })();
