@@ -68,7 +68,8 @@ mynatest/
 │   ├── bug-report.js       # Bug 报告助手
 │   ├── mock-interceptor.js  # 接口 Mock 拦截器
 │   ├── link-checker.js      # 链接可用性检查
-│   └── snapshot-diff.js     # 元素快照对比
+│   ├── snapshot-diff.js     # 元素快照对比
+│   └── ip-generator.js      # IP 地址生成 + 本机 IP
 │
 ├── icons/                  # 工具图标（16×16 PNG）
 ├── assets/                 # 静态资源（收款码等）
@@ -91,6 +92,7 @@ mynatest/
 | **Mock 拦截器** | 测试工具 | 拦截指定 URL 返回自定义响应；多套场景一键切换 |
 | **链接检查** | 测试工具 | 批量扫描页面 a 标签，校验可访问性与跳转地址 |
 | **快照对比** | 测试工具 | 捕获元素基准图，自动像素比对 UI 变更；差异高亮红色标注 |
+| **IP 地址生成** | 数据生成 | 随机生成 IPv4/IPv6（支持公网/私有/回环/自定义网段） |
 
 ## 新增工具（插件化）
 
