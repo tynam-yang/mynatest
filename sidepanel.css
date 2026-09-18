@@ -3570,6 +3570,7 @@ html, body {
 
 .ipg-result {
   max-height: 160px;
+  min-height: 0;
   overflow-y: auto;
   border: 1px solid var(--border);
   border-radius: 4px;
@@ -3612,6 +3613,18 @@ html, body {
 .ipg-copy:hover {
   color: var(--primary);
   border-color: var(--primary);
+}
+
+.ipg-copy-all {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.ipg-btn-copyall {
+  width: 100%;
+  padding: 7px 0;
+  font-size: 12px;
 }
 
 /* ========== UA Generator Tool ========== */
@@ -3734,6 +3747,7 @@ html, body {
 
 .uag-result {
   max-height: 200px;
+  min-height: 0;
   overflow-y: auto;
   border: 1px solid var(--border);
   border-radius: 4px;
@@ -3786,4 +3800,16 @@ html, body {
 .uag-copy:hover {
   color: var(--primary);
   border-color: var(--primary);
+}
+
+.uag-copy-all {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.uag-btn-copyall {
+  width: 100%;
+  padding: 7px 0;
+  font-size: 12px;
 }

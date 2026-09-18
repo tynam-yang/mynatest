@@ -255,9 +255,12 @@
           <div class="ipg-gen-row">
             <label class="ipg-label">数量</label>
             <input type="number" id="ipgV4Count" class="ipg-input ipg-count" min="1" max="100" value="1">
-            <button class="ipg-btn ipg-btn-primary" id="ipgGenV4">🎲 生成</button>
+            <button class="ipg-btn ipg-btn-primary" id="ipgGenV4">生成</button>
           </div>
           <div class="ipg-result" id="ipgV4Result" style="display:none;"></div>
+          <div class="ipg-copy-all" id="ipgV4CopyAll" style="display:none;">
+            <button class="ipg-btn ipg-btn-primary ipg-btn-copyall" id="ipgV4CopyAllBtn">📋 复制全部</button>
+          </div>
         </div>
 
         <!-- IPv6 生成 -->
@@ -275,9 +278,12 @@
           <div class="ipg-gen-row">
             <label class="ipg-label">数量</label>
             <input type="number" id="ipgV6Count" class="ipg-input ipg-count" min="1" max="100" value="1">
-            <button class="ipg-btn ipg-btn-primary" id="ipgGenV6">🎲 生成</button>
+            <button class="ipg-btn ipg-btn-primary" id="ipgGenV6">生成</button>
           </div>
           <div class="ipg-result" id="ipgV6Result" style="display:none;"></div>
+          <div class="ipg-copy-all" id="ipgV6CopyAll" style="display:none;">
+            <button class="ipg-btn ipg-btn-primary ipg-btn-copyall" id="ipgV6CopyAllBtn">📋 复制全部</button>
+          </div>
         </div>
 
       </div>
@@ -344,7 +350,10 @@
       }
       const ips = [];
       for (let i = 0; i < count; i++) ips.push(randomIPv4(range, custom));
-      renderResult(container.querySelector('#ipgV4Result'), ips);
+      const resultEl = container.querySelector('#ipgV4Result');
+      renderResult(resultEl, ips);
+      resultEl.dataset.all = ips.join('\n');
+      container.querySelector('#ipgV4CopyAll').style.display = '';
     });
 
     // 生成 IPv6
@@ -353,7 +362,10 @@
       const count = Math.min(100, Math.max(1, Number(container.querySelector('#ipgV6Count').value) || 1));
       const ips = [];
       for (let i = 0; i < count; i++) ips.push(randomIPv6(range));
-      renderResult(container.querySelector('#ipgV6Result'), ips);
+      const resultEl = container.querySelector('#ipgV6Result');
+      renderResult(resultEl, ips);
+      resultEl.dataset.all = ips.join('\n');
+      container.querySelector('#ipgV6CopyAll').style.display = '';
     });
 
     // 重新检测本机 IP
@@ -381,6 +393,21 @@
 
     // 复制按钮代理
     container.addEventListener('click', (e) => {
+      // 复制全部
+      const copyAllBtn = e.target.closest('.ipg-btn-copyall');
+      if (copyAllBtn) {
+        const targetId = copyAllBtn.id.includes('V4') ? 'ipgV4Result' : 'ipgV6Result';
+        const all = container.querySelector('#' + targetId).dataset.all;
+        if (!all) return;
+        navigator.clipboard?.writeText(all).then(() => flashMessage('✓ 已复制全部')).catch(() => {
+          const ta = document.createElement('textarea');
+          ta.value = all; document.body.appendChild(ta); ta.select();
+          document.execCommand('copy'); document.body.removeChild(ta);
+          flashMessage('✓ 已复制全部');
+        });
+        return;
+      }
+      // 单条复制
       const btn = e.target.closest('.ipg-copy');
       if (!btn) return;
       const target = btn.dataset.target;

@@ -216,9 +216,12 @@
           <div class="uag-gen-row">
             <label class="uag-label">数量</label>
             <input type="number" id="uagCount" class="uag-input uag-count" min="1" max="50" value="1">
-            <button class="uag-btn uag-btn-primary" id="uagGenBtn">🎲 生成</button>
+            <button class="uag-btn uag-btn-primary" id="uagGenBtn">生成</button>
           </div>
           <div class="uag-result" id="uagResult" style="display:none;"></div>
+          <div class="uag-copy-all" id="uagCopyAll" style="display:none;">
+            <button class="uag-btn uag-btn-primary uag-btn-copyall" id="uagCopyAllBtn">📋 复制全部</button>
+          </div>
         </div>
 
       </div>
@@ -286,7 +289,9 @@
       const platform = container.querySelector('#uagPlatform').value;
       const count = Math.min(50, Math.max(1, Number(container.querySelector('#uagCount').value) || 1));
       const resultEl = container.querySelector('#uagResult');
+      const copyAllEl = container.querySelector('#uagCopyAll');
       resultEl.style.display = 'block';
+      copyAllEl.style.display = 'block';
       const list = [];
       const seen = new Set();
       for (let i = 0; i < count * 3 && list.length < count; i++) {
@@ -306,9 +311,25 @@
           </div>
         </div>
       `).join('');
+      // 存储当前列表供复制全部使用
+      resultEl.dataset.all = list.join('\n');
     });
 
     container.addEventListener('click', (e) => {
+      // 复制全部
+      const copyAllBtn = e.target.closest('#uagCopyAllBtn');
+      if (copyAllBtn) {
+        const all = container.querySelector('#uagResult').dataset.all;
+        if (!all) return;
+        navigator.clipboard?.writeText(all).then(() => flashMessage('✓ 已复制全部')).catch(() => {
+          const ta = document.createElement('textarea');
+          ta.value = all; document.body.appendChild(ta); ta.select();
+          document.execCommand('copy'); document.body.removeChild(ta);
+          flashMessage('✓ 已复制全部');
+        });
+        return;
+      }
+      // 单条复制
       const btn = e.target.closest('.uag-copy');
       if (!btn) return;
       const val = btn.dataset.val || document.getElementById(btn.dataset.target)?.textContent;
