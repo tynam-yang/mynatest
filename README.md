@@ -70,7 +70,8 @@ mynatest/
 │   ├── link-checker.js      # 链接可用性检查
 │   ├── snapshot-diff.js     # 元素快照对比
 │   ├── ip-generator.js      # IP 地址生成 + 本机 IP
-│   └── ua-generator.js      # User-Agent 随机生成 + 本机 UA
+│   ├── ua-generator.js      # User-Agent 随机生成 + 本机 UA
+│   └── user-generator.js    # 用户信息随机生成（28 字段可选 + 文本/JSON/YAML 导出）
 │
 ├── icons/                  # 工具图标（16×16 PNG）
 ├── assets/                 # 静态资源（收款码等）
@@ -95,6 +96,7 @@ mynatest/
 | **快照对比** | 测试工具 | 捕获元素基准图，自动像素比对 UI 变更；差异高亮红色标注 |
 | **IP 地址生成** | 数据生成 | 随机生成 IPv4/IPv6（支持公网/私有/回环/自定义网段）；显示本机内外网 IP |
 | **UA 生成** | 数据生成 | 随机生成 User-Agent（Chrome/Safari/Firefox/Edge/Samsung × 多平台）；显示本机当前 UA |
+| **用户信息生成** | 数据生成 | 28 字段可选随机生成（姓名/身份证/银行卡/统一社会信用代码等），支持文本/JSON/YAML 导出 |
 
 ## 新增工具（插件化）
 
