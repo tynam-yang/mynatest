@@ -3916,13 +3916,17 @@ html, body {
 .ug-range-pair {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   font-size: 11px;
 }
 .ug-range-pair .ug-input {
-  width: 48px;
+  width: 42px;
   flex: none;
   text-align: center;
+}
+.ug-range-pair .ug-sub-label {
+  min-width: 0;
+  padding: 0 2px 0 4px;
 }
 
 /* 文本列表（逗号分隔自定义） */
@@ -4023,6 +4027,8 @@ html, body {
 .ug-cfg-row:first-child { margin-top: 0; }
 
 .ug-sub-label {
+  min-width: 56px;
+  display: inline-block;
   color: var(--text-secondary, #666);
   font-size: 11px;
   flex-shrink: 0;
