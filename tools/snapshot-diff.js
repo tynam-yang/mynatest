@@ -17,7 +17,7 @@
     container.innerHTML = `
       <div class="sd-wrap">
         <div class="sd-header">
-          <div class="sd-title">元素快照对比</div>
+          <h2><img src="${meta.iconUrl}" alt="${meta.name}"> ${meta.name}</h2>
         </div>
 
         <div class="sd-tip">点击元素生成基准图，下次打开自动比对；支持手动校验 UI 变更。</div>

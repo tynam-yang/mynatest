@@ -83,7 +83,7 @@
     container.innerHTML = `
       <div class="mi-wrap">
         <div class="mi-header">
-          <div class="mi-title">接口 Mock 拦截器</div>
+          <h2><img src="${meta.iconUrl}" alt="${meta.name}"> ${meta.name}</h2>
           <label class="mi-toggle">
             <input type="checkbox" id="mi-enabled">
             <span class="mi-toggle-slider"></span>

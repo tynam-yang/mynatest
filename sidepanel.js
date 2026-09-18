@@ -56,9 +56,22 @@ async function init() {
     const img = document.createElement('img');
     img.src = 'icons/settings.png';
     img.alt = '设置';
+    img.style.width = '22px';
+    img.style.height = '22px';
     settingsBtn.appendChild(img);
     settingsBtn.addEventListener('click', () => {
-      chrome.runtime.openOptionsPage();
+      try {
+        chrome.runtime.openOptionsPage(() => {
+          if (chrome.runtime.lastError) {
+            console.warn('[mynatest] openOptionsPage error:', chrome.runtime.lastError.message);
+            // 兜底：直接新 tab 打开 options.html
+            chrome.tabs.create({ url: chrome.runtime.getURL('options.html') });
+          }
+        });
+      } catch (e) {
+        console.warn('[mynatest] openOptionsPage exception:', e);
+        chrome.tabs.create({ url: chrome.runtime.getURL('options.html') });
+      }
     });
     settingsBtn.dataset.tooltip = '设置';
   }
@@ -248,15 +261,19 @@ function renderPanels() {
   contentEl.innerHTML = '';
 
   currentTools.forEach(tool => {
-    const panel = document.createElement('div');
-    panel.className = 'tool-panel';
-    panel.dataset.toolPanel = tool.meta.id;
-    panel.style.display = 'none';
-
-    tool.render(panel);
-    contentEl.appendChild(panel);
-
-    const cleanup = tool.mount({ container: panel, events: eventBus });
-    if (typeof cleanup === 'function') toolCleanups.push(cleanup);
+    try {
+      const panel = document.createElement('div');
+      panel.className = 'tool-panel';
+      panel.dataset.toolPanel = tool.meta.id;
+      panel.style.display = 'none';
+      tool.render(panel);
+      contentEl.appendChild(panel);
+      if (typeof tool.mount === 'function') {
+        const cleanup = tool.mount({ container: panel, events: eventBus });
+        if (typeof cleanup === 'function') toolCleanups.push(cleanup);
+      }
+    } catch (e) {
+      console.error(`[mynatest] Failed to init tool "${tool.meta?.id}":`, e);
+    }
   });
 }

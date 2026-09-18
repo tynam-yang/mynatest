@@ -20,6 +20,24 @@
     '呼延', '归海', '羊舌', '微生', '岳', '帅', '缑', '亢', '况', '后',
     '有', '琴', '梁丘', '左丘', '东门', '西门', '南宫', '公'];
 
+  const EN_FIRST_MALE = ['James', 'John', 'Robert', 'Michael', 'William', 'David', 'Richard', 'Joseph',
+    'Thomas', 'Charles', 'Christopher', 'Daniel', 'Matthew', 'Anthony', 'Mark', 'Donald',
+    'Steven', 'Paul', 'Andrew', 'Joshua', 'Kenneth', 'Kevin', 'Brian', 'George', 'Timothy',
+    'Ronald', 'Edward', 'Jason', 'Jeffrey', 'Ryan', 'Jacob', 'Gary', 'Nicholas', 'Eric', 'Jonathan',
+    'Stephen', 'Larry', 'Justin', 'Scott', 'Brandon', 'Benjamin', 'Samuel', 'Raymond', 'Gregory',
+    'Frank', 'Alexander', 'Patrick', 'Jack', 'Dennis', 'Jerry'];
+  const EN_FIRST_FEMALE = ['Mary', 'Patricia', 'Jennifer', 'Linda', 'Barbara', 'Elizabeth', 'Susan', 'Jessica',
+    'Sarah', 'Karen', 'Lisa', 'Nancy', 'Betty', 'Margaret', 'Sandra', 'Ashley',
+    'Kimberly', 'Emily', 'Donna', 'Michelle', 'Carol', 'Amanda', 'Dorothy', 'Melissa', 'Deborah',
+    'Stephanie', 'Rebecca', 'Laura', 'Sharon', 'Cynthia', 'Amy', 'Kathleen', 'Angela', 'Shirley', 'Anna',
+    'Brenda', 'Pamela', 'Emma', 'Nicole', 'Helen', 'Samantha', 'Katherine', 'Christine', 'Debra', 'Rachel',
+    'Carolyn', 'Janet', 'Catherine', 'Maria', 'Heather'];
+  const EN_LAST = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis',
+    'Rodriguez', 'Martinez', 'Hernandez', 'Lopez', 'Gonzalez', 'Wilson', 'Anderson', 'Thomas',
+    'Taylor', 'Moore', 'Jackson', 'Martin', 'Lee', 'Perez', 'Thompson', 'White', 'Harris',
+    'Sanchez', 'Clark', 'Ramirez', 'Lewis', 'Robinson', 'Walker', 'Young', 'Allen', 'King', 'Wright',
+    'Scott', 'Torres', 'Nguyen', 'Hill', 'Flores', 'Green', 'Adams', 'Nelson', 'Baker', 'Hall'];
+
   // 生成随机单字（Unicode CJK 基本区 U+4E00~U+9FFF）
   function _randHan() {
     const code = _randInt(0x4E00, 0x9FFF);
@@ -108,53 +126,42 @@
     const style = _randInt(0, 3);
     let w = '';
     if (style === 0) {
-      // 英文名 + 数字
       const a = _r(EN_ADJ); const n = _r(EN_NOUN);
       w = a + n + _randInt(1, 9999);
     } else if (style === 1) {
-      // 全随机字母数字
       w = EN_CHAR[_randInt(0, 25)].toUpperCase();
       const pool = EN_CHAR + '_1234567890';
       for (let i = 1; i < _randInt(7, 18); i++) w += pool[_randInt(0, pool.length - 1)];
     } else if (style === 2) {
-      // 中文名拼音首字母 + 数字
       w = EN_CHAR[_randInt(0, 25)].toUpperCase() + EN_CHAR[_randInt(0, 25)].toUpperCase() + _randInt(1000, 99999);
     } else {
-      // 复姓拼音
       w = EN_CHAR[_randInt(0, 25)] + EN_CHAR[_randInt(0, 25)] + EN_CHAR[_randInt(0, 25)] + _randInt(1, 999);
     }
     return w;
   }
 
   function _randNickname() {
-    // 昵称：中英文混合 + emoji + 数字后缀，尽量多样
     const style = _randInt(0, 5);
     let n = '';
     if (style === 0) {
-      // 纯中文 2-5 字
       const len = _randInt(2, 5);
       for (let i = 0; i < len; i++) n += _r(NICK_HAN);
     } else if (style === 1) {
-      // 中文 + 数字
       const len = _randInt(1, 3);
       for (let i = 0; i < len; i++) n += _r(NICK_HAN);
       n += _randInt(0, 9999);
     } else if (style === 2) {
-      // emoji + 中文
       n += _r(NICK_EMOJIS);
       const len = _randInt(1, 3);
       for (let i = 0; i < len; i++) n += _r(NICK_HAN);
       if (Math.random() < 0.5) n += _r(NICK_EMOJIS);
     } else if (style === 3) {
-      // emoji + 英文 + 数字
       n += _r(NICK_EMOJIS);
       n += _r(EN_ADJ) + _r(EN_NOUN) + _randInt(0, 99);
     } else if (style === 4) {
-      // 随机汉字 + 随机字母 + 数字
       n += _randHan() + _randHan();
       n += EN_CHAR[_randInt(0, 25)].toUpperCase() + _randInt(10, 999);
     } else {
-      // 随机 ASCII 装饰符 + 中文
       const deco = ['「', '『', '【', '☆', '★', '✿', '❀', '✧', '༺', '༻', '꧁', '꧂'];
       n += _r(deco);
       const len = _randInt(2, 4);
@@ -166,7 +173,6 @@
 
   function _randSchool() {
     if (Math.random() < 0.25) return _r(SCHOOL_ELITE);
-    // 组合生成：前缀 + 中间 + 后缀
     const prefix = _r(SCHOOL_PREFIX);
     const mid = _r(SCHOOL_MID);
     const suffix = _r(SCHOOL_SUFFIX);
@@ -216,6 +222,44 @@
     '自由职业', '待业', '学生', '退休', 'HR', '行政', '市场专员', '摄影师',
     '记者', '编辑', '主播', '模特', '运动员', '教练', '心理咨询师', '营养师'];
 
+  // ========== 新增数据常量 ==========
+  const DEGREES = ['无', '学士', '硕士', '博士'];
+  const HEALTH_STATUSES = ['良好', '健康', '亚健康', '一般', '较差'];
+  const POLITICAL_STATUSES = ['中共党员', '中共预备党员', '共青团员', '民革党员', '民盟盟员',
+    '民建会员', '民进会员', '农工党党员', '致公党党员', '九三学社社员',
+    '台盟盟员', '无党派人士', '群众'];
+  const TITLES = ['正高级工程师', '高级工程师', '工程师', '助理工程师',
+    '正教授', '副教授', '讲师', '研究员', '副研究员', '实习研究员',
+    '主任医师', '副主任医师', '主治医师', '住院医师',
+    '正高级', '副高级', '中级', '助理级', '员级'];
+  const POSITIONS = ['CEO', 'CTO', 'CFO', 'COO', '总经理', '副总经理', '总监', '副总监',
+    '经理', '副经理', '主管', '组长', '副组长', '专员', '助理', '实习生',
+    '高级工程师', '架构师', '技术专家', '产品经理', '高级产品经理', '设计师',
+    '运营', '高级运营', '销售', '高级销售', '财务', 'HR', '行政'];
+  const HOBBIES_POOL = ['阅读', '健身', '旅行', '摄影', '音乐', '电影', '美食', '运动',
+    '绘画', '书法', '编程', '写作', '养花', '钓鱼', '登山', '骑车',
+    '瑜伽', '跳舞', '唱歌', '游戏', '追剧', '网购', '做饭', '手工',
+    '下棋', '滑板', '滑雪', '冲浪', '潜水', '攀岩'];
+
+  // 虚构公司
+  const COMPANY_PREFIX = ['华信', '中兴', '华夏', '中联', '宏达', '恒通', '万达', '中天',
+    '鼎盛', '卓越', '兴业', '富邦', '金汇', '鼎盛', '环球', '新世纪',
+    '东方', '南方', '北方', '西部', '中科', '中创', '创新', '未来',
+    '蓝海', '红杉', '青松', '梅花', '玉兰', '金鼎', '鸿图', '宏图'];
+  const COMPANY_INDUSTRY = ['科技', '信息', '网络', '数据', '智能', '电子', '生物', '医药',
+    '能源', '环保', '材料', '机械', '汽车', '金融', '投资', '贸易',
+    '传媒', '文化', '教育', '咨询', '设计', '建筑', '地产', '物流',
+    '食品', '农业', '航天', '航空', '化工', '软件', '通信', '半导体'];
+  const COMPANY_SUFFIX = ['有限公司', '股份有限公司', '集团有限公司', '有限责任公司'];
+
+  const BLOOD_TYPES = ['A', 'B', 'AB', 'O'];
+  const RH_TYPES = ['Rh+', 'Rh-'];
+  const NATIONALITIES = ['中国', '美国', '英国', '法国', '德国', '日本', '韩国', '加拿大', '澳大利亚', '俄罗斯', '新加坡', '马来西亚'];
+  const RESIDENCE_TYPES = ['农业户口', '非农业户口', '集体户口', '城镇户口', '农村户口'];
+  const CERT_TYPES = ['毕业证', '学位证', '结业证', '肄业证'];
+  const FAMILY_RELATIONS = ['父亲', '母亲', '配偶', '儿子', '女儿', '兄弟', '姐妹', '祖父', '祖母', '外祖父', '外祖母'];
+  const SKILL_CERTS = ['计算机二级', '计算机三级', '计算机四级', '驾驶证C1', '驾驶证C2', '驾驶证A1', '注册会计师', '初级会计师', '中级会计师', '教师资格证', '法律职业资格A证', '法律职业资格B证', '英语四级', '英语六级', '雅思', '托福', '普通话一级', '普通话二级', '软件设计师', '系统分析师', '项目经理PMP', '网络工程师', '人力资源管理师', '心理咨询师', '营养师', '护士执业资格', '医师资格证'];
+
   // 手机号号段
   const PHONE_PREFIXES = ['130', '131', '132', '133', '134', '135', '136', '137', '138', '139',
     '145', '146', '147', '149',
@@ -224,6 +268,9 @@
     '170', '171', '172', '173', '175', '176', '177', '178',
     '180', '181', '182', '183', '184', '185', '186', '187', '188', '189',
     '190', '191', '193', '195', '197', '198', '199'];
+
+  const TEL_AREAS = ['010', '021', '022', '023', '020', '0755', '0571', '025', '028', '029',
+    '024', '027', '0591', '0531', '0371', '0411', '0451', '0512', '0551', '0731'];
 
   // 银行前缀（简化版，用于生成假卡号）
   const BANKS = [
@@ -267,14 +314,10 @@
     '聪明好学，适应能力强，业余爱好{hobby}。'
   ];
 
-  const HOBBIES = ['阅读', '健身', '旅行', '摄影', '音乐', '电影', '美食', '运动',
-    '绘画', '书法', '编程', '写作', '养花', '钓鱼', '登山', '骑车',
-    '瑜伽', '跳舞', '唱歌', '游戏', '追剧', '网购', '做饭', '手工'];
-
   // 统一社会信用代码字符集
   const USCC_CHARS = '0123456789ABCDEFGHJKLMNPQRTUWXY';
   const USCC_WEIGHTS = [1, 3, 9, 27, 19, 26, 16, 17, 4, 5, 7, 20, 6, 23, 15, 19, 1];
-  const USCC_REG_CODES = ['9', '5', '1', 'Y', '6']; // 登记管理部门代码
+  const USCC_REG_CODES = ['9', '5', '1', 'Y', '6'];
 
   // ========== 工具函数 ==========
   const _r = (a) => a[Math.floor(Math.random() * a.length)];
@@ -317,7 +360,6 @@
     return USCC_CHARS[check];
   }
 
-  // 生成随机日期
   function randomDate(startYear, endYear) {
     const year = _randInt(startYear, endYear);
     const month = _randInt(1, 12);
@@ -333,116 +375,405 @@
       .replace('DD', _pad(d.day, 2));
   }
 
+  // ========== 字段 key 中英文映射 ==========
+  const FIELD_KEYS = {
+    name: { zh: '姓名', en: 'name' },
+    enName: { zh: '英文名', en: 'enName' },
+    gender: { zh: '性别', en: 'gender' },
+    age: { zh: '年龄', en: 'age' },
+    birthDate: { zh: '出生日期', en: 'birthDate' },
+    nation: { zh: '民族', en: 'nation' },
+    idCard: { zh: '身份证号', en: 'idCard' },
+    phone: { zh: '手机号码', en: 'phone' },
+    tel: { zh: '固定电话', en: 'tel' },
+    emergencyContact: { zh: '紧急联系人', en: 'emergencyContact' },
+    emergencyPhone: { zh: '紧急联系电话', en: 'emergencyPhone' },
+    email: { zh: '邮箱', en: 'email' },
+    qq: { zh: 'QQ号', en: 'qq' },
+    wechat: { zh: '微信号', en: 'wechat' },
+    nickname: { zh: '昵称', en: 'nickname' },
+    school: { zh: '毕业学校', en: 'school' },
+    college: { zh: '学院', en: 'college' },
+    major: { zh: '专业', en: 'major' },
+    degree: { zh: '学位', en: 'degree' },
+    healthStatus: { zh: '健康状态', en: 'healthStatus' },
+    politicalStatus: { zh: '政治面貌', en: 'politicalStatus' },
+    title: { zh: '职称', en: 'title' },
+    company: { zh: '单位', en: 'company' },
+    companyAddr: { zh: '单位地址', en: 'companyAddr' },
+    companyTel: { zh: '单位电话', en: 'companyTel' },
+    position: { zh: '职务', en: 'position' },
+    hobby: { zh: '特长/爱好', en: 'hobby' },
+    birthPlace: { zh: '出生地', en: 'birthPlace' },
+    address: { zh: '地址', en: 'address' },
+    postcode: { zh: '邮编', en: 'postcode' },
+    bankCard: { zh: '银行卡号', en: 'bankCard' },
+    bankName: { zh: '开户行', en: 'bankName' },
+    bankCode: { zh: '开户行联行号', en: 'bankCode' },
+    account: { zh: '账号', en: 'account' },
+    password: { zh: '密码', en: 'password' },
+    uscc: { zh: '统一社会信用代码', en: 'uscc' },
+    height: { zh: '身高(cm)', en: 'height' },
+    weight: { zh: '体重(kg)', en: 'weight' },
+    education: { zh: '学历', en: 'education' },
+    occupation: { zh: '职业', en: 'occupation' },
+    marriage: { zh: '婚姻状态', en: 'marriage' },
+    passport: { zh: '护照号', en: 'passport' },
+    hkMacau: { zh: '港澳通行证号', en: 'hkMacau' },
+    residence: { zh: '居住证号码', en: 'residence' },
+    hukou: { zh: '户籍所在地', en: 'hukou' },
+    profile: { zh: '个人简介', en: 'profile' },
+    bloodType: { zh: '血型', en: 'bloodType' },
+    nationality: { zh: '国籍', en: 'nationality' },
+    formerName: { zh: '曾用名', en: 'formerName' },
+    pinyin: { zh: '姓名拼音', en: 'pinyin' },
+    residenceType: { zh: '户口性质', en: 'residenceType' },
+    highestEducation: { zh: '最高学历', en: 'highestEducation' },
+    certificateNo: { zh: '学历证书编号', en: 'certificateNo' },
+    familyMembers: { zh: '家庭信息成员', en: 'familyMembers' },
+    skillCerts: { zh: '技能证书', en: 'skillCerts' }
+  };
+
+  // ========== configUI 辅助模板 ==========
+  // 渲染一组 checkbox（多选）
+  function _tplCheckboxes(name, options, selected) {
+    const set = new Set(selected || []);
+    return `<div class="ug-cfg-row"><div class="ug-checkbox-group" data-cfg-key="${name}">
+      ${options.map(opt => `<label><input type="checkbox" value="${opt}" ${set.has(opt) ? 'checked' : ''}>${opt}</label>`).join('')}
+    </div></div>`;
+  }
+  // 渲染数字范围
+  function _tplRange(name, curMin, curMax, minV, maxV) {
+    return `<div class="ug-cfg-row"><div class="ug-range-pair" data-cfg-min="${name}" data-cfg-max="${name}">
+      <span class="ug-sub-label">最小</span>
+      <input type="number" class="ug-input" min="${minV}" max="${maxV}" value="${curMin}">
+      <span class="ug-sub-label">最大</span>
+      <input type="number" class="ug-input" min="${minV}" max="${maxV}" value="${curMax}">
+    </div></div>`;
+  }
+  // 渲染文本列表（逗号分隔自定义）
+  function _tplTextarea(name, value, placeholder, rows) {
+    return `<div class="ug-cfg-row"><textarea class="ug-input ug-textlist" rows="${rows || 2}" placeholder="${placeholder}" data-cfg-text="${name}">${value || ''}</textarea></div>`;
+  }
+
+  // ========== 字段分类 ==========
+  const CATEGORIES = [
+    { id: 'basic', title: '🧑 基础信息' },
+    { id: 'contact', title: '📱 联系方式' },
+    { id: 'address', title: '📍 地址信息' },
+    { id: 'id', title: '🪪 证件编号' },
+    { id: 'edu', title: '🎓 教育经历' },
+    { id: 'work', title: '💼 工作单位' },
+    { id: 'finance', title: '💰 金融账户' },
+    { id: 'social', title: '🏥 社会与家庭' },
+    { id: 'socialmedia', title: '🌐 网络社交' }
+  ];
+
   // ========== 字段注册表 ==========
-  // 每个字段 { id, label, defaultSelected, gen(ctx), configUI? }
-  // ctx = { birthDate, gender, ... } 共享上下文
+  // 每个字段 { id, label, group, defaultSelected, gen(ctx, cfg), configUI?(cfg) }
+  // ctx = { birthDate, gender, age, ... } 共享上下文; cfg = fieldConfig
   const FIELDS = [
     {
-      id: 'name', label: '姓名', defaultSelected: true,
-      gen: (ctx) => {
+      id: 'name', group: 'basic', label: '姓名', defaultSelected: true,
+      configUI: (cfg) => `<div class="ug-cfg-row"><span class="ug-sub-label">格式：</span>
+        <select class="ug-select" data-cfg-simple="nameStyle">
+          <option value="zh" ${cfg.nameStyle === 'zh' ? 'selected' : ''}>中文</option>
+          <option value="en" ${cfg.nameStyle === 'en' ? 'selected' : ''}>英文</option>
+        </select></div>`,
+      gen: (ctx, cfg) => {
+        const style = cfg.nameStyle || 'zh';
+        if (style === 'en') {
+          const sex = ctx.gender !== undefined ? ctx.gender : _randInt(0, 1);
+          const first = sex === 1 ? _r(EN_FIRST_MALE) : _r(EN_FIRST_FEMALE);
+          return first + ' ' + _r(EN_LAST);
+        }
         const sex = ctx.gender !== undefined ? ctx.gender : _randInt(0, 1);
         const pool = sex === 1 ? GIVEN_NAMES.male : GIVEN_NAMES.female;
         const gn = Math.random() < 0.35 ? _r(pool) + _r(pool) : _r(pool);
-        // 15% 概率使用复姓
         const sur = Math.random() < 0.15 ? _r(COMPOUND_SUR) : _r(SUR_NAMES);
         return sur + gn;
       }
     },
     {
-      id: 'gender', label: '性别', defaultSelected: true,
-      gen: (ctx) => { return ctx.gender === 1 ? '男' : '女'; }
+      id: 'pinyin', group: 'basic', label: '姓名拼音', defaultSelected: false,
+      configUI: (cfg) => `<div class="ug-cfg-row"><span class="ug-sub-label">风格：</span>
+        <select class="ug-select" data-cfg-simple="pinyinStyle">
+          <option value="upper" ${cfg.pinyinStyle === 'upper' ? 'selected' : ''}>全大写</option>
+          <option value="first" ${cfg.pinyinStyle === 'first' ? 'selected' : ''}>首字母大写</option>
+          <option value="lower" ${cfg.pinyinStyle === 'lower' ? 'selected' : ''}>全小写</option>
+        </select></div>`,
+      gen: (ctx, cfg) => {
+        const style = cfg.pinyinStyle || 'first';
+        const len = _randInt(6, 14);
+        let s = '';
+        for (let i = 0; i < len; i++) s += EN_CHAR[_randInt(0, 25)];
+        if (style === 'upper') return s.toUpperCase();
+        if (style === 'lower') return s.toLowerCase();
+        return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+      }
     },
     {
-      id: 'age', label: '年龄', defaultSelected: true,
+      id: 'enName', group: 'basic', label: '英文名', defaultSelected: false,
+      gen: (ctx) => {
+        const sex = ctx.gender !== undefined ? ctx.gender : _randInt(0, 1);
+        const first = sex === 1 ? _r(EN_FIRST_MALE) : _r(EN_FIRST_FEMALE);
+        return first + ' ' + _r(EN_LAST);
+      }
+    },
+    {
+      id: 'gender', group: 'basic', label: '性别', defaultSelected: true,
+      configUI: (cfg) => {
+        const genders = cfg.genders || ['男', '女'];
+        const custom = cfg.genderCustom || '';
+        const all = ['男', '女', '未知', '空'];
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">可选值(多选)：</span></div>
+          ${_tplCheckboxes('genders', all, genders)}
+          <div class="ug-cfg-row"><span class="ug-sub-label">自定义值（逗号分隔，选入结果）：</span></div>
+          ${_tplTextarea('genderCustom', custom, '如: 保密, 其它')}`;
+      },
+      gen: (ctx, cfg) => {
+        const base = cfg.genders && cfg.genders.length > 0 ? cfg.genders : ['男', '女'];
+        let pool = base.slice();
+        if (cfg.genderCustom) {
+          const customArr = cfg.genderCustom.split(/[,，\s]+/).filter(Boolean);
+          pool = pool.concat(customArr);
+        }
+        return pool.length > 0 ? _r(pool) : '';
+      }
+    },
+    {
+      id: 'age', group: 'basic', label: '年龄', defaultSelected: true,
+      configUI: (cfg) => _tplRange('age', cfg.ageMin || 18, cfg.ageMax || 65, 1, 120),
       gen: (ctx) => { return ctx.age; }
     },
     {
-      id: 'birthDate', label: '出生日期', defaultSelected: true,
+      id: 'birthDate', group: 'basic', label: '出生日期', defaultSelected: true,
       gen: (ctx) => { return ctx.birthDateStr; },
-      configUI: (ctx) => `<label class="ug-sub-label">格式：</label>
-        <select class="ug-select" data-ug-config="birthFmt">
-          <option value="YYYY-MM-DD">YYYY-MM-DD</option>
-          <option value="YYYYMMDD">YYYYMMDD</option>
-          <option value="YYYY年MM月DD日">YYYY年MM月DD日</option>
-          <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-        </select>`
+      configUI: (cfg) => `<div class="ug-cfg-row"><span class="ug-sub-label">格式：</span>
+        <select class="ug-select" data-cfg-simple="birthFmt">
+          <option value="YYYY-MM-DD" ${cfg.birthFmt === 'YYYY-MM-DD' ? 'selected' : ''}>YYYY-MM-DD</option>
+          <option value="YYYYMMDD" ${cfg.birthFmt === 'YYYYMMDD' ? 'selected' : ''}>YYYYMMDD</option>
+          <option value="YYYY年MM月DD日" ${cfg.birthFmt === 'YYYY年MM月DD日' ? 'selected' : ''}>YYYY年MM月DD日</option>
+          <option value="MM/DD/YYYY" ${cfg.birthFmt === 'MM/DD/YYYY' ? 'selected' : ''}>MM/DD/YYYY</option>
+        </select></div>`
     },
     {
-      id: 'nation', label: '民族', defaultSelected: false,
-      gen: () => _r(NATIONS)
+      id: 'nation', group: 'basic', label: '民族', defaultSelected: false,
+      configUI: (cfg) => {
+        const selected = cfg.nations || NATIONS;
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">选择民族(默认全部，不选则为空)：</span></div>
+          ${_tplCheckboxes('nations', NATIONS, selected)}`;
+      },
+      gen: (ctx, cfg) => {
+        const pool = cfg.nations && cfg.nations.length > 0 ? cfg.nations : NATIONS;
+        return _r(pool);
+      }
     },
     {
-      id: 'idCard', label: '身份证号', defaultSelected: true,
+      id: 'idCard', group: 'id', label: '身份证号', defaultSelected: true,
       gen: (ctx) => {
-        // 随机省市区县码
         const provinceCode = _r(Object.keys(PROVINCES));
         const cityCode = _randInt(1, 20);
         const districtCode = _randInt(1, 20);
         const area = provinceCode + _pad(cityCode, 2) + _pad(districtCode, 2);
-
         const birth = ctx.birthDate || randomDate(1950, 2005);
         const birthStr = _pad(birth.year, 4) + _pad(birth.month, 2) + _pad(birth.day, 2);
-
         const seq = _pad(_randInt(1, 999), 3);
         const first17 = area + birthStr + seq;
         return first17 + idChecksum(first17);
       }
     },
     {
-      id: 'phone', label: '手机号码', defaultSelected: true,
+      id: 'phone', group: 'contact', label: '手机号码', defaultSelected: true,
       gen: () => _r(PHONE_PREFIXES) + _randInt(10000000, 99999999)
     },
     {
-      id: 'tel', label: '固定电话', defaultSelected: false,
-      gen: () => {
-        const area = ['010', '021', '022', '023', '020', '0755', '0571', '025', '028', '029'];
-        return _r(area) + '-' + _randInt(60000000, 69999999);
+      id: 'tel', group: 'contact', label: '固定电话', defaultSelected: false,
+      configUI: (cfg) => {
+        const selected = cfg.telAreas || TEL_AREAS;
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">区号选择(多选)：</span></div>
+          ${_tplCheckboxes('telAreas', TEL_AREAS, selected)}`;
+      },
+      gen: (ctx, cfg) => {
+        const pool = cfg.telAreas && cfg.telAreas.length > 0 ? cfg.telAreas : TEL_AREAS;
+        return _r(pool) + '-' + _randInt(60000000, 69999999);
       }
     },
     {
-      id: 'emergencyContact', label: '紧急联系人', defaultSelected: false,
+      id: 'emergencyContact', group: 'contact', label: '紧急联系人', defaultSelected: false,
       gen: () => _r(SUR_NAMES) + _r(GIVEN_NAMES.female.concat(GIVEN_NAMES.male))
     },
     {
-      id: 'emergencyPhone', label: '紧急联系电话', defaultSelected: false,
+      id: 'emergencyPhone', group: 'contact', label: '紧急联系电话', defaultSelected: false,
       gen: () => _r(PHONE_PREFIXES) + _randInt(10000000, 99999999)
     },
     {
-      id: 'email', label: '邮箱', defaultSelected: true,
-      gen: (ctx) => {
-        const namePart = (ctx.name || '').length > 0
-          ? (ctx.name.match(/[\u4e00-\u9fa5]/g) || []).map(c => c.charCodeAt(0).toString(16)).join('').slice(0, 8)
-          : 'user' + _randInt(1000, 9999);
-        return namePart.toLowerCase() + '@' + _r(EMAIL_DOMAINS);
+      id: 'email', group: 'contact', label: '邮箱', defaultSelected: true,
+      configUI: (cfg) => {
+        const domains = cfg.emailDomains || EMAIL_DOMAINS;
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">邮箱后缀(多选)：</span></div>
+          ${_tplCheckboxes('emailDomains', EMAIL_DOMAINS, domains)}
+          <div class="ug-cfg-row"><span class="ug-sub-label">自定义后缀（逗号分隔）：</span></div>
+          ${_tplTextarea('emailDomainExtra', cfg.emailDomainExtra || '', '如: company.com, test.org')}`;
+      },
+      gen: (ctx, cfg) => {
+        const base = cfg.emailDomains && cfg.emailDomains.length > 0 ? cfg.emailDomains : EMAIL_DOMAINS;
+        let pool = base.slice();
+        if (cfg.emailDomainExtra) {
+          const extra = cfg.emailDomainExtra.split(/[,，\s]+/).filter(Boolean);
+          pool = pool.concat(extra);
+        }
+        const baseName = (ctx.gender === 1 ? _r(EN_FIRST_MALE) : _r(EN_FIRST_FEMALE)).toLowerCase();
+        const namePart = baseName.replace(/[^a-z0-9]/g, '') + _randInt(1, 99);
+        return namePart + '@' + _r(pool);
       }
     },
     {
-      id: 'qq', label: 'QQ号', defaultSelected: false,
+      id: 'qq', group: 'socialmedia', label: 'QQ号', defaultSelected: false,
       gen: () => _randQQ()
     },
     {
-      id: 'wechat', label: '微信号', defaultSelected: false,
+      id: 'wechat', group: 'socialmedia', label: '微信号', defaultSelected: false,
       gen: () => _randWechat()
     },
     {
-      id: 'nickname', label: '昵称', defaultSelected: false,
+      id: 'nickname', group: 'socialmedia', label: '昵称', defaultSelected: false,
       gen: () => _randNickname()
     },
     {
-      id: 'school', label: '毕业学校', defaultSelected: false,
+      id: 'school', group: 'edu', label: '毕业学校', defaultSelected: false,
       gen: () => _randSchool()
     },
     {
-      id: 'college', label: '学院', defaultSelected: false,
+      id: 'college', group: 'edu', label: '学院', defaultSelected: false,
       gen: () => _r(COLLEGES)
     },
     {
-      id: 'major', label: '专业', defaultSelected: false,
+      id: 'major', group: 'edu', label: '专业', defaultSelected: false,
       gen: () => _r(MAJORS)
     },
     {
-      id: 'address', label: '地址', defaultSelected: true,
+      id: 'degree', group: 'edu', label: '学位', defaultSelected: false,
+      configUI: (cfg) => {
+        const selected = cfg.degrees || DEGREES;
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">学位(多选)：</span></div>
+          ${_tplCheckboxes('degrees', DEGREES, selected)}`;
+      },
+      gen: (ctx, cfg) => {
+        const pool = cfg.degrees && cfg.degrees.length > 0 ? cfg.degrees : DEGREES;
+        return _r(pool);
+      }
+    },
+    {
+      id: 'healthStatus', group: 'social', label: '健康状态', defaultSelected: false,
+      configUI: (cfg) => {
+        const selected = cfg.healthStatuses || HEALTH_STATUSES;
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">健康状态(多选)：</span></div>
+          ${_tplCheckboxes('healthStatuses', HEALTH_STATUSES, selected)}`;
+      },
+      gen: (ctx, cfg) => {
+        const pool = cfg.healthStatuses && cfg.healthStatuses.length > 0 ? cfg.healthStatuses : HEALTH_STATUSES;
+        return _r(pool);
+      }
+    },
+    {
+      id: 'politicalStatus', group: 'social', label: '政治面貌', defaultSelected: false,
+      configUI: (cfg) => {
+        const selected = cfg.politicalStatuses || POLITICAL_STATUSES;
+        const custom = cfg.politicalStatusCustom || '';
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">政治面貌(多选)：</span></div>
+          ${_tplCheckboxes('politicalStatuses', POLITICAL_STATUSES, selected)}
+          <div class="ug-cfg-row"><span class="ug-sub-label">自定义值（逗号分隔）：</span></div>
+          ${_tplTextarea('politicalStatusCustom', custom, '如: 民主党派人士')}`;
+      },
+      gen: (ctx, cfg) => {
+        let pool = cfg.politicalStatuses && cfg.politicalStatuses.length > 0 ? cfg.politicalStatuses : POLITICAL_STATUSES;
+        if (cfg.politicalStatusCustom) {
+          const extra = cfg.politicalStatusCustom.split(/[,，\s]+/).filter(Boolean);
+          pool = pool.concat(extra);
+        }
+        return _r(pool);
+      }
+    },
+    {
+      id: 'title', group: 'work', label: '职称', defaultSelected: false,
+      configUI: (cfg) => {
+        const selected = cfg.titles || TITLES;
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">职称(多选)：</span></div>
+          ${_tplCheckboxes('titles', TITLES, selected)}`;
+      },
+      gen: (ctx, cfg) => {
+        const pool = cfg.titles && cfg.titles.length > 0 ? cfg.titles : TITLES;
+        return _r(pool);
+      }
+    },
+    {
+      id: 'position', group: 'work', label: '职务', defaultSelected: false,
+      configUI: (cfg) => {
+        const selected = cfg.positions || POSITIONS;
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">职务(多选)：</span></div>
+          ${_tplCheckboxes('positions', POSITIONS, selected)}`;
+      },
+      gen: (ctx, cfg) => {
+        const pool = cfg.positions && cfg.positions.length > 0 ? cfg.positions : POSITIONS;
+        return _r(pool);
+      }
+    },
+    {
+      id: 'company', group: 'work', label: '单位', defaultSelected: false,
       gen: () => {
+        // 10% 精英企业
+        if (Math.random() < 0.1) {
+          const elites = ['华为技术有限公司', '阿里巴巴集团控股有限公司', '腾讯科技(深圳)有限公司',
+            '字节跳动科技有限公司', '百度在线网络技术(北京)有限公司', '小米科技有限责任公司',
+            '京东集团', '美团网', '网易(杭州)网络有限公司', '滴滴出行科技有限公司',
+            '中国移动通信集团有限公司', '国家电网有限公司', '中国石油化工集团公司'];
+          return _r(elites);
+        }
+        return _r(COMPANY_PREFIX) + _r(COMPANY_INDUSTRY) + _r(COMPANY_SUFFIX);
+      }
+    },
+    {
+      id: 'companyAddr', group: 'work', label: '单位地址', defaultSelected: false,
+      gen: () => {
+        const province = _r(Object.values(PROVINCES).filter(p => p !== '台湾' && p !== '香港' && p !== '澳门'));
+        const provincePart = ['北京', '上海', '天津', '重庆'].includes(province) ? province : province + '省';
+        const city = province + _r(CITY_SUFFIXES);
+        const district = _r(['朝阳', '海淀', '浦东', '南山', '天河', '鼓楼', '西湖', '玄武', '岳麓', '历下']) + _r(DISTRICT_SUFFIXES);
+        const street = _r(STREET_PREFIXES);
+        return provincePart + city + district + street + _randInt(1, 999) + '号';
+      }
+    },
+    {
+      id: 'companyTel', group: 'work', label: '单位电话', defaultSelected: false,
+      gen: () => _r(TEL_AREAS) + '-' + _randInt(80000000, 89999999)
+    },
+    {
+      id: 'hobby', group: 'social', label: '特长/爱好', defaultSelected: false,
+      gen: () => {
+        const count = _randInt(1, 3);
+        const shuffled = HOBBIES_POOL.slice().sort(() => Math.random() - 0.5);
+        return shuffled.slice(0, count).join('、');
+      }
+    },
+    {
+      id: 'birthPlace', group: 'basic', label: '出生地', defaultSelected: false,
+      gen: () => {
+        const province = _r(Object.values(PROVINCES).filter(p => p !== '台湾' && p !== '香港' && p !== '澳门'));
+        const isDirect = ['北京', '上海', '天津', '重庆'];
+        if (isDirect.includes(province)) return province;
+        return province + _r(CITY_SUFFIXES);
+      }
+    },
+    {
+      id: 'address', group: 'address', label: '地址', defaultSelected: true,
+      configUI: (cfg) => `<div class="ug-cfg-row"><span class="ug-sub-label">详细程度：</span>
+        <select class="ug-select" data-cfg-simple="addrType">
+          <option value="full" ${cfg.addrType === 'full' ? 'selected' : ''}>省市区详细地址</option>
+          <option value="simple" ${cfg.addrType === 'simple' ? 'selected' : ''}>极简地址（省/市）</option>
+          <option value="long" ${cfg.addrType === 'long' ? 'selected' : ''}>超长地址（含楼层门牌）</option>
+        </select></div>`,
+      gen: (ctx, cfg) => {
         const isDirect = ['北京', '上海', '天津', '重庆'];
         const province = _r(Object.values(PROVINCES).filter(p => p !== '台湾' && p !== '香港' && p !== '澳门'));
         const provincePart = isDirect.includes(province) ? province : province + '省';
@@ -450,19 +781,34 @@
         const district = _r(['朝阳', '海淀', '浦东', '南山', '天河', '鼓楼', '西湖', '玄武', '岳麓', '历下']) + _r(DISTRICT_SUFFIXES);
         const street = _r(STREET_PREFIXES);
         const number = _randInt(1, 999) + '号';
-        const building = _randInt(1, 30) + '栋';
-        const room = _randInt(101, 3001) + '室';
-        return provincePart + city + district + street + number + building + room;
+        const type = cfg.addrType || 'full';
+        if (type === 'simple') return provincePart + city;
+        if (type === 'long') {
+          const building = _randInt(1, 30) + '栋';
+          const unit = _randInt(1, 6) + '单元';
+          const floor = _randInt(1, 30) + '层';
+          const room = _randInt(101, 3001) + '室';
+          return provincePart + city + district + street + number + building + unit + floor + room;
+        }
+        return provincePart + city + district + street + number;
       }
     },
     {
-      id: 'postcode', label: '邮编', defaultSelected: false,
+      id: 'postcode', group: 'address', label: '邮编', defaultSelected: false,
       gen: () => _pad(_randInt(100000, 999999), 6)
     },
     {
-      id: 'bankCard', label: '银行卡号', defaultSelected: false,
-      gen: () => {
-        const bank = _r(BANKS);
+      id: 'bankCard', group: 'finance', label: '银行卡号', defaultSelected: false,
+      configUI: (cfg) => {
+        const names = BANKS.map(b => b.name);
+        const selected = cfg.banks || names;
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">银行(多选，与开户行/联行号共用)：</span></div>
+          ${_tplCheckboxes('banks', names, selected)}`;
+      },
+      gen: (ctx, cfg) => {
+        let banks = cfg.banks && cfg.banks.length > 0 ? BANKS.filter(b => cfg.banks.includes(b.name)) : BANKS;
+        if (banks.length === 0) banks = BANKS;
+        const bank = _r(banks);
         const prefix = _r(bank.prefix);
         const remaining = 16 - prefix.length;
         let first = prefix;
@@ -471,71 +817,142 @@
       }
     },
     {
-      id: 'bankName', label: '开户行', defaultSelected: false,
-      gen: () => _r(BANKS).name + ' 总行'
+      id: 'bankName', group: 'finance', label: '开户行', defaultSelected: false,
+      configUI: (cfg) => {
+        const names = BANKS.map(b => b.name);
+        const selected = cfg.banks || names;
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">银行(多选)：</span></div>
+          ${_tplCheckboxes('banks', names, selected)}`;
+      },
+      gen: (ctx, cfg) => {
+        const names = BANKS.map(b => b.name);
+        const pool = cfg.banks && cfg.banks.length > 0 ? cfg.banks : names;
+        return _r(pool) + ' 总行';
+      }
     },
     {
-      id: 'bankCode', label: '开户行联行号', defaultSelected: false,
-      gen: () => _r(BANKS).code + _pad(_randInt(1, 99), 2)
+      id: 'bankCode', group: 'finance', label: '开户行联行号', defaultSelected: false,
+      gen: (ctx, cfg) => {
+        let banks = cfg.banks && cfg.banks.length > 0 ? BANKS.filter(b => cfg.banks.includes(b.name)) : BANKS;
+        if (banks.length === 0) banks = BANKS;
+        return _r(banks).code + _pad(_randInt(1, 99), 2);
+      }
     },
     {
-      id: 'account', label: '账号', defaultSelected: false,
+      id: 'account', group: 'finance', label: '账号', defaultSelected: false,
       gen: () => {
         const pools = ['user', 'admin', 'test', 'member', 'vip', 'guest', 'developer', 'manager'];
         return _r(pools) + _randInt(1000, 9999);
       }
     },
     {
-      id: 'password', label: '密码', defaultSelected: false,
-      gen: () => {
-        const chars = 'abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-        let pwd = '';
-        for (let i = 0; i < _randInt(8, 14); i++) pwd += chars[_randInt(0, chars.length - 1)];
-        return pwd;
+      id: 'password', group: 'finance', label: '密码', defaultSelected: false,
+      configUI: (cfg) => `<div class="ug-cfg-row"><span class="ug-sub-label">强度：</span>
+        <select class="ug-select" data-cfg-simple="pwdType">
+          <option value="weak" ${cfg.pwdType === 'weak' ? 'selected' : ''}>弱密码（字母+数字 6-8位）</option>
+          <option value="strong" ${cfg.pwdType === 'strong' ? 'selected' : ''}>强密码（大小写+数字+符号 10-16位）</option>
+          <option value="space" ${cfg.pwdType === 'space' ? 'selected' : ''}>带空格密码（单词组合）</option>
+        </select></div>`,
+      gen: (ctx, cfg) => {
+        const type = cfg.pwdType || 'strong';
+        if (type === 'weak') {
+          const chars = 'abcdefghijkmnopqrstuvwxyz23456789';
+          let p = '';
+          for (let i = 0; i < _randInt(6, 8); i++) p += chars[_randInt(0, chars.length - 1)];
+          return p;
+        }
+        if (type === 'space') {
+          const a = _r(EN_ADJ); const n = _r(EN_NOUN);
+          return (a + ' ' + n + ' ' + _randInt(1, 9999)).trim();
+        }
+        // strong
+        const upper = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+        const lower = 'abcdefghijkmnopqrstuvwxyz';
+        const sym = '!@#$%^&*()-_=+[]{};:,.<>?';
+        let p = upper[_randInt(0, upper.length - 1)]
+          + lower[_randInt(0, lower.length - 1)]
+          + String(_randInt(0, 9))
+          + sym[_randInt(0, sym.length - 1)];
+        const pool = upper + lower + '23456789' + sym;
+        const len = _randInt(10, 16);
+        for (let i = 4; i < len; i++) p += pool[_randInt(0, pool.length - 1)];
+        return p.split('').sort(() => Math.random() - 0.5).join('');
       }
     },
     {
-      id: 'uscc', label: '统一社会信用代码', defaultSelected: false,
+      id: 'uscc', group: 'id', label: '统一社会信用代码', defaultSelected: false,
       gen: () => {
-        const regCode = _r(USCC_REG_CODES);       // 1
-        const catCode = _r(['1', '2', '3', '9']);  // 1
-        const area = _pad(_randInt(110000, 659999), 6); // 6
-        const orgCode = USCC_CHARS[_randInt(0, USCC_CHARS.length - 1)]
-          + USCC_CHARS[_randInt(0, USCC_CHARS.length - 1)]
-          + USCC_CHARS[_randInt(0, USCC_CHARS.length - 1)]
-          + USCC_CHARS[_randInt(0, USCC_CHARS.length - 1)]
-          + USCC_CHARS[_randInt(0, USCC_CHARS.length - 1)]
-          + USCC_CHARS[_randInt(0, USCC_CHARS.length - 1)]
-          + USCC_CHARS[_randInt(0, USCC_CHARS.length - 1)]
-          + USCC_CHARS[_randInt(0, USCC_CHARS.length - 1)]; // 8
+        const regCode = _r(USCC_REG_CODES);
+        const catCode = _r(['1', '2', '3', '9']);
+        const area = _pad(_randInt(110000, 659999), 6);
+        let orgCode = '';
+        for (let i = 0; i < 8; i++) orgCode += USCC_CHARS[_randInt(0, USCC_CHARS.length - 1)];
         const first17 = regCode + catCode + area + orgCode;
         return first17 + usccChecksum(first17);
       }
     },
     {
-      id: 'height', label: '身高(cm)', defaultSelected: false,
+      id: 'height', group: 'basic', label: '身高(cm)', defaultSelected: false,
       gen: (ctx) => {
         if (ctx.gender === 1) return _randInt(160, 190);
         return _randInt(150, 175);
       }
     },
     {
-      id: 'weight', label: '体重(kg)', defaultSelected: false,
-      gen: (ctx) => {
-        if (ctx.gender === 1) return _randInt(55, 90);
-        return _randInt(40, 70);
+      id: 'weight', group: 'basic', label: '体重(kg)', defaultSelected: false,
+      configUI: (cfg) => `<div class="ug-cfg-row">
+        <span class="ug-sub-label">范围(男)：</span>
+        <div class="ug-range-pair" data-cfg-min="weight" data-cfg-max="weight">
+          <span class="ug-sub-label">最小</span>
+          <input type="number" class="ug-input" min="30" max="200" value="${cfg.weightMinMale !== undefined ? cfg.weightMinMale : 55}">
+          <span class="ug-sub-label">最大</span>
+          <input type="number" class="ug-input" min="30" max="200" value="${cfg.weightMaxMale !== undefined ? cfg.weightMaxMale : 90}">
+        </div>
+        <span class="ug-sub-label" style="margin-left:8px">范围(女)：</span>
+        <div class="ug-range-pair" data-cfg-min="weightF" data-cfg-max="weightF">
+          <span class="ug-sub-label">最小</span>
+          <input type="number" class="ug-input" min="30" max="200" value="${cfg.weightMinFemale !== undefined ? cfg.weightMinFemale : 40}">
+          <span class="ug-sub-label">最大</span>
+          <input type="number" class="ug-input" min="30" max="200" value="${cfg.weightMaxFemale !== undefined ? cfg.weightMaxFemale : 70}">
+        </div>
+      </div>`,
+      gen: (ctx, cfg) => {
+        if (ctx.gender === 1) {
+          const mn = cfg.weightMinMale !== undefined ? cfg.weightMinMale : 55;
+          const mx = cfg.weightMaxMale !== undefined ? cfg.weightMaxMale : 90;
+          return _randInt(mn, mx);
+        }
+        const mn = cfg.weightMinFemale !== undefined ? cfg.weightMinFemale : 40;
+        const mx = cfg.weightMaxFemale !== undefined ? cfg.weightMaxFemale : 70;
+        return _randInt(mn, mx);
       }
     },
     {
-      id: 'education', label: '学历', defaultSelected: false,
-      gen: () => _r(EDUCATIONS)
+      id: 'education', group: 'edu', label: '学历', defaultSelected: false,
+      configUI: (cfg) => {
+        const selected = cfg.educations || EDUCATIONS;
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">学历(多选)：</span></div>
+          ${_tplCheckboxes('educations', EDUCATIONS, selected)}`;
+      },
+      gen: (ctx, cfg) => {
+        const pool = cfg.educations && cfg.educations.length > 0 ? cfg.educations : EDUCATIONS;
+        return _r(pool);
+      }
     },
     {
-      id: 'occupation', label: '职业', defaultSelected: false,
-      gen: () => _r(OCCUPATIONS)
+      id: 'occupation', group: 'work', label: '职业', defaultSelected: false,
+      configUI: (cfg) => {
+        const selected = cfg.occupations || OCCUPATIONS;
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">职业(多选)：</span></div>
+          ${_tplCheckboxes('occupations', OCCUPATIONS, selected)}`;
+      },
+      gen: (ctx, cfg) => {
+        const pool = cfg.occupations && cfg.occupations.length > 0 ? cfg.occupations : OCCUPATIONS;
+        return _r(pool);
+      }
     },
     {
-      id: 'marriage', label: '婚姻状态', defaultSelected: false,
+      id: 'marriage', group: 'social', label: '婚姻状态', defaultSelected: false,
       gen: (ctx) => {
         const age = ctx.age || _randInt(18, 65);
         if (age < 22) return '未婚';
@@ -544,7 +961,7 @@
       }
     },
     {
-      id: 'passport', label: '护照号', defaultSelected: false,
+      id: 'passport', group: 'id', label: '护照号', defaultSelected: false,
       gen: () => {
         const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
         let p = letters[_randInt(0, letters.length - 1)];
@@ -554,13 +971,11 @@
       }
     },
     {
-      id: 'hkMacau', label: '港澳通行证号', defaultSelected: false,
-      gen: () => {
-        return 'C' + _pad(_randInt(10000000, 99999999), 8);
-      }
+      id: 'hkMacau', group: 'id', label: '港澳通行证号', defaultSelected: false,
+      gen: () => 'C' + _pad(_randInt(10000000, 99999999), 8)
     },
     {
-      id: 'residence', label: '居住证号码', defaultSelected: false,
+      id: 'residence', group: 'id', label: '居住证号码', defaultSelected: false,
       gen: () => {
         const area = _pad(_randInt(110000, 440000), 6);
         const birth = formatDate(randomDate(1950, 2005), 'YYYYMMDD');
@@ -568,7 +983,7 @@
       }
     },
     {
-      id: 'hukou', label: '户籍所在地', defaultSelected: false,
+      id: 'hukou', group: 'address', label: '户籍所在地', defaultSelected: false,
       gen: () => {
         const province = _r(Object.values(PROVINCES));
         const cities = province === '北京' || province === '上海' || province === '天津' || province === '重庆'
@@ -578,19 +993,159 @@
       }
     },
     {
-      id: 'profile', label: '个人简介', defaultSelected: false,
+      id: 'profile', group: 'social', label: '个人简介', defaultSelected: false,
       gen: () => {
         const tpl = _r(PROFILE_TEMPLATES);
-        return tpl.replace('{hobby}', _r(HOBBIES));
+        return tpl.replace('{hobby}', _r(HOBBIES_POOL));
+      }
+    },
+    {
+      id: 'bloodType', group: 'basic', label: '血型', defaultSelected: false,
+      configUI: (cfg) => `<div class="ug-cfg-row"><span class="ug-sub-label">ABO：</span>
+        <select class="ug-select" data-cfg-simple="bloodABO">
+          ${BLOOD_TYPES.map(t => `<option value="${t}" ${cfg.bloodABO === t ? 'selected' : ''}>${t}</option>`).join('')}
+        </select></div>
+        <div class="ug-cfg-row"><span class="ug-sub-label">Rh：</span>
+        <select class="ug-select" data-cfg-simple="bloodRh">
+          ${RH_TYPES.map(t => `<option value="${t}" ${cfg.bloodRh === t ? 'selected' : ''}>${t}</option>`).join('')}
+        </select></div>`,
+      gen: (ctx, cfg) => `${cfg.bloodABO || 'O'}型 (${cfg.bloodRh || 'Rh+'})`
+    },
+    {
+      id: 'nationality', group: 'basic', label: '国籍', defaultSelected: false,
+      configUI: (cfg) => {
+        const selected = cfg.nationalities || NATIONALITIES;
+        const custom = cfg.nationalityCustom || '';
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">国籍(多选)：</span></div>
+          ${_tplCheckboxes('nationalities', NATIONALITIES, selected)}
+          <div class="ug-cfg-row"><span class="ug-sub-label">自定义后缀（逗号分隔）：</span></div>
+          ${_tplTextarea('nationalityCustom', custom, '如: 无国籍, 双重国籍')}`;
+      },
+      gen: (ctx, cfg) => {
+        let pool = cfg.nationalities && cfg.nationalities.length > 0 ? cfg.nationalities : NATIONALITIES;
+        if (cfg.nationalityCustom) {
+          const extra = cfg.nationalityCustom.split(/[,，\s]+/).filter(Boolean);
+          pool = pool.concat(extra);
+        }
+        return _r(pool);
+      }
+    },
+    {
+      id: 'formerName', group: 'basic', label: '曾用名', defaultSelected: false,
+      gen: () => {
+        if (Math.random() < 0.7) return '';
+        const sex = _randInt(0, 1);
+        const pool = sex === 1 ? GIVEN_NAMES.male : GIVEN_NAMES.female;
+        const gn = Math.random() < 0.35 ? _r(pool) + _r(pool) : _r(pool);
+        const sur = Math.random() < 0.15 ? _r(COMPOUND_SUR) : _r(SUR_NAMES);
+        return sur + gn;
+      }
+    },
+    {
+      id: 'residenceType', group: 'address', label: '户口性质', defaultSelected: false,
+      configUI: (cfg) => {
+        const selected = cfg.residenceTypes || RESIDENCE_TYPES;
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">户口性质(多选)：</span></div>
+          ${_tplCheckboxes('residenceTypes', RESIDENCE_TYPES, selected)}`;
+      },
+      gen: (ctx, cfg) => {
+        const pool = cfg.residenceTypes && cfg.residenceTypes.length > 0 ? cfg.residenceTypes : RESIDENCE_TYPES;
+        return _r(pool);
+      }
+    },
+    {
+      id: 'highestEducation', group: 'edu', label: '最高学历', defaultSelected: false,
+      configUI: (cfg) => {
+        const selected = cfg.highestEducations || EDUCATIONS;
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">最高学历(多选)：</span></div>
+          ${_tplCheckboxes('highestEducations', EDUCATIONS, selected)}`;
+      },
+      gen: (ctx, cfg) => {
+        const pool = cfg.highestEducations && cfg.highestEducations.length > 0 ? cfg.highestEducations : EDUCATIONS;
+        return _r(pool);
+      }
+    },
+    {
+      id: 'certificateNo', group: 'id', label: '学历证书编号', defaultSelected: false,
+      gen: () => {
+        const type = _randInt(0, 1);
+        const num = _pad(_randInt(10000000, 99999999), 8);
+        if (type === 0) return `毕证第${num}号`;
+        return `学位证字第${num}号`;
+      }
+    },
+    {
+      id: 'familyMembers', group: 'social', label: '家庭信息成员', defaultSelected: false,
+      configUI: (cfg) => {
+        const selected = cfg.familyRelations || FAMILY_RELATIONS.slice(0, 4);
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">关系(多选，默认父/母/配偶/儿子)：</span></div>
+          ${_tplCheckboxes('familyRelations', FAMILY_RELATIONS, selected)}`;
+      },
+      gen: (ctx, cfg) => {
+        const pool = cfg.familyRelations && cfg.familyRelations.length > 0 ? cfg.familyRelations : FAMILY_RELATIONS.slice(0, 4);
+        const count = _randInt(1, Math.min(3, pool.length));
+        const shuffled = pool.slice().sort(() => Math.random() - 0.5).slice(0, count);
+        return shuffled.map(rel => {
+          const sex = _randInt(0, 1);
+          const gpool = sex === 1 ? GIVEN_NAMES.male : GIVEN_NAMES.female;
+          const gn = Math.random() < 0.35 ? _r(gpool) + _r(gpool) : _r(gpool);
+          const sur = Math.random() < 0.15 ? _r(COMPOUND_SUR) : _r(SUR_NAMES);
+          return {
+            '关系': rel,
+            '姓名': sur + gn,
+            '职业': _r(OCCUPATIONS),
+            '单位': Math.random() < 0.1
+              ? _r(['华为技术有限公司', '阿里巴巴集团控股有限公司', '腾讯科技(深圳)有限公司', '字节跳动科技有限公司'])
+              : _r(COMPANY_PREFIX) + _r(COMPANY_INDUSTRY) + _r(COMPANY_SUFFIX),
+            '联系方式': _r(PHONE_PREFIXES) + _pad(_randInt(10000000, 99999999), 8)
+          };
+        });
+      }
+    },
+    {
+      id: 'skillCerts', group: 'social', label: '技能证书', defaultSelected: false,
+      configUI: (cfg) => {
+        const selected = cfg.skillCerts || SKILL_CERTS;
+        const custom = cfg.skillCertsCustom || '';
+        return `<div class="ug-cfg-row"><span class="ug-sub-label">技能证书(多选)：</span></div>
+          ${_tplCheckboxes('skillCerts', SKILL_CERTS, selected)}
+          <div class="ug-cfg-row"><span class="ug-sub-label">自定义后缀（逗号分隔）：</span></div>
+          ${_tplTextarea('skillCertsCustom', custom, '如: 初级电工证, 安全员证', 2)}`;
+      },
+      gen: (ctx, cfg) => {
+        let pool = cfg.skillCerts && cfg.skillCerts.length > 0 ? cfg.skillCerts : SKILL_CERTS;
+        if (cfg.skillCertsCustom) {
+          const extra = cfg.skillCertsCustom.split(/[,，\s]+/).filter(Boolean);
+          pool = pool.concat(extra);
+        }
+        const count = _randInt(1, Math.min(3, pool.length));
+        const shuffled = pool.slice().sort(() => Math.random() - 0.5).slice(0, count);
+        return shuffled.join('、');
       }
     }
   ];
 
   // ========== 渲染工具 ==========
+  // 把任意值（含数组/对象）安全转成字符串表示
+  function _stringifyVal(v) {
+    if (Array.isArray(v)) {
+      return v.map(item => {
+        if (item && typeof item === 'object') {
+          return Object.entries(item).map(([k, v2]) => `${k}:${v2}`).join(' | ');
+        }
+        return String(item);
+      }).join('；');
+    }
+    if (v && typeof v === 'object') {
+      return Object.entries(v).map(([k, v2]) => `${k}:${v2}`).join(' | ');
+    }
+    return v === undefined || v === null ? '' : String(v);
+  }
+
   function escapeYaml(v) {
     if (typeof v === 'number') return String(v);
     if (typeof v === 'boolean') return v ? 'true' : 'false';
-    const s = String(v);
+    const s = _stringifyVal(v);
     if (/[:#&*!?|>%@`,\[\]]/.test(s) || s.includes('\n') || s === '' || s !== s.trim()) {
       return '"' + s.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
     }
@@ -610,30 +1165,61 @@
   }
 
   function toText(data) {
-    // 中文标签 + 值，等号分隔，行显示
     const lines = [];
     for (const [k, v] of Object.entries(data)) {
-      const f = FIELDS.find(f => f.id === k);
-      const label = f ? f.label : k;
-      lines.push(label + '：' + v);
+      lines.push(k + '：' + _stringifyVal(v));
     }
     return lines.join('\n');
   }
 
   // ========== 工具定义 ==========
-  const meta = {
-    id: NAME,
-    name: '用户信息生成',
-    desc: '28 字段可选随机生成（姓名/身份证/银行卡/统一社会信用代码等），支持文本/JSON/YAML 导出',
-    icon: '👤',
-    iconUrl: 'icons/user-generator.png',
-    category: 'data-gen',
-    categoryName: '数据生成'
-  };
-
   const tool = {
-    meta,
-    fieldConfig: { birthFmt: 'YYYY-MM-DD' },
+    meta: {
+      id: NAME,
+      name: '用户信息生成',
+      desc: '50+ 字段可选随机生成，支持中英文 key、多选/范围/格式配置，文本/JSON/YAML 导出，分组选择',
+      icon: '👤',
+      iconUrl: 'icons/user-generator.png',
+      category: 'data-gen',
+      categoryName: '数据生成'
+    },
+    fieldConfig: {
+      // 全局
+      keyLang: 'zh',
+      // 已有字段配置默认
+      birthFmt: 'YYYY-MM-DD',
+      nameStyle: 'zh',
+      ageMin: 18, ageMax: 65,
+      emailDomains: EMAIL_DOMAINS.slice(),
+      emailDomainExtra: '',
+      banks: BANKS.map(b => b.name),
+      weightMinMale: 55, weightMaxMale: 90,
+      weightMinFemale: 40, weightMaxFemale: 70,
+      genders: ['男', '女'],
+      genderCustom: '',
+      nations: NATIONS.slice(),
+      telAreas: TEL_AREAS.slice(),
+      addrType: 'full',
+      pwdType: 'strong',
+      educations: EDUCATIONS.slice(),
+      occupations: OCCUPATIONS.slice(),
+      degrees: DEGREES.slice(),
+      healthStatuses: HEALTH_STATUSES.slice(),
+      politicalStatuses: POLITICAL_STATUSES.slice(),
+      politicalStatusCustom: '',
+      titles: TITLES.slice(),
+      positions: POSITIONS.slice(),
+      // 新增字段配置默认值
+      bloodABO: 'O', bloodRh: 'Rh+',
+      nationalities: NATIONALITIES.slice(),
+      residenceTypes: RESIDENCE_TYPES.slice(),
+      highestEducations: EDUCATIONS.slice(),
+      familyRelations: FAMILY_RELATIONS.slice(0, 4),
+      skillCerts: SKILL_CERTS.slice(),
+      skillCertsCustom: '',
+      nationalityCustom: '',
+      pinyinStyle: 'first'
+    },
     _currentFmt: 'text',
     _generated: null,
     _toastTimer: null,
@@ -641,28 +1227,34 @@
     render(root) {
       root.innerHTML = `
         <div class="ug-wrap">
+          <div class="lc-header"><h2><img src="${tool.meta.iconUrl}" alt="${tool.meta.name}"> ${tool.meta.name}</h2></div>
           <div class="ug-section ug-config">
-            <div class="ug-section-title">⚙️ 生成配置</div>
-            <div class="ug-config-row">
-              <label class="ug-label">数量</label>
-              <input type="number" id="ugCount" class="ug-input ug-count" min="1" max="20" value="1">
-              <button id="ugGen" class="ug-btn-primary ug-gen-btn">🎲 生成</button>
-            </div>
-          </div>
+              <div class="ug-section-title">⚙️ 生成配置</div>
 
-          <div class="ug-section ug-fields">
-            <div class="ug-section-title">
-              <span>📋 选择字段（${FIELDS.length}项）</span>
-              <div class="ug-field-actions">
-                <button id="ugSelectAll" class="ug-btn-tiny">全选</button>
-                <button id="ugSelectDefault" class="ug-btn-tiny">默认</button>
-                <button id="ugClearAll" class="ug-btn-tiny">清空</button>
+
+            <div class="ug-section-sub">
+              <div class="ug-section-title">
+                <span>📋 选择字段（${FIELDS.length}项）</span>
+                <div class="ug-field-actions">
+                  <button id="ugSelectAll" class="ug-btn-tiny">全选</button>
+                  <button id="ugSelectDefault" class="ug-btn-tiny">默认</button>
+                  <button id="ugClearAll" class="ug-btn-tiny">清空</button>
+                </div>
               </div>
+              <div id="ugFieldGrid" class="ug-field-grid"></div>
+              <div id="ugFieldConfig" class="ug-field-config"></div>
             </div>
-            <div id="ugFieldGrid" class="ug-field-grid"></div>
-            <div id="ugFieldConfig" class="ug-field-config"></div>
           </div>
-
+            <div class="ug-config-row">
+              <label class="ug-label">Key 语言</label>
+              <select class="ug-select" id="ugKeyLang" style="flex:none;width:auto">
+                <option value="zh" ${this.fieldConfig.keyLang === 'zh' ? 'selected' : ''}>中文</option>
+                <option value="en" ${this.fieldConfig.keyLang === 'en' ? 'selected' : ''}>英文</option>
+              </select>
+              <label class="ug-label" style="margin-left:8px">数量</label>
+              <input type="number" id="ugCount" class="ug-input ug-count" min="1" max="500" value="1">
+              <button id="ugGen" class="ug-btn-primary ug-gen-btn">生成</button>
+            </div>
           <div class="ug-section ug-result-section">
             <div class="ug-section-title">
               <span>📝 生成结果</span>
@@ -682,64 +1274,156 @@
         </div>
       `;
 
-      // 渲染字段选择网格
+      // 渲染字段选择网格（按 CATEGORIES 分组）
       const grid = root.querySelector('#ugFieldGrid');
-      grid.innerHTML = FIELDS.map((f, i) => {
-        const checked = f.defaultSelected ? 'checked' : '';
-        const cfgBtn = f.configUI ? `<button class="ug-cfg-toggle" data-field="${f.id}" title="配置">⚙️</button>` : '';
-        return `<label class="ug-field-item">
-          <input type="checkbox" class="ug-field-check" data-id="${f.id}" ${checked}>
-          <span>${f.label}</span>
-          ${cfgBtn}
-        </label>`;
+      const byGroup = {};
+      FIELDS.forEach(f => {
+        const g = f.group || 'basic';
+        (byGroup[g] = byGroup[g] || []).push(f);
+      });
+      grid.innerHTML = CATEGORIES.map(cat => {
+        const fields = byGroup[cat.id] || [];
+        if (fields.length === 0) return '';
+        const items = fields.map(f => {
+          const checked = f.defaultSelected ? 'checked' : '';
+          const cfgBtn = f.configUI ? `<button class="ug-cfg-toggle" data-field="${f.id}" title="配置">⚙️</button>` : '';
+          return `<label class="ug-field-item">
+            <input type="checkbox" class="ug-field-check" data-id="${f.id}" ${checked}>
+            <span>${f.label}</span>
+            ${cfgBtn}
+          </label>`;
+        }).join('');
+        return `<div class="ug-cat-group">
+          <div class="ug-cat-title">
+            <span>${cat.title}（${fields.length}）</span>
+            <div class="ug-cat-btns">
+              <button class="ug-btn-tiny ug-cat-sel" data-cat="${cat.id}">全选</button>
+              <button class="ug-btn-tiny ug-cat-clr" data-cat="${cat.id}">清空</button>
+            </div>
+          </div>
+          <div class="ug-field-grid ug-cat-grid">${items}</div>
+        </div>`;
       }).join('');
+      this._currentFmt = 'text';
+      this._generated = null;
+    },
+
+    mount(context) {
+      const { container } = context;
 
       // 事件绑定
-      root.querySelector('#ugGen').addEventListener('click', () => this.doGenerate(root));
-      root.querySelector('#ugSelectAll').addEventListener('click', () => this._selectAll(root, true));
-      root.querySelector('#ugSelectDefault').addEventListener('click', () => this._selectAll(root, 'default'));
-      root.querySelector('#ugClearAll').addEventListener('click', () => this._selectAll(root, false));
+      container.querySelector('#ugGen').addEventListener('click', () => this.doGenerate(container));
+
+      // 数量输入自动 clamp
+      const ugCountInput = container.querySelector('#ugCount');
+      ugCountInput.addEventListener('input', () => {
+        const val = parseInt(ugCountInput.value, 10);
+        if (isNaN(val)) return;
+        const max = parseInt(ugCountInput.max, 10) || 500;
+        const min = parseInt(ugCountInput.min, 10) || 1;
+        if (val > max) ugCountInput.value = max;
+        if (val < min) ugCountInput.value = min;
+      });
+      container.querySelector('#ugSelectAll').addEventListener('click', () => this._selectAll(container, true));
+      container.querySelector('#ugSelectDefault').addEventListener('click', () => this._selectAll(container, 'default'));
+      container.querySelector('#ugClearAll').addEventListener('click', () => this._selectAll(container, false));
+
+      // 全局 key 语言
+      container.querySelector('#ugKeyLang').addEventListener('change', (e) => {
+        this.fieldConfig.keyLang = e.target.value;
+        this._renderResult(container);
+      });
 
       // 字段配置按钮
+      const grid = container.querySelector('#ugFieldGrid');
       grid.querySelectorAll('.ug-cfg-toggle').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.preventDefault(); e.stopPropagation();
           const fieldId = btn.dataset.field;
           const field = FIELDS.find(f => f.id === fieldId);
-          const cfgBox = root.querySelector('#ugFieldConfig');
+          const cfgBox = container.querySelector('#ugFieldConfig');
           if (cfgBox.dataset.forField === fieldId && cfgBox.innerHTML) {
             cfgBox.innerHTML = ''; cfgBox.dataset.forField = '';
           } else if (field && field.configUI) {
-            cfgBox.innerHTML = `<div class="ug-cfg-block">${field.label} 配置：${field.configUI(this.fieldConfig)}</div>`;
+            cfgBox.innerHTML = `<div class="ug-cfg-block">${field.configUI(this.fieldConfig)}</div>`;
             cfgBox.dataset.forField = fieldId;
-            cfgBox.querySelectorAll('[data-ug-config]').forEach(sel => {
-              sel.value = this.fieldConfig[sel.dataset.ugConfig] || '';
-              sel.addEventListener('change', () => {
-                this.fieldConfig[sel.dataset.ugConfig] = sel.value;
-              });
-            });
+            // 绑定配置事件（统一处理 4 种类型）
+            this._bindCfgEvents(cfgBox);
           }
         });
       });
 
+      // 分组全选/清空
+      grid.querySelectorAll('.ug-cat-sel').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const groupRoot = btn.closest('.ug-cat-group');
+          groupRoot.querySelectorAll('.ug-field-check').forEach(cb => cb.checked = true);
+        });
+      });
+      grid.querySelectorAll('.ug-cat-clr').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const groupRoot = btn.closest('.ug-cat-group');
+          groupRoot.querySelectorAll('.ug-field-check').forEach(cb => cb.checked = false);
+        });
+      });
+
       // 格式切换
-      root.querySelectorAll('.ug-format-tab').forEach(tab => {
+      container.querySelectorAll('.ug-format-tab').forEach(tab => {
         tab.addEventListener('click', () => {
-          root.querySelectorAll('.ug-format-tab').forEach(t => t.classList.remove('active'));
+          container.querySelectorAll('.ug-format-tab').forEach(t => t.classList.remove('active'));
           tab.classList.add('active');
           this._currentFmt = tab.dataset.fmt;
-          this._renderResult(root);
+          this._renderResult(container);
         });
       });
 
       // 复制
-      root.querySelector('#ugCopyAll').addEventListener('click', () => {
-        const text = this._getCurrentOutput(root);
+      container.querySelector('#ugCopyAll').addEventListener('click', () => {
+        const text = this._getCurrentOutput(container);
         navigator.clipboard.writeText(text).then(() => this._toast('✓ 已复制全部'));
       });
 
-      this._currentFmt = 'text';
-      this._generated = null;
+      this._renderResult(container);
+    },
+
+    _bindCfgEvents(box) {
+      // 1) 简单 select
+      box.querySelectorAll('[data-cfg-simple]').forEach(sel => {
+        sel.value = this.fieldConfig[sel.dataset.cfgSimple] !== undefined ? this.fieldConfig[sel.dataset.cfgSimple] : sel.value;
+        sel.addEventListener('change', () => {
+          this.fieldConfig[sel.dataset.cfgSimple] = sel.value;
+        });
+      });
+      // 2) 多选 checkbox-group
+      box.querySelectorAll('[data-cfg-key]').forEach(group => {
+        const key = group.dataset.cfgKey;
+        const sync = () => {
+          const arr = Array.from(group.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+          this.fieldConfig[key] = arr;
+        };
+        group.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.addEventListener('change', sync));
+      });
+      // 3) 数字范围（两个 input）
+      box.querySelectorAll('[data-cfg-min]').forEach(pair => {
+        const key = pair.dataset.cfgMin;
+        const inputs = pair.querySelectorAll('input[type="number"]');
+        // 找 max 和 min 的键
+        let minKey, maxKey;
+        if (key === 'weightF') {
+          minKey = 'weightMinFemale'; maxKey = 'weightMaxFemale';
+        } else if (key === 'weight') {
+          minKey = 'weightMinMale'; maxKey = 'weightMaxMale';
+        } else {
+          minKey = key + 'Min'; maxKey = key + 'Max';
+        }
+        inputs[0].addEventListener('change', () => { this.fieldConfig[minKey] = parseInt(inputs[0].value, 10); });
+        inputs[1].addEventListener('change', () => { this.fieldConfig[maxKey] = parseInt(inputs[1].value, 10); });
+      });
+      // 4) textarea
+      box.querySelectorAll('[data-cfg-text]').forEach(ta => {
+        ta.value = this.fieldConfig[ta.dataset.cfgText] || '';
+        ta.addEventListener('input', () => { this.fieldConfig[ta.dataset.cfgText] = ta.value; });
+      });
     },
 
     _selectAll(root, all) {
@@ -756,20 +1440,23 @@
       return Array.from(checks).map(c => c.dataset.id);
     },
 
-    // 生成前预填充共享上下文，确保字段间依赖一致
+    // 生成前预填充共享上下文
     _prepareCtx() {
-      const ctx = { ...this.fieldConfig };
+      const cfg = this.fieldConfig;
+      const ctx = { ...cfg };
       ctx.gender = _randInt(0, 1);
-      ctx.age = _randInt(18, 65);
-      ctx.birthDate = randomDate(new Date().getFullYear() - ctx.age - 1, new Date().getFullYear() - ctx.age);
-      ctx.birthDateStr = formatDate(ctx.birthDate, ctx.birthFmt || 'YYYY-MM-DD');
+      ctx.age = _randInt(cfg.ageMin || 18, cfg.ageMax || 65);
+      const birthYear = new Date().getFullYear() - ctx.age - 1;
+      const birthYear2 = new Date().getFullYear() - ctx.age;
+      ctx.birthDate = randomDate(birthYear, birthYear2);
+      ctx.birthDateStr = formatDate(ctx.birthDate, cfg.birthFmt || 'YYYY-MM-DD');
       return ctx;
     },
 
     doGenerate(root) {
       const ids = this._getSelected(root);
       if (ids.length === 0) { this._toast('请先选择至少一个字段'); return; }
-      const count = Math.max(1, Math.min(20, parseInt(root.querySelector('#ugCount').value) || 1));
+      const count = Math.max(1, Math.min(500, parseInt(root.querySelector('#ugCount').value) || 1));
 
       const results = [];
       for (let i = 0; i < count; i++) {
@@ -778,9 +1465,11 @@
         for (const fid of ids) {
           const field = FIELDS.find(f => f.id === fid);
           if (field) {
-            const label = field.label;
-            try { item[label] = field.gen(ctx); }
-            catch (e) { item[label] = '(生成失败)'; }
+            // 根据 keyLang 选择 key
+            const keyDef = FIELD_KEYS[fid] || { zh: field.label, en: fid };
+            const key = this.fieldConfig.keyLang === 'en' ? keyDef.en : keyDef.zh;
+            try { item[key] = field.gen(ctx, this.fieldConfig); }
+            catch (e) { item[key] = '(生成失败)'; }
           }
         }
         results.push(item);
@@ -801,14 +1490,18 @@
 
       if (fmt === 'text') {
         box.innerHTML = this._generated.map((item, idx) => {
-          const lines = Object.entries(item).map(([k, v]) => `<div class="ug-row"><span class="ug-row-label">${k}</span><span class="ug-row-val">${v}</span></div>`);
+          const lines = Object.entries(item).map(([k, v]) => {
+            const valStr = Array.isArray(v)
+              ? v.map(m => Object.entries(m).map(([k2, v2]) => `${k2}:${v2}`).join(' | ')).join('；')
+              : (v === null || v === undefined) ? '' : v;
+            return `<div class="ug-row"><span class="ug-row-label">${k}</span><span class="ug-row-val">${valStr}</span></div>`;
+          });
           const header = this._generated.length > 1 ? `<div class="ug-entry-header">#${idx + 1}</div>` : '';
           return `<div class="ug-entry">${header}${lines.join('')}</div>`;
         }).join('<div class="ug-entry-sep"></div>');
       } else if (fmt === 'json') {
         box.innerHTML = `<pre>${toJSON(this._generated.length === 1 ? this._generated[0] : this._generated, true)}</pre>`;
       } else {
-        // YAML
         let yaml;
         if (this._generated.length === 1) {
           yaml = toYaml(this._generated[0]);
@@ -828,7 +1521,6 @@
           ? toYaml(this._generated[0])
           : this._generated.map(item => '- ' + toYaml(item).replace(/\n/g, '\n  ')).join('\n');
       }
-      // text
       return this._generated.map(item => toText(item)).join('\n\n');
     },
 

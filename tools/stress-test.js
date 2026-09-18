@@ -64,9 +64,9 @@
         <div class="st-section-title">压测参数</div>
         <div class="st-param-row">
           <label>次数</label>
-          <input type="number" id="stCount" value="5" min="1" max="200">
+          <input type="number" id="stCount" value="5" min="1" max="500">
           <label>并发</label>
-          <input type="number" id="stConcurrency" value="1" min="1" max="50">
+          <input type="number" id="stConcurrency" value="1" min="1" max="500">
         </div>
       </div>
 
@@ -145,6 +145,20 @@
     const bodyBlock = c.querySelector('#stBodyBlock');
     methodSel?.addEventListener('change', () => {
       bodyBlock.style.display = ['POST', 'PUT', 'PATCH'].includes(methodSel.value) ? 'block' : 'none';
+    });
+
+    // 数量输入自动 clamp
+    ['#stCount', '#stConcurrency'].forEach(sel => {
+      const input = c.querySelector(sel);
+      if (!input) return;
+      input.addEventListener('input', () => {
+        const val = parseInt(input.value, 10);
+        if (isNaN(val)) return;
+        const max = parseInt(input.max, 10) || 500;
+        const min = parseInt(input.min, 10) || 1;
+        if (val > max) input.value = max;
+        if (val < min) input.value = min;
+      });
     });
 
     // 块展开/收起

@@ -3553,8 +3553,8 @@ html, body {
 
 .ipg-count {
   width: 60px;
+  flex: none;
   text-align: center;
-  flex-shrink: 0;
 }
 
 .ipg-btn {
@@ -3734,8 +3734,8 @@ html, body {
 
 .uag-count {
   width: 60px;
+  flex: none;
   text-align: center;
-  flex-shrink: 0;
 }
 
 .uag-btn {
@@ -3890,9 +3890,45 @@ html, body {
 }
 
 .ug-count {
-  width: 96px;
+  width: 60px;
+  flex: none;
   text-align: center;
-  flex-shrink: 0;
+}
+
+/* 多选 checkbox 组 */
+.ug-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  font-size: 11px;
+}
+.ug-checkbox-group label {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+}
+.ug-checkbox-group input[type="checkbox"] {
+  margin: 0;
+}
+
+/* 数字范围 */
+.ug-range-pair {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+}
+.ug-range-pair .ug-input {
+  width: 48px;
+  flex: none;
+  text-align: center;
+}
+
+/* 文本列表（逗号分隔自定义） */
+.ug-textlist {
+  font-size: 11px;
+  width: 100%;
 }
 
 .ug-btn-primary {
@@ -3967,20 +4003,36 @@ html, body {
 .ug-field-config {
   margin-top: 6px;
   padding-top: 6px;
-  border-top: 1px dashed var(--border);
   font-size: 12px;
 }
 
 .ug-cfg-block {
+  display: block;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* 配置中的每一行：label + 控件（同一行内 flex 对齐） */
+.ug-cfg-row {
   display: flex;
   align-items: center;
   gap: 6px;
+  margin-top: 4px;
   flex-wrap: wrap;
 }
+.ug-cfg-row:first-child { margin-top: 0; }
 
 .ug-sub-label {
   color: var(--text-secondary, #666);
   font-size: 11px;
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+.ug-cfg-row .ug-input,
+.ug-cfg-row .ug-select {
+  min-width: 60px;
+  max-width: 260px;
 }
 
 .ug-result-section {
@@ -4064,7 +4116,8 @@ html, body {
 
 .ug-row-label {
   color: var(--text-secondary, #666);
-  min-width: 72px;
+  width: 110px;
+  min-width: 110px;
   flex-shrink: 0;
 }
 
@@ -4082,4 +4135,39 @@ html, body {
   width: 100%;
   padding: 10px;
   font-size: 13px;
+}
+
+/* ========== 分组字段 ========== */
+.ug-cat-group {
+  border: 1px solid var(--border, #e5e5e5);
+  border-radius: 6px;
+  margin-bottom: 8px;
+  padding: 4px 8px 6px;
+  background: #fafafa;
+}
+.ug-cat-group:last-child { margin-bottom: 0; }
+
+.ug-cat-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8B5CF6;
+  padding: 4px 0;
+  border-bottom: 1px dashed var(--border, #ddd);
+  margin-bottom: 4px;
+}
+.ug-cat-btns { display: flex; gap: 4px; }
+.ug-cat-btns .ug-btn-tiny { padding: 1px 6px; font-size: 10px; }
+
+.ug-cat-grid {
+  max-height: none !important;
+  overflow-y: visible !important;
+}
+
+/* 配置区内嵌子块 */
+.ug-section-sub {
+  margin-top: 10px;
+  padding-top: 8px;
 }

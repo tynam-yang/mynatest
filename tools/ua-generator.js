@@ -177,6 +177,7 @@
     const currentUA = navigator.userAgent;
     container.innerHTML = `
       <div class="uag-wrap">
+        <div class="lc-header"><h2><img src="${meta.iconUrl}" alt="${meta.name}"> ${meta.name}</h2></div>
 
         <!-- 本机 UA -->
         <div class="uag-section">
@@ -215,7 +216,7 @@
           </div>
           <div class="uag-gen-row">
             <label class="uag-label">数量</label>
-            <input type="number" id="uagCount" class="uag-input uag-count" min="1" max="50" value="1">
+            <input type="number" id="uagCount" class="uag-input uag-count" min="1" max="500" value="1">
             <button class="uag-btn uag-btn-primary" id="uagGenBtn">生成</button>
           </div>
           <div class="uag-result" id="uagResult" style="display:none;"></div>
@@ -284,10 +285,21 @@
       }
     });
 
+    // 数量输入自动 clamp
+    const uagCountInput = container.querySelector('#uagCount');
+    uagCountInput.addEventListener('input', () => {
+      const val = parseInt(uagCountInput.value, 10);
+      if (isNaN(val)) return;
+      const max = parseInt(uagCountInput.max, 10) || 500;
+      const min = parseInt(uagCountInput.min, 10) || 1;
+      if (val > max) uagCountInput.value = max;
+      if (val < min) uagCountInput.value = min;
+    });
+
     container.querySelector('#uagGenBtn').addEventListener('click', () => {
       const browser = container.querySelector('#uagBrowser').value;
       const platform = container.querySelector('#uagPlatform').value;
-      const count = Math.min(50, Math.max(1, Number(container.querySelector('#uagCount').value) || 1));
+      const count = Math.min(500, Math.max(1, Number(container.querySelector('#uagCount').value) || 1));
       const resultEl = container.querySelector('#uagResult');
       const copyAllEl = container.querySelector('#uagCopyAll');
       resultEl.style.display = 'block';

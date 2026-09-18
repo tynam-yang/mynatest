@@ -191,6 +191,7 @@
   function render(container) {
     container.innerHTML = `
       <div class="ipg-wrap">
+        <div class="lc-header"><h2><img src="${meta.iconUrl}" alt="${meta.name}"> ${meta.name}</h2></div>
 
         <!-- 本机 IP -->
         <div class="ipg-section">
@@ -255,7 +256,7 @@
           </div>
           <div class="ipg-gen-row">
             <label class="ipg-label">数量</label>
-            <input type="number" id="ipgV4Count" class="ipg-input ipg-count" min="1" max="100" value="1">
+            <input type="number" id="ipgV4Count" class="ipg-input ipg-count" min="1" max="500" value="1">
             <button class="ipg-btn ipg-btn-primary" id="ipgGenV4">生成</button>
           </div>
           <div class="ipg-result" id="ipgV4Result" style="display:none;"></div>
@@ -278,7 +279,7 @@
           </div>
           <div class="ipg-gen-row">
             <label class="ipg-label">数量</label>
-            <input type="number" id="ipgV6Count" class="ipg-input ipg-count" min="1" max="100" value="1">
+            <input type="number" id="ipgV6Count" class="ipg-input ipg-count" min="1" max="500" value="1">
             <button class="ipg-btn ipg-btn-primary" id="ipgGenV6">生成</button>
           </div>
           <div class="ipg-result" id="ipgV6Result" style="display:none;"></div>
@@ -340,11 +341,24 @@
       row.style.display = e.target.value === 'custom' ? '' : 'none';
     });
 
+    // 数量输入自动 clamp
+    ['#ipgV4Count', '#ipgV6Count'].forEach(sel => {
+      const input = container.querySelector(sel);
+      input.addEventListener('input', () => {
+        const val = parseInt(input.value, 10);
+        if (isNaN(val)) return;
+        const max = parseInt(input.max, 10) || 500;
+        const min = parseInt(input.min, 10) || 1;
+        if (val > max) input.value = max;
+        if (val < min) input.value = min;
+      });
+    });
+
     // 生成 IPv4
     container.querySelector('#ipgGenV4').addEventListener('click', () => {
       const range = container.querySelector('#ipgV4Range').value;
       const custom = container.querySelector('#ipgV4Custom').value.trim();
-      const count = Math.min(100, Math.max(1, Number(container.querySelector('#ipgV4Count').value) || 1));
+      const count = Math.min(500, Math.max(1, Number(container.querySelector('#ipgV4Count').value) || 1));
       if (range === 'custom' && !custom) {
         flashMessage('请输入自定义网段', true);
         return;
@@ -360,7 +374,7 @@
     // 生成 IPv6
     container.querySelector('#ipgGenV6').addEventListener('click', () => {
       const range = container.querySelector('#ipgV6Range').value;
-      const count = Math.min(100, Math.max(1, Number(container.querySelector('#ipgV6Count').value) || 1));
+      const count = Math.min(500, Math.max(1, Number(container.querySelector('#ipgV6Count').value) || 1));
       const ips = [];
       for (let i = 0; i < count; i++) ips.push(randomIPv6(range));
       const resultEl = container.querySelector('#ipgV6Result');
