@@ -3552,7 +3552,7 @@ html, body {
 }
 
 .ipg-count {
-  width: 48px;
+  width: 60px;
   text-align: center;
   flex-shrink: 0;
 }
@@ -3733,7 +3733,7 @@ html, body {
 }
 
 .uag-count {
-  width: 48px;
+  width: 60px;
   text-align: center;
   flex-shrink: 0;
 }
