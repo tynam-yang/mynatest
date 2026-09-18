@@ -36,49 +36,44 @@
 
 ```
 mynatest/
-├── manifest.json           # MV3 清单（content_scripts 声明式注入 MAIN/ISOLATED world）
-├── background.js           # Service Worker：侧栏 + Port 中转 + 截图
-├── sidepanel.html/css/js   # 侧边栏 UI 框架
-├── options.html/css/js     # 设置页（Tab 式，按分类管理工具）
-│
-├── core/                   # 共享核心模块（全局脚本，挂 window）
-│   ├── storage.js          # chrome.storage 封装 + 启用工具管理
-│   ├── diff.js             # diffJSON / diffLines / parseJSONRobust
-│   └── utils.js            # escapeHtml / flashMessage
-│
-├── content/                # ⭐ Content Scripts（注入页面，manifest 声明式）
-│   ├── injected.js         # MAIN world：hook fetch/XHR，捕获请求/响应
-│   ├── content.js          # ISOLATED world：Port 长连接转发
-│   ├── env-banner-content.js  # 环境横幅：域名匹配 + 顶部横幅注入
-│   ├── bug-report-content.js  # Bug 报告：框选 + Canvas 标注 + 环境采集
-│   ├── mock-interceptor-main.js    # Mock：MAIN world 独立 hook fetch/XHR
-│   ├── mock-interceptor-bridge.js  # Mock：ISOLATED world 读 storage → postMessage 下发配置
+├── manifest.json                   # MV3 清单（content_scripts 声明式注入 MAIN/ISOLATED world）
+├── background.js                   # Service Worker：侧栏 + Port 中转 + 截图
+├── sidepanel.html/css/js           # 侧边栏 UI 框架
+├── options.html/css/js             # 设置页（Tab 式，按分类管理工具）
+├── core/                           # 共享核心模块（全局脚本，挂 window）
+│   ├── storage.js                 # chrome.storage 封装 + 启用工具管理
+│   ├── diff.js                    # diffJSON / diffLines / parseJSONRobust
+│   └── utils.js                   # escapeHtml / flashMessage
+├── content/                        # ⭐ Content Scripts（注入页面，manifest 声明式）
+│   ├── injected.js                # MAIN world：hook fetch/XHR，捕获请求/响应
+│   ├── content.js                 # ISOLATED world：Port 长连接转发
+│   ├── env-banner-content.js      # 环境横幅：域名匹配 + 顶部横幅注入
+│   ├── bug-report-content.js      # Bug 报告：框选 + Canvas 标注 + 环境采集
+│   ├── mock-interceptor-main.js   # Mock：MAIN world 独立 hook fetch/XHR
+│   ├── mock-interceptor-bridge.js # Mock：ISOLATED world 读 storage → postMessage 下发配置
 │   └── snapshot-picker.js         # 快照：元素选择器 + 自动比对 + DOM 徽章
-│
-├── tools/                  # ⭐ 所有工具集中在这里（全局 IIFE 自注册）
-│   ├── request-diff.js     # 请求对比
-│   ├── stress-test.js      # 轻量压测
-│   ├── timestamp.js        # 时间戳转换
-│   ├── json-formatter.js   # JSON 格式化
-│   ├── data-diff.js        # 数据对比
-│   ├── storage-manager.js  # Cookie/Storage 管理
-│   ├── jwt-parser.js       # JWT 解析
-│   ├── regex-tester.js     # 正则测试
-│   ├── env-banner.js       # 测试环境横幅
-│   ├── bug-report.js       # Bug 报告助手
-│   ├── mock-interceptor.js  # 接口 Mock 拦截器
-│   ├── link-checker.js      # 链接可用性检查
-│   ├── snapshot-diff.js     # 元素快照对比
-│   ├── ip-generator.js      # IP 地址生成 + 本机 IP
-│   ├── ua-generator.js      # User-Agent 随机生成 + 本机 UA
-│   ├── user-generator.js    # 用户信息随机生成（55 字段可选 · 9 分类 · 文本/JSON/YAML 导出）
-│   ├── file-generator.js    # 文件生成（自定义大小/类型/二进制 · 自动下载）
-│   ├── vehicle-generator.js # 车辆信息随机生成（33 字段 · 5 分类）
-│   └── contract-generator.js # 合同 & 票据信息随机生成（32 字段 · 6 分类）
-│
-├── icons/                  # 工具图标（16×16 PNG）
-├── assets/                 # 静态资源（收款码等）
-└── README.md
+├── tools/                          # ⭐ 所有工具集中在这里（全局 IIFE 自注册）
+│   ├── request-diff.js            # 请求对比
+│   ├── stress-test.js             # 轻量压测
+│   ├── timestamp.js               # 时间戳转换
+│   ├── json-formatter.js          # JSON 格式化
+│   ├── data-diff.js               # 数据对比
+│   ├── storage-manager.js         # Cookie/Storage 管理
+│   ├── jwt-parser.js              # JWT 解析
+│   ├── regex-tester.js            # 正则测试
+│   ├── env-banner.js              # 测试环境横幅
+│   ├── bug-report.js              # Bug 报告助手
+│   ├── mock-interceptor.js        # 接口 Mock 拦截器
+│   ├── link-checker.js            # 链接可用性检查
+│   ├── snapshot-diff.js           # 元素快照对比
+│   ├── ip-generator.js            # IP 地址生成 + 本机 IP
+│   ├── ua-generator.js            # User-Agent 随机生成 + 本机 UA
+│   ├── user-generator.js          # 用户信息随机生成（55 字段可选 · 9 分类 · 文本/JSON/YAML 导出）
+│   ├── file-generator.js          # 文件生成（自定义大小/类型/二进制 · 自动下载）
+│   ├── vehicle-generator.js       # 车辆信息随机生成（33 字段 · 5 分类）
+│   └── contract-generator.js      # 合同 & 票据信息随机生成（32 字段 · 6 分类）
+├── icons/                          # 工具图标（16×16 PNG）
+├── assets/                         # 静态资源（收款码等）
 ```
 
 ## 现有工具
@@ -93,16 +88,16 @@ mynatest/
 | **数据对比** | 开发工具 | JSON / 文本行级 diff |
 | **Cookie/Storage 管理** | 开发工具 | 登录态快照切换 |
 | **正则测试** | 开发工具 | 实时匹配结果，内置邮箱/手机号/IP 等 18 个常用正则速查 |
-| **环境横幅** | 开发工具 | 域名规则匹配 + 页面顶部彩色横幅，区分 dev/test/pre 防误操作生产 |
+| **环境横幅** | 开发工具 | 域名规则匹配 + 页面顶部彩色横幅，防误操作生产 |
 | **Mock 拦截器** | 测试工具 | 拦截指定 URL 返回自定义响应；多套场景一键切换 |
 | **链接检查** | 测试工具 | 批量扫描页面 a 标签，校验可访问性与跳转地址 |
 | **快照对比** | 测试工具 | 捕获元素基准图，自动像素比对 UI 变更；差异高亮红色标注 |
-| **IP 地址生成** | 数据生成 | 随机生成 IPv4/IPv6（支持公网/私有/回环/自定义网段）；显示本机内外网 IP |
-| **UA 生成** | 数据生成 | 随机生成 User-Agent（Chrome/Safari/Firefox/Edge/Samsung × 多平台）；显示本机当前 UA |
-| **用户信息生成** | 数据生成 | 55 字段 × 9 分类；支持 Key 中英文切换、畸形数据；文本/JSON/YAML 导出 |
-| **文件生成** | 数据生成 | 自定义文件名、大小（B~GB）、类型（文本/二进制/BMP）、扩展名；生成后自动下载 |
-| **车辆信息生成** | 数据生成 | 33 字段 × 5 分类（基础/证件/状态/车主/交通）；支持畸形车牌/异常 VIN/违章记录/驾驶证信息 |
-| **合同票据生成** | 数据生成 | 32 字段 × 6 分类（合同/甲乙双方/金额/日期/票据/备注）；支持金额大小写/注入 payload/统一社会信用代码 |
+| **IP 地址生成** | 数据生成 | 随机生成 IPv4/IPv6；显示本机内外网 IP |
+| **UA 生成** | 数据生成 | 随机生成 User-Agent（多浏览器 × 多平台）；显示本机当前 UA |
+| **用户信息生成** | 数据生成 | 55 字段数据；支持文本/JSON/YAML 导出 |
+| **文件生成** | 数据生成 | 自定义文件（文本/二进制/BMP）；生成后自动下载 |
+| **车辆信息生成** | 数据生成 | 33 字段车辆信息；支持畸形车牌/异常 VIN/违章记录/驾驶证信息 |
+| **合同票据生成** | 数据生成 | 32 字段合同票据 |
 
 ## 新增工具（插件化）
 
