@@ -230,6 +230,7 @@
               <div class="ipg-local-note-text">Chrome 隐私限制可能隐藏真实 IP，显示 mDNS 名称（xxx.local）时需通过系统网络设置查看</div>
             </div>
             <button class="ipg-btn-refresh" id="ipgRefreshLocal">🔄 重新检测</button>
+            <button class="ipg-btn ipg-btn-primary ipg-btn-copyall" id="ipgLocalCopyAll" style="margin-top:6px;">📋 复制全部</button>
           </div>
         </div>
 
@@ -393,7 +394,29 @@
 
     // 复制按钮代理
     container.addEventListener('click', (e) => {
-      // 复制全部
+      // 复制全部 - 本机 IP
+      const localCopyAllBtn = e.target.closest('#ipgLocalCopyAll');
+      if (localCopyAllBtn) {
+        const lines = [];
+        const push = (label, id) => {
+          const v = container.querySelector('#' + id)?.textContent?.trim();
+          if (v && v !== '--' && !v.startsWith('未检测到')) lines.push(`${label}: ${v}`);
+        };
+        push('公网 IPv4', 'ipgPublicV4');
+        push('内网 IPv4', 'ipgLocalV4');
+        push('本机 IPv6', 'ipgLocalV6');
+        push('mDNS', 'ipgMdns');
+        if (!lines.length) { flashMessage('暂无可复制的 IP', true); return; }
+        const all = lines.join('\n');
+        navigator.clipboard?.writeText(all).then(() => flashMessage('✓ 已复制全部')).catch(() => {
+          const ta = document.createElement('textarea');
+          ta.value = all; document.body.appendChild(ta); ta.select();
+          document.execCommand('copy'); document.body.removeChild(ta);
+          flashMessage('✓ 已复制全部');
+        });
+        return;
+      }
+      // 复制全部 - 生成结果
       const copyAllBtn = e.target.closest('.ipg-btn-copyall');
       if (copyAllBtn) {
         const targetId = copyAllBtn.id.includes('V4') ? 'ipgV4Result' : 'ipgV6Result';
