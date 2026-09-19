@@ -77,6 +77,11 @@
       "matches": ["http://*/*", "https://*/*"],
       "js": ["content/selector-picker.js"],
       "run_at": "document_idle"
+    },
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content/screen-recorder.js"],
+      "run_at": "document_idle"
     }
   ],
 
@@ -86,7 +91,12 @@
     "scripting",
     "activeTab",
     "cookies",
-    "tabs"
+    "tabs",
+    "debugger",
+    "tabCapture",
+    "desktopCapture",
+    "downloads",
+    "offscreen"
   ],
 
   "host_permissions": [

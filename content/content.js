@@ -49,7 +49,7 @@
 
     // hook-ready 只用于确认注入成功，不转发
     if (type === 'network:hook-ready') return;
-    if (!type || (!String(type).startsWith('network:') && !String(type).startsWith('perf:'))) return;
+    if (!type || (!String(type).startsWith('network:') && !String(type).startsWith('perf:') && !String(type).startsWith('resource-check:'))) return;
 
     // 上下文已失效：静默放弃，避免每次请求都报错
     if (contextDead) return;

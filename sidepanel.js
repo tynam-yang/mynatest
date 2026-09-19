@@ -91,6 +91,10 @@ async function init() {
         if (msg.type === 'perf:vitals') { eventBus.emit('perf:vitals', msg.payload); return; }
         if (msg.type === 'perf:resources') { eventBus.emit('perf:resources', msg.payload); return; }
         if (msg.type === 'selector-gen:picked') { eventBus.emit('selector-gen:picked', msg.payload); return; }
+        if (msg.type === 'resource-check:result') { eventBus.emit('resource-check:result', msg.payload); return; }
+        if (msg.type === 'screen-recorder:tick') { eventBus.emit('screen-recorder:tick', msg.payload); return; }
+        if (msg.type === 'screen-recorder:recording-done') { eventBus.emit('screen-recorder:recording-done', msg.payload); return; }
+        if (msg.type === 'screen-recorder:started') { eventBus.emit('screen-recorder:started', msg.payload); return; }
       });
       relayPort.onDisconnect.addListener(() => {
         relayPort = null;
@@ -137,6 +141,10 @@ async function init() {
       if (val.type === 'perf:vitals') { eventBus.emit('perf:vitals', val.payload); return; }
       if (val.type === 'perf:resources') { eventBus.emit('perf:resources', val.payload); return; }
       if (val.type === 'selector-gen:picked') { eventBus.emit('selector-gen:picked', val.payload); return; }
+      if (val.type === 'resource-check:result') { eventBus.emit('resource-check:result', val.payload); return; }
+      if (val.type === 'screen-recorder:tick') { eventBus.emit('screen-recorder:tick', val.payload); return; }
+      if (val.type === 'screen-recorder:recording-done') { eventBus.emit('screen-recorder:recording-done', val.payload); return; }
+      if (val.type === 'screen-recorder:started') { eventBus.emit('screen-recorder:started', val.payload); return; }
     });
   });
 

@@ -360,5 +360,193 @@
       collectResources();
       reportVitals();
     }
+    if (ev.data.type === 'resource-check:collect') {
+      collectFailedResources();
+    }
   });
+
+  // ========== 资源加载失败检测 ==========
+  // 1) capture-phase error 监听（img/script/link 失败不会冒泡，必须 capture）
+  const FAILED_RESOURCES = new Map(); // url → { url, type, element, timestamp }
+
+  window.addEventListener('error', (e) => {
+    // 只关心资源加载错误，过滤掉 JS runtime error（有 message/filename）
+    const target = e.target;
+    if (!target || !(target instanceof HTMLElement)) return;
+    // 排除 window.onerror 上报的 JS 错误（它们的 target 是 window）
+    if (target === window) return;
+
+    let type = null;
+    let url = '';
+    const tag = target.tagName ? target.tagName.toLowerCase() : '';
+
+    if (tag === 'img' || tag === 'picture') {
+      type = 'image';
+      url = target.currentSrc || target.src || '';
+    } else if (tag === 'script') {
+      type = 'js';
+      url = target.src || '';
+    } else if (tag === 'link') {
+      const rel = (target.rel || '').toLowerCase();
+      const as = (target.as || '').toLowerCase();
+      if (rel === 'stylesheet') { type = 'css'; url = target.href || ''; }
+      else if (as === 'font' || (target.href && /\.(woff2?|ttf|otf|eot)(\?|$)/i.test(target.href))) { type = 'font'; url = target.href || ''; }
+      else if (rel === 'icon' || rel === 'shortcut icon' || rel === 'apple-touch-icon') { type = 'image'; url = target.href || ''; }
+      else { return; }
+    } else if (tag === 'source') {
+      // picture 内的 source
+      const as = (target.as || '').toLowerCase();
+      if (as === 'image' || target.srcset) { type = 'image'; url = target.srcset || target.src || ''; }
+      else return;
+    } else {
+      return; // 不关心的标签
+    }
+
+    if (!url) return;
+    const absUrl = absoluteUrl(url.split(/\s/)[0]); // srcset 取第一个
+    if (!FAILED_RESOURCES.has(absUrl)) {
+      FAILED_RESOURCES.set(absUrl, {
+        url: absUrl,
+        type,
+        element: tag,
+        timestamp: Date.now(),
+        from: 'error-event'
+      });
+    }
+  }, true); // ← capture=true 关键！资源错误不冒泡
+
+  // 2) PerformanceObserver 补充：同域资源的 responseStatus >= 400 或 transferSize === 0
+  //    （跨域资源拿不到 responseStatus，但 error event 已经覆盖了）
+  try {
+    const resObs = new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        // 只检查已经有 initiatorType 的资源
+        const it = entry.initiatorType;
+        if (!it) continue;
+        const url = entry.name;
+        // 已经被 error-event 捕获的跳过
+        if (FAILED_RESOURCES.has(url)) continue;
+
+        // 同域：看 responseStatus
+        if (entry.responseStatus !== undefined) {
+          if (entry.responseStatus >= 400 && entry.responseStatus < 600) {
+            const type = mapInitiatorToType(it);
+            if (type) {
+              FAILED_RESOURCES.set(url, {
+                url, type, element: it,
+                status: entry.responseStatus,
+                timestamp: Date.now(),
+                from: 'performance-observer'
+              });
+            }
+          }
+        } else {
+          // 跨域：transferSize === 0 且 decodedBodySize === 0 可能是失败
+          // 但 transferSize 为 0 也可能是缓存，所以跳过（依赖 error-event）
+        }
+      }
+    });
+    resObs.observe({ type: 'resource', buffered: true });
+  } catch (_) {}
+
+  function mapInitiatorToType(it) {
+    if (it === 'img' || it === 'image') return 'image';
+    if (it === 'script') return 'js';
+    if (it === 'link') return 'css'; // link rel=stylesheet
+    if (it === 'css' || it === 'stylesheet') return 'css';
+    if (it === 'font') return 'font';
+    return null;
+  }
+
+  // 3) 主动采集：输出所有资源（成功 + 失败），每条带 ok/error 状态
+  function collectFailedResources() {
+    // 先收集 PerformanceObserver 中的所有资源
+    const all = [];
+    const seen = new Set();
+
+    try {
+      const perfEntries = performance.getEntriesByType('resource');
+      for (const e of perfEntries) {
+        const it = e.initiatorType;
+        const type = mapInitiatorToType(it);
+        if (!type) continue;
+        const url = e.name;
+        seen.add(url);
+
+        // 判断是否成功
+        let ok = true;
+        let status = null;
+        let from = 'performance';
+
+        if (FAILED_RESOURCES.has(url)) {
+          ok = false;
+          const rec = FAILED_RESOURCES.get(url);
+          status = rec.status || 'error';
+          from = rec.from || 'error-event';
+        } else if (e.responseStatus !== undefined) {
+          // 同域：看 HTTP 状态码
+          status = e.responseStatus;
+          if (e.responseStatus >= 400 && e.responseStatus < 600) {
+            ok = false;
+            from = 'performance-observer';
+          }
+        }
+        // 跨域资源 responseStatus 为 0：无法判断，默认 ok=true
+
+        all.push({
+          url, type, ok, status, from,
+          transferSize: e.transferSize || 0,
+          decodedSize: e.decodedBodySize || 0,
+          duration: Math.round(e.duration),
+          initiatorType: it
+        });
+      }
+    } catch (_) {}
+
+    // 补充 error-event 捕获但不在 PerformanceObserver 中的条目（极少见）
+    FAILED_RESOURCES.forEach((rec, url) => {
+      if (!seen.has(url)) {
+        all.push({
+          url, type: rec.type, ok: false,
+          status: rec.status || 'error', from: rec.from || 'error-event',
+          transferSize: 0, decodedSize: 0, duration: 0,
+          initiatorType: rec.element
+        });
+      }
+    });
+
+    // document.fonts 检查
+    try {
+      if (document.fonts && document.fonts.check) {
+        document.fonts.forEach(fontFace => {
+          if (fontFace.status === 'error' || fontFace.status === 'loadfailed') {
+            const key = fontFace.family + ' (字体)';
+            all.push({
+              url: key, type: 'font', ok: false,
+              status: 'loadfailed', from: 'document.fonts',
+              transferSize: 0, decodedSize: 0, duration: 0,
+              initiatorType: '@font-face'
+            });
+          }
+        });
+      }
+    } catch (_) {}
+
+    // 按 ok 分组，失败排前面，成功排后面
+    all.sort((a, b) => {
+      if (a.ok !== b.ok) return a.ok ? 1 : -1;
+      return a.url.localeCompare(b.url);
+    });
+
+    const failedCount = all.filter(r => !r.ok).length;
+    const okCount = all.length - failedCount;
+
+    BRIDGE('resource-check:result', {
+      all,
+      failedCount,
+      okCount,
+      totalResources: all.length,
+      timestamp: Date.now()
+    });
+  }
 })();

@@ -51,6 +51,12 @@ chrome.runtime.onConnect.addListener((port) => {
           latestResources = msg.payload;
         }
         sidepanelPorts.forEach((p) => { try { p.postMessage({ type: msg.type, payload: msg.payload }); } catch (_) {} });
+        return;
+      }
+      // resource-check:* 消息（资源加载失败检测）
+      if (String(msg.type).startsWith('resource-check:')) {
+        sidepanelPorts.forEach((p) => { try { p.postMessage({ type: msg.type, payload: msg.payload }); } catch (_) {} });
+        return;
       }
     });
   }
@@ -189,7 +195,257 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     safeSend({ ok: true, vitals: latestVitals, resources: latestResources });
     return;
   }
+
+  // ========== 资源加载失败检查 ==========
+  if (msg.type === 'resource-check:collect') {
+    collectResourceFailures().then(safeSend).catch((e) => {
+      safeSend({ ok: false, error: String(e?.message || e) });
+    });
+    return true;
+  }
+
+  if (msg.type === 'resource-check:result') {
+    // content script 回传 → 广播给 sidepanel
+    sidepanelPorts.forEach((p) => {
+      try { p.postMessage({ type: 'resource-check:result', payload: msg.payload }); } catch (_) {}
+    });
+    safeSend({ ok: true });
+    return;
+  }
+
+  // ========== 截图 & 录屏 ==========
+  if (msg.type === 'screen-capture:visible') {
+    captureVisibleNow().then(safeSend).catch((e) => {
+      safeSend({ ok: false, error: String(e?.message || e) });
+    });
+    return true;
+  }
+
+  if (msg.type === 'screen-capture:fullpage') {
+    captureFullPage().then(safeSend).catch((e) => {
+      safeSend({ ok: false, error: String(e?.message || e) });
+    });
+    return true;
+  }
+
+  if (msg.type === 'screen-capture:download') {
+    downloadDataUrl(msg.dataUrl, msg.filename || 'screenshot.png');
+    safeSend({ ok: true });
+    return;
+  }
+
+  if (msg.type === 'screen-capture:start-recording') {
+    startRecording(msg.tabId).then(safeSend).catch((e) => {
+      safeSend({ ok: false, error: String(e?.message || e) });
+    });
+    return true;
+  }
+
+  if (msg.type === 'screen-capture:stop-recording') {
+    stopRecording().then(safeSend).catch((e) => {
+      safeSend({ ok: false, error: String(e?.message || e) });
+    });
+    return true;
+  }
+
+  // offscreen document 主动上报的录屏状态 → 广播给 sidepanel
+  if (msg.type === 'screen-recorder:tick' || msg.type === 'screen-recorder:started' || msg.type === 'screen-recorder:recording-done' || msg.type === 'screen-recorder:error') {
+    sidepanelPorts.forEach((p) => {
+      try { p.postMessage({ type: msg.type, payload: msg.payload }); } catch (_) {}
+    });
+    safeSend({ ok: true });
+    return;
+  }
 });
+
+async function collectResourceFailures() {
+  let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  if (!tab?.id) [tab] = await chrome.tabs.query({ active: true });
+  if (!tab?.id) return { ok: false, error: '无活跃标签页' };
+  try {
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: () => {
+        window.postMessage({ __mynatest__: true, type: 'resource-check:collect' }, '*');
+      },
+      world: 'MAIN'
+    });
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: String(e?.message || e) };
+  }
+}
+
+// ========== 截图 & 录屏辅助函数 ==========
+
+async function getActiveTab() {
+  let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  if (!tab?.id) [tab] = await chrome.tabs.query({ active: true });
+  return tab || null;
+}
+
+async function captureVisibleNow() {
+  const tab = await getActiveTab();
+  if (!tab?.id) return { ok: false, error: '无活跃标签页' };
+  try {
+    const dataUrl = await chrome.tabs.captureVisibleTab(tab.windowId, { format: 'png' });
+    return { ok: true, dataUrl };
+  } catch (e) {
+    return { ok: false, error: String(e?.message || e) };
+  }
+}
+
+// 全页截图：用 chrome.debugger → Page.captureScreenshot({ captureBeyondViewport: true })
+async function captureFullPage() {
+  const tab = await getActiveTab();
+  if (!tab?.id) return { ok: false, error: '无活跃标签页' };
+
+  try {
+    await chrome.debugger.attach({ tabId: tab.id }, '1.3');
+  } catch (e) {
+    return { ok: false, error: '无法附加调试器：' + String(e?.message || e) };
+  }
+
+  try {
+    await new Promise(r => setTimeout(r, 100));
+
+    const result = await new Promise((resolve, reject) => {
+      chrome.debugger.sendCommand({ tabId: tab.id }, 'Page.captureScreenshot', {
+        format: 'png',
+        captureBeyondViewport: true
+      }, (r) => {
+        const err = chrome.runtime.lastError;
+        if (err) reject(new Error(err.message));
+        else resolve(r);
+      });
+    });
+
+    if (!result?.data) {
+      return { ok: false, error: '截图返回空数据' };
+    }
+
+    const dataUrl = 'data:image/png;base64,' + result.data;
+    return { ok: true, dataUrl };
+  } catch (e) {
+    return { ok: false, error: String(e?.message || e) };
+  } finally {
+    try { await chrome.debugger.detach({ tabId: tab.id }); } catch {}
+  }
+}
+
+async function downloadDataUrl(dataUrl, filename) {
+  try {
+    await chrome.downloads.download({ url: dataUrl, filename, saveAs: true });
+  } catch (_) {}
+}
+
+// ========== Offscreen Document 管理 ==========
+let offscreenCreated = false;
+
+async function ensureOffscreen() {
+  // 检查是否已存在
+  const existing = await chrome.offscreen.hasDocument();
+  if (existing) { offscreenCreated = true; return; }
+
+  try {
+    await chrome.offscreen.createDocument({
+      url: 'offscreen.html',
+      reasons: ['USER_MEDIA', 'BLOBS'],
+      justification: '需要在 offscreen document 中调用 getUserMedia/MediaRecorder 录制标签页'
+    });
+    offscreenCreated = true;
+  } catch (e) {
+    // 如果已经存在（竞态），忽略
+    if (!/already exists/i.test(String(e?.message || e))) throw e;
+    offscreenCreated = true;
+  }
+}
+
+async function closeOffscreen() {
+  try {
+    if (await chrome.offscreen.hasDocument()) {
+      await chrome.offscreen.closeDocument();
+    }
+  } catch (_) {}
+  offscreenCreated = false;
+}
+
+// ========== 录屏状态管理 ==========
+let recordingTabId = null;
+
+function sendToOffscreen(payload) {
+  return new Promise((resolve) => {
+    chrome.runtime.sendMessage(payload, (resp) => {
+      void chrome.runtime?.lastError;
+      if (chrome.runtime.lastError) {
+        resolve({ ok: false, error: 'Offscreen 通信失败：' + chrome.runtime.lastError.message });
+        return;
+      }
+      resolve(resp || { ok: true });
+    });
+  });
+}
+
+async function startRecording(tabId) {
+  const tab = tabId ? await chrome.tabs.get(tabId).catch(() => null) : await getActiveTab();
+  if (!tab?.id) return { ok: false, error: '无活跃标签页' };
+
+  const url = tab.url || '';
+  if (/^(chrome|edge|about|chrome-extension|file|data|blob):\/\//i.test(url)) {
+    return { ok: false, error: '当前页面无法录屏，请在 http/https 网页上操作' };
+  }
+
+  await ensureOffscreen();
+
+  // 路径1：tabCapture（无弹窗；任何阶段失败都自动降级到路径2）
+  // 注意：tabCapture API 只存在于 Service Worker，offscreen document 中不可用
+  let tabErr = null;
+  try {
+    const streamId = await new Promise((resolve, reject) => {
+      chrome.tabCapture.getMediaStreamId({ targetTabId: tab.id }, (id) => {
+        if (chrome.runtime.lastError) reject(new Error(chrome.runtime.lastError.message));
+        else resolve(id);
+      });
+    });
+    const resp = await sendToOffscreen({ type: 'offscreen:start-recording', source: 'tab', streamId, audio: true });
+    if (resp?.ok) {
+      recordingTabId = tab.id;
+      return { ok: true };
+    }
+    tabErr = resp?.error || 'offscreen 消费流失败';
+  } catch (e) {
+    tabErr = String(e?.message || e);
+  }
+
+  // 路径2：desktopCapture（弹出系统选择框，用户选"此标签页"；无唤起要求，必定可用）
+  const desktopId = await new Promise((resolve) => {
+    try {
+      chrome.desktopCapture.chooseDesktopMedia(['tab', 'window'], tab, (id) => resolve(id || null));
+    } catch (e) {
+      resolve(null);
+    }
+  });
+  if (!desktopId) {
+    return { ok: false, error: 'tabCapture 失败（' + tabErr + '），且未选择录制源' };
+  }
+
+  const resp2 = await sendToOffscreen({ type: 'offscreen:start-recording', source: 'desktop', streamId: desktopId, audio: false });
+  if (resp2?.ok) {
+    recordingTabId = tab.id;
+    return { ok: true };
+  }
+  return { ok: false, error: '录屏失败（tabCapture: ' + tabErr + ' / desktopCapture: ' + (resp2?.error || '未知') + '）' };
+}
+
+async function stopRecording() {
+  return new Promise((resolve) => {
+    chrome.runtime.sendMessage({ type: 'offscreen:stop-recording' }, (resp) => {
+      void chrome.runtime?.lastError;
+      recordingTabId = null;
+      resolve(resp || { ok: true });
+    });
+  });
+}
 
 async function collectPerfInTab() {
   let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });

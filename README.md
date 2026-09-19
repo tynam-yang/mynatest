@@ -74,7 +74,9 @@ mynatest/
 │   ├── contract-generator.js      # 合同 & 票据信息随机生成（32 字段 · 6 分类）
 │   ├── code-generator.js          # 请求转代码（cURL/fetch/axios/Python requests/Playwright）
 │   ├── web-vitals.js              # 性能面板（LCP/CLS/INP · 慢请求 · 资源瀑布图 · 大小分布）
-│   └── selector-generator.js      # 选择器生成（CSS/XPath/Playwright · 唯一性校验）
+│   ├── selector-generator.js      # 选择器生成（CSS/XPath/Playwright · 唯一性校验）
+│   ├── resource-checker.js         # 资源检查（图片/JS/CSS/字体 加载失败检测）
+│   └── screen-capture.js           # 截图 & 录屏（可视/全页截图 · tabCapture 录屏）
 ├── icons/                          # 工具图标（16×16 PNG）
 ├── assets/                         # 静态资源（收款码等）
 ```
@@ -94,6 +96,8 @@ mynatest/
 <tr><td><b>请求转代码</b></td><td>网络工具</td><td>捕获请求一键生成 cURL、fetch、axios、Python requests、Playwright</td></tr>
 <tr><td><b>性能面板</b></td><td>网络工具</td><td>LCP/CLS/INP 实时监控；慢请求 TOP 10；资源瀑布图（DNS/TCP/TTFB/Download 分段）；资源大小按类型分布</td></tr>
 <tr><td><b>选择器生成</b></td><td>测试工具</td><td>点击页面元素生成 CSS / XPath / Playwright 选择器；自动校验唯一性；逐级增强直到唯一</td></tr>
+<tr><td><b>资源检查</b></td><td>测试工具</td><td>检测页面中图片/JS/CSS/字体的加载失败（404 等）；capture-phase error 监听 + PerformanceObserver 补充 + document.fonts</td></tr>
+<tr><td><b>截图 & 录屏</b></td><td>开发工具</td><td>可见区域截图（captureVisibleTab）+ 全页截图（chrome.debugger Page.captureScreenshot）+ 录屏（tabCapture + MediaRecorder）</td></tr>
 <tr><td><b>时间戳转换</b></td><td>开发工具</td><td>时间与时间戳互转，支持秒/毫秒级</td></tr>
 <tr><td><b>JSON 格式化</b></td><td>开发工具</td><td>格式化 / 压缩 / 转义 / 反转义</td></tr>
 <tr><td><b>数据对比</b></td><td>开发工具</td><td>JSON / 文本行级 diff</td></tr>
