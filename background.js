@@ -234,6 +234,13 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     return;
   }
 
+  if (msg.type === 'table-export:extract') {
+    extractPageTables().then(safeSend).catch((e) => {
+      safeSend({ ok: false, error: String(e?.message || e) });
+    });
+    return true;
+  }
+
   if (msg.type === 'screen-capture:start-recording') {
     startRecording(msg.tabId).then(safeSend).catch((e) => {
       safeSend({ ok: false, error: String(e?.message || e) });
@@ -273,6 +280,65 @@ async function collectResourceFailures() {
     return { ok: true };
   } catch (e) {
     return { ok: false, error: String(e?.message || e) };
+  }
+}
+
+// ========== 表格导出 ==========
+// 在页面 ISOLATED world 中提取所有 <table>，直接返回结果（无需消息中继）
+function extractTablesInPage() {
+  const tables = Array.from(document.querySelectorAll('table'));
+  return tables.map((table, idx) => {
+    const rows = [];
+    let firstRowIsHeader = false;
+    table.querySelectorAll('tr').forEach((tr, ri) => {
+      const cells = [];
+      tr.querySelectorAll('th,td').forEach((cell) => {
+        let text = cell.innerText || cell.textContent || '';
+        text = text.replace(/\s+/g, ' ').trim();
+        const colspan = cell.colSpan || 1;
+        for (let i = 0; i < colspan; i++) cells.push(text);
+      });
+      if (ri === 0 && tr.querySelector('th') && !tr.querySelector('td')) {
+        firstRowIsHeader = true;
+      }
+      rows.push(cells);
+    });
+
+    let visible = false;
+    try { visible = table.getClientRects().length > 0; } catch (_) {}
+
+    return {
+      index: idx + 1,
+      rows,
+      rowCount: rows.length,
+      colCount: rows.length ? Math.max(...rows.map(r => r.length)) : 0,
+      caption: (table.caption?.innerText || '').trim(),
+      visible,
+      firstRowIsHeader,
+      preview: rows.slice(0, 3)
+    };
+  }).filter(t => t.rowCount > 0);
+}
+
+async function extractPageTables() {
+  let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  if (!tab?.id) [tab] = await chrome.tabs.query({ active: true });
+  if (!tab?.id) return { ok: false, error: '无活跃标签页' };
+
+  const url = tab.url || '';
+  if (/^(chrome|edge|about|chrome-extension|chrome-web-store):\/\//i.test(url)) {
+    return { ok: false, error: '浏览器内部页面无法提取表格，请在普通网页上操作' };
+  }
+
+  try {
+    const results = await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: extractTablesInPage
+    });
+    const tables = results?.[0]?.result || [];
+    return { ok: true, tables };
+  } catch (e) {
+    return { ok: false, error: '无法访问页面：' + String(e?.message || e) };
   }
 }
 

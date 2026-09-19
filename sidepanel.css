@@ -5292,3 +5292,111 @@ html, body {
   background: #000;
 }
 
+/* ===== 表格导出（te-*） ===== */
+
+.te-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.te-summary {
+  font-size: 12px;
+  color: #8B5CF6;
+  font-weight: 600;
+}
+
+.te-tip {
+  font-size: 11px;
+  color: #9CA3AF;
+  margin-bottom: 8px;
+}
+
+.te-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.te-empty {
+  padding: 24px 12px;
+  text-align: center;
+  color: #9CA3AF;
+  font-size: 12px;
+  border: 1px dashed #374151;
+  border-radius: 8px;
+  line-height: 1.8;
+}
+
+.te-empty small {
+  font-size: 10px;
+  color: #6B7280;
+}
+
+.te-card {
+  border: 1px solid #374151;
+  border-radius: 8px;
+  background: #1F2937;
+  overflow: hidden;
+}
+
+.te-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px 4px;
+}
+
+.te-card-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #E5E7EB;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.te-card-dim {
+  flex: none;
+  font-size: 11px;
+  color: #9CA3AF;
+  white-space: nowrap;
+}
+
+.te-preview {
+  padding: 4px 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.te-preview-row {
+  display: flex;
+  gap: 4px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.te-preview-cell {
+  flex: 1;
+  min-width: 0;
+  font-size: 10px;
+  color: #9CA3AF;
+  background: #111827;
+  border-radius: 3px;
+  padding: 2px 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.te-card-actions {
+  display: flex;
+  gap: 6px;
+  padding: 0 10px 10px;
+  border-top: 1px solid #2b3547;
+  padding-top: 8px;
+}
+
