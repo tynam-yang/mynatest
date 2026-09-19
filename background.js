@@ -62,101 +62,131 @@ chrome.runtime.onConnect.addListener((port) => {
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (!msg || !msg.type) return;
 
-  // 扫描当前页面所有 a 标签
+  const safeSend = (data) => { try { sendResponse(data); } catch {} };
+
   if (msg.type === 'link-check:scan') {
-    scanLinksInTab().then(sendResponse).catch((e) => {
-      sendResponse({ ok: false, error: String(e?.message || e) });
+    scanLinksInTab().then(safeSend).catch((e) => {
+      safeSend({ ok: false, error: String(e?.message || e) });
     });
-    return true; // 异步
+    return true;
   }
 
-  // 批量校验链接可访问性
   if (msg.type === 'link-check:check') {
-    checkLinks(msg.urls || [], msg.concurrency || 4).then(sendResponse).catch((e) => {
-      sendResponse({ ok: false, error: String(e?.message || e) });
+    checkLinks(msg.urls || [], msg.concurrency || 4).then(safeSend).catch((e) => {
+      safeSend({ ok: false, error: String(e?.message || e) });
     });
-    return true; // 异步
+    return true;
   }
 
   // ========== 元素快照 ==========
   if (msg.type === 'snapshot:activate-picker') {
-    // sidepanel → 转发给当前 tab 的 content script
     chrome.tabs.query({ active: true, lastFocusedWindow: true }).then(([tab]) => {
-      if (!tab?.id) { sendResponse({ ok: false, error: '无活跃标签页' }); return; }
+      if (!tab?.id) { try { sendResponse({ ok: false, error: '无活跃标签页' }); } catch {} return; }
       chrome.tabs.sendMessage(tab.id, { type: 'snapshot:activate-picker' })
-        .then(() => sendResponse({ ok: true }))
-        .catch((e) => sendResponse({ ok: false, error: String(e?.message || e) }));
+        .then(() => { try { sendResponse({ ok: true }); } catch {} })
+        .catch((e) => { try { sendResponse({ ok: false, error: String(e?.message || e) }); } catch {} });
     });
-    return true; // 异步
+    return true;
+  }
+
+  // ========== 选择器生成器 ==========
+  if (msg.type === 'selector-gen:activate-picker') {
+    chrome.tabs.query({ active: true, lastFocusedWindow: true }).then(([tab]) => {
+      if (!tab?.id) { try { sendResponse({ ok: false, error: '无活跃标签页' }); } catch {} return; }
+      chrome.tabs.sendMessage(tab.id, { type: 'selector-gen:activate-picker' })
+        .then(() => { try { sendResponse({ ok: true }); } catch {} })
+        .catch((e) => { try { sendResponse({ ok: false, error: String(e?.message || e) }); } catch {} });
+    });
+    return true;
+  }
+
+  if (msg.type === 'selector-gen:deactivate-picker') {
+    chrome.tabs.query({ active: true, lastFocusedWindow: true }).then(([tab]) => {
+      if (!tab?.id) { try { sendResponse({ ok: false, error: '无活跃标签页' }); } catch {} return; }
+      chrome.tabs.sendMessage(tab.id, { type: 'selector-gen:deactivate-picker' })
+        .then(() => { try { sendResponse({ ok: true }); } catch {} })
+        .catch((e) => { try { sendResponse({ ok: false, error: String(e?.message || e) }); } catch {} });
+    });
+    return true;
+  }
+
+  if (msg.type === 'selector-gen:picked') {
+    sidepanelPorts.forEach((p) => {
+      try { p.postMessage({ type: 'selector-gen:picked', payload: msg.payload }); } catch (_) {}
+    });
+    try { sendResponse({ ok: true }); } catch {}
+    return;
+  }
+
+  if (msg.type === 'selector-gen:validate') {
+    chrome.tabs.query({ active: true, lastFocusedWindow: true }).then(([tab]) => {
+      if (!tab?.id) { try { sendResponse({ ok: false, error: '无活跃标签页' }); } catch {} return; }
+      chrome.tabs.sendMessage(tab.id, { type: 'selector-gen:validate', selector: msg.selector, selectorType: msg.selectorType })
+        .then((r) => { try { sendResponse(r); } catch {} })
+        .catch((e) => { try { sendResponse({ ok: false, error: String(e?.message || e) }); } catch {} });
+    });
+    return true;
   }
 
   if (msg.type === 'snapshot:capture') {
-    // 从 sidepanel 触发：传入 tabId + rect → 截图裁剪
-    captureElement(msg.tabId, msg.rect, msg.viewport).then(sendResponse).catch((e) => {
-      sendResponse({ ok: false, error: String(e?.message || e) });
+    captureElement(msg.tabId, msg.rect, msg.viewport).then(safeSend).catch((e) => {
+      safeSend({ ok: false, error: String(e?.message || e) });
     });
     return true;
   }
 
   if (msg.type === 'snapshot:picked') {
-    // 从 content script 触发：元素选择完成，只回传 selector 给 sidepanel，不做截图
     const payload = { ok: true, selector: msg.selector, selectorType: msg.selectorType, cssSelector: msg.cssSelector, pageUrl: msg.url };
-    sendResponse(payload);
-    // 直接广播给所有扩展页面（sidepanel/options），不依赖 Port 或 storage
-    try {
-      chrome.runtime.sendMessage({ type: 'snapshot:picked', payload });
-    } catch (_) {}
+    safeSend(payload);
+    try { chrome.runtime.sendMessage({ type: 'snapshot:picked', payload }); } catch (_) {}
     return;
   }
 
   if (msg.type === 'snapshot:save-baseline') {
-    saveBaseline(msg.baseline).then(sendResponse);
+    saveBaseline(msg.baseline).then(safeSend);
     return true;
   }
 
   if (msg.type === 'snapshot:list-baselines') {
-    listBaselines().then(sendResponse);
+    listBaselines().then(safeSend);
     return true;
   }
 
   if (msg.type === 'snapshot:delete-baseline') {
-    deleteBaseline(msg.id).then(sendResponse);
+    deleteBaseline(msg.id).then(safeSend);
     return true;
   }
 
   if (msg.type === 'snapshot:compare') {
-    compareWithBaseline(msg).then(sendResponse).catch((e) => {
-      sendResponse({ ok: false, error: String(e?.message || e) });
+    compareWithBaseline(msg).then(safeSend).catch((e) => {
+      safeSend({ ok: false, error: String(e?.message || e) });
     });
     return true;
   }
 
   if (msg.type === 'bug-report:capture') {
-    captureFull(sender.tab).then(sendResponse).catch((e) => {
-      sendResponse({ ok: false, error: String(e?.message || e) });
+    captureFull(sender.tab).then(safeSend).catch((e) => {
+      safeSend({ ok: false, error: String(e?.message || e) });
     });
-    return true; // 异步
+    return true;
   }
 
-  // content script 确认标注后通知 sidepanel 刷新截图预览
   if (msg.type === 'bug-report:screenshot-ready') {
     sidepanelPorts.forEach((p) => {
       try { p.postMessage({ type: 'bug-report:screenshot-ready', payload: msg.payload }); } catch (_) {}
     });
-    sendResponse({ ok: true });
+    safeSend({ ok: true });
   }
 
-  // ======= Web Vitals：sidepanel 请求采集 =======
   if (msg.type === 'perf:collect') {
-    collectPerfInTab().then(sendResponse).catch((e) => {
-      sendResponse({ ok: false, error: String(e?.message || e) });
+    collectPerfInTab().then(safeSend).catch((e) => {
+      safeSend({ ok: false, error: String(e?.message || e) });
     });
-    return true; // 异步
+    return true;
   }
 
-  // sidepanel 请求最近的缓存值（刚打开面板时）
   if (msg.type === 'perf:get-latest') {
-    sendResponse({ ok: true, vitals: latestVitals, resources: latestResources });
+    safeSend({ ok: true, vitals: latestVitals, resources: latestResources });
     return;
   }
 });

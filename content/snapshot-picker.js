@@ -73,15 +73,17 @@
     // 等滚动完成再发消息
     setTimeout(() => {
       const r = pickedEl.getBoundingClientRect();
-      chrome.runtime.sendMessage({
-        type: 'snapshot:picked',
-        selector: css,
-        selectorType: 'css',
-        xpathSelector: xpath,
-        rect: { left: r.left, top: r.top, width: r.width, height: r.height },
-        url: location.href,
-        viewport: { w: window.innerWidth, h: window.innerHeight }
-      });
+      try {
+        chrome.runtime.sendMessage({
+          type: 'snapshot:picked',
+          selector: css,
+          selectorType: 'css',
+          xpathSelector: xpath,
+          rect: { left: r.left, top: r.top, width: r.width, height: r.height },
+          url: location.href,
+          viewport: { w: window.innerWidth, h: window.innerHeight }
+        }, () => { void chrome.runtime?.lastError; });
+      } catch {}
     }, 200);
   }
 
@@ -236,17 +238,22 @@
           if (!el) continue;
           el.scrollIntoView({ block: 'center', inline: 'nearest' });
           const rect = el.getBoundingClientRect();
-          const msg = await chrome.runtime.sendMessage({
-            type: 'snapshot:compare',
-            baselineId: baseline.id,
-            selector: baseline.selector,
-            selectorType: baseline.selectorType || 'css',
-            rect: { left: rect.left, top: rect.top, width: rect.width, height: rect.height },
-            url: currentUrl,
-            viewport: { w: window.innerWidth, h: window.innerHeight }
-          });
-          // 在页面上显示徽章
-          showBadge(baseline, msg);
+          let msg = null;
+          try {
+            msg = await chrome.runtime.sendMessage({
+              type: 'snapshot:compare',
+              baselineId: baseline.id,
+              selector: baseline.selector,
+              selectorType: baseline.selectorType || 'css',
+              rect: { left: rect.left, top: rect.top, width: rect.width, height: rect.height },
+              url: currentUrl,
+              viewport: { w: window.innerWidth, h: window.innerHeight }
+            });
+          } catch (e) {
+            void chrome.runtime?.lastError;
+            continue;
+          }
+          if (msg) showBadge(baseline, msg);
         } catch (e) {
           // 静默忽略
         }
@@ -284,24 +291,47 @@
   }
 
   // ========== 监听 sidepanel 请求 ==========
+  function safeSendResponse(sendResponse, data) {
+    try { sendResponse(data); } catch {}
+  }
+
   chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
     if (!msg || !msg.type) return;
     if (msg.type === 'snapshot:activate-picker') {
       activatePicker();
-      sendResponse({ ok: true });
+      safeSendResponse(sendResponse, { ok: true });
     }
     if (msg.type === 'snapshot:get-rect') {
-      // sidepanel 传入 selector + selectorType，返回元素 rect
       const el = findEl(msg.selector, msg.selectorType || 'css');
-      if (!el) { sendResponse({ ok: false, error: '元素不存在' }); return; }
+      if (!el) { safeSendResponse(sendResponse, { ok: false, error: '元素不存在' }); return; }
       el.scrollIntoView({ block: 'center', inline: 'nearest' });
       const r = el.getBoundingClientRect();
-      sendResponse({
+      safeSendResponse(sendResponse, {
         ok: true,
         rect: { left: r.left, top: r.top, width: r.width, height: r.height },
         viewport: { w: window.innerWidth, h: window.innerHeight }
       });
     }
+  });
+
+  // bfcache 恢复时重新注册
+  window.addEventListener('pageshow', (e) => {
+    if (!e.persisted) return;
+    chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+      if (!msg || !msg.type) return;
+      if (msg.type === 'snapshot:activate-picker') { activatePicker(); safeSendResponse(sendResponse, { ok: true }); }
+      if (msg.type === 'snapshot:get-rect') {
+        const el = findEl(msg.selector, msg.selectorType || 'css');
+        if (!el) { safeSendResponse(sendResponse, { ok: false, error: '元素不存在' }); return; }
+        el.scrollIntoView({ block: 'center', inline: 'nearest' });
+        const r = el.getBoundingClientRect();
+        safeSendResponse(sendResponse, {
+          ok: true,
+          rect: { left: r.left, top: r.top, width: r.width, height: r.height },
+          viewport: { w: window.innerWidth, h: window.innerHeight }
+        });
+      }
+    });
   });
 
   // 页面加载后自动检查

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "MynaTest",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "专为 Web 测试人员打造的轻量测试辅助工具集",
 
   "icons": {
@@ -71,6 +71,11 @@
     {
       "matches": ["http://*/*", "https://*/*"],
       "js": ["content/snapshot-picker.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content/selector-picker.js"],
       "run_at": "document_idle"
     }
   ],

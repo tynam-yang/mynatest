@@ -107,13 +107,24 @@
   };
 
   chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    const safeSend = (data) => { try { sendResponse(data); } catch {} };
     if (msg?.type === 'bug-report:start') {
-      sendResponse({ ok: true });
+      safeSend({ ok: true });
       startFlow();
     }
     if (msg?.type === 'bug-report:get-env') {
-      sendResponse({ ok: true, env: collectEnv() });
+      safeSend({ ok: true, env: collectEnv() });
     }
+  });
+
+  // bfcache 恢复时重注册
+  window.addEventListener('pageshow', (e) => {
+    if (!e.persisted) return;
+    chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+      const safeSend = (data) => { try { sendResponse(data); } catch {} };
+      if (msg?.type === 'bug-report:start') { safeSend({ ok: true }); startFlow(); }
+      if (msg?.type === 'bug-report:get-env') { safeSend({ ok: true, env: collectEnv() }); }
+    });
   });
 
   async function startFlow() {
