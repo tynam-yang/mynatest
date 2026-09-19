@@ -88,6 +88,8 @@ async function init() {
         if (msg.type === 'network:request') { eventBus.emit('network:request', msg.payload); return; }
         if (msg.type === 'snapshot:picked') { eventBus.emit('snapshot:picked', msg.payload); return; }
         if (msg.type === 'bug-report:screenshot-ready') { eventBus.emit('bug-report:screenshot-ready', msg.payload); return; }
+        if (msg.type === 'perf:vitals') { eventBus.emit('perf:vitals', msg.payload); return; }
+        if (msg.type === 'perf:resources') { eventBus.emit('perf:resources', msg.payload); return; }
       });
       relayPort.onDisconnect.addListener(() => {
         relayPort = null;
@@ -131,6 +133,8 @@ async function init() {
       if (!val || !val.type) return;
       if (val.type === 'network:request') { eventBus.emit('network:request', val.payload); return; }
       if (val.type === 'snapshot:picked') { eventBus.emit('snapshot:picked', val.payload); return; }
+      if (val.type === 'perf:vitals') { eventBus.emit('perf:vitals', val.payload); return; }
+      if (val.type === 'perf:resources') { eventBus.emit('perf:resources', val.payload); return; }
     });
   });
 

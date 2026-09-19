@@ -3,6 +3,8 @@
 const sidepanelPorts = new Set();
 const recentRequests = [];
 const MAX_BUFFER = 100;
+let latestVitals = { lcp: null, cls: 0, inp: null };
+let latestResources = null;
 
 chrome.action.onClicked.addListener(async (tab) => {
   if (tab.id) {
@@ -19,16 +21,37 @@ chrome.runtime.onConnect.addListener((port) => {
     sidepanelPorts.add(port);
     port.onDisconnect.addListener(() => sidepanelPorts.delete(port));
     recentRequests.forEach((msg) => { try { port.postMessage(msg); } catch (_) {} });
+    // 推送最近的 vitals / resources 缓存
+    if (latestVitals && (latestVitals.lcp || latestVitals.inp || latestVitals.cls)) {
+      try { port.postMessage({ type: 'perf:vitals', payload: latestVitals }); } catch (_) {}
+    }
+    if (latestResources) {
+      try { port.postMessage({ type: 'perf:resources', payload: latestResources }); } catch (_) {}
+    }
     return;
   }
   if (port.name === 'content-relay') {
     port.onMessage.addListener((msg) => {
-      if (!msg || !msg.type || !String(msg.type).startsWith('network:')) return;
-      if (msg.type === 'network:request') {
-        recentRequests.push({ type: msg.type, payload: msg.payload });
-        if (recentRequests.length > MAX_BUFFER) recentRequests.shift();
+      if (!msg || !msg.type) return;
+      // network:* 消息（已有的请求捕获）
+      if (String(msg.type).startsWith('network:')) {
+        if (msg.type === 'network:request') {
+          recentRequests.push({ type: msg.type, payload: msg.payload });
+          if (recentRequests.length > MAX_BUFFER) recentRequests.shift();
+        }
+        sidepanelPorts.forEach((p) => { try { p.postMessage({ type: msg.type, payload: msg.payload }); } catch (_) {} });
+        return;
       }
-      sidepanelPorts.forEach((p) => { try { p.postMessage({ type: msg.type, payload: msg.payload }); } catch (_) {} });
+      // perf:* 消息（Web Vitals / ResourceTiming）
+      if (String(msg.type).startsWith('perf:')) {
+        if (msg.type === 'perf:vitals' && msg.payload) {
+          Object.assign(latestVitals, msg.payload);
+        }
+        if (msg.type === 'perf:resources' && msg.payload) {
+          latestResources = msg.payload;
+        }
+        sidepanelPorts.forEach((p) => { try { p.postMessage({ type: msg.type, payload: msg.payload }); } catch (_) {} });
+      }
     });
   }
 });
@@ -122,7 +145,40 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     });
     sendResponse({ ok: true });
   }
+
+  // ======= Web Vitals：sidepanel 请求采集 =======
+  if (msg.type === 'perf:collect') {
+    collectPerfInTab().then(sendResponse).catch((e) => {
+      sendResponse({ ok: false, error: String(e?.message || e) });
+    });
+    return true; // 异步
+  }
+
+  // sidepanel 请求最近的缓存值（刚打开面板时）
+  if (msg.type === 'perf:get-latest') {
+    sendResponse({ ok: true, vitals: latestVitals, resources: latestResources });
+    return;
+  }
 });
+
+async function collectPerfInTab() {
+  let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  if (!tab?.id) [tab] = await chrome.tabs.query({ active: true });
+  if (!tab?.id) return { ok: false, error: '无活跃标签页' };
+  try {
+    // 向 MAIN world 发送 perf:collect 消息（injected.js 会监听）
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: () => {
+        window.postMessage({ __mynatest__: true, type: 'perf:collect' }, '*');
+      },
+      world: 'MAIN'
+    });
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: String(e?.message || e) };
+  }
+}
 
 async function scanLinksInTab() {
   // sidepanel 发消息时 sender.tab 是 undefined，需主动查询当前活跃标签页

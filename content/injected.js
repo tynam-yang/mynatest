@@ -217,4 +217,148 @@
 
   // 通知加载完成
   BRIDGE('network:hook-ready', { ok: true });
+
+  // ========== Web Vitals + ResourceTiming ==========
+  const VITALS = {
+    lcp: null,      // { value: ms, element: tag }
+    cls: 0,         // accumulated session value
+    inp: null,      // p98 of all events { value: ms, element: tag }
+    _inpEntries: [] // all event durations for INP p98 calc
+  };
+
+  function reportVitals() {
+    BRIDGE('perf:vitals', {
+      lcp: VITALS.lcp,
+      cls: VITALS.cls,
+      inp: VITALS.inp,
+      timestamp: Date.now()
+    });
+  }
+
+  // LCP
+  try {
+    const lcpObs = new PerformanceObserver((list) => {
+      const entries = list.getEntries();
+      const last = entries[entries.length - 1];
+      if (last) {
+        VITALS.lcp = {
+          value: Math.round(last.startTime),
+          element: last.element ? last.element.tagName.toLowerCase() + (last.element.id ? '#' + last.element.id : '') : ''
+        };
+        reportVitals();
+      }
+    });
+    lcpObs.observe({ type: 'largest-contentful-paint', buffered: true });
+  } catch (_) {}
+
+  // CLS
+  try {
+    let clsSession = 0;
+    let clsSessionStart = performance.now();
+    const clsObs = new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        // 忽略用户输入后的 layout shift
+        if (entry.hadRecentInput) continue;
+        clsSession += entry.value;
+        // session 结束条件：shift gap > 1s 或 total session gap > 5s
+        const now = performance.now();
+        if (now - clsSessionStart > 5000) {
+          VITALS.cls = clsSession;
+          reportVitals();
+          clsSession = 0;
+          clsSessionStart = now;
+        }
+      }
+    });
+    clsObs.observe({ type: 'layout-shift', buffered: true });
+
+    // pagehide 时输出最终值
+    const finalizeCLS = () => {
+      if (clsSession > 0) {
+        VITALS.cls += clsSession;
+        clsSession = 0;
+        reportVitals();
+      }
+    };
+    addEventListener('visibilitychange', finalizeCLS);
+    addEventListener('pagehide', finalizeCLS);
+  } catch (_) {}
+
+  // INP
+  try {
+    const inpObs = new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        // 只关注有交互的事件
+        if (entry.interactionId || (entry.name === 'click' || entry.name === 'keydown' || entry.name === 'pointerdown')) {
+          const dur = Math.round(entry.duration);
+          VITALS._inpEntries.push({
+            duration: dur,
+            element: entry.target && entry.target.tagName ? entry.target.tagName.toLowerCase() : '',
+            name: entry.name
+          });
+          // 计算 p98
+          const sorted = VITALS._inpEntries.slice().sort((a, b) => a.duration - b.duration);
+          const idx = Math.min(sorted.length - 1, Math.ceil(sorted.length * 0.98) - 1);
+          if (idx >= 0) {
+            const top = sorted[idx];
+            VITALS.inp = { value: top.duration, element: top.element, name: top.name };
+            reportVitals();
+          }
+        }
+      }
+    });
+    inpObs.observe({ type: 'event', buffered: true, durationThreshold: 0 });
+  } catch (_) {}
+
+  // ResourceTiming 收集（按需触发）
+  function collectResources() {
+    try {
+      const entries = performance.getEntriesByType('resource');
+      const resources = entries.map(e => {
+        const phases = {
+          dns: Math.max(0, e.domainLookupEnd - e.domainLookupStart),
+          tcp: Math.max(0, e.connectEnd - e.connectStart),
+          ttfb: Math.max(0, e.responseStart - e.requestStart),
+          download: Math.max(0, e.responseEnd - e.responseStart),
+          total: Math.round(e.duration)
+        };
+        return {
+          name: e.name,
+          initiatorType: e.initiatorType,
+          transferSize: e.transferSize || 0,
+          encodedBodySize: e.encodedBodySize || 0,
+          decodedBodySize: e.decodedBodySize || 0,
+          startTime: Math.round(e.startTime),
+          redirectStart: Math.round(e.redirectStart),
+          ...phases
+        };
+      });
+      // 按 startTime 排序
+      resources.sort((a, b) => a.startTime - b.startTime);
+
+      // 资源类型聚合
+      const typeMap = {};
+      resources.forEach(r => {
+        const t = r.initiatorType || 'other';
+        if (!typeMap[t]) typeMap[t] = { count: 0, totalTransfer: 0, totalDecoded: 0 };
+        typeMap[t].count++;
+        typeMap[t].totalTransfer += r.transferSize;
+        typeMap[t].totalDecoded += r.decodedBodySize;
+      });
+
+      BRIDGE('perf:resources', { resources, typeBreakdown: typeMap, timestamp: Date.now() });
+    } catch (e) {
+      BRIDGE('perf:resources', { resources: [], typeBreakdown: {}, error: String(e.message || e), timestamp: Date.now() });
+    }
+  }
+
+  // 监听 sidepanel 发来的采集请求
+  window.addEventListener('message', (ev) => {
+    if (ev.source !== window) return;
+    if (!ev.data || ev.data.__mynatest__ !== true) return;
+    if (ev.data.type === 'perf:collect') {
+      collectResources();
+      reportVitals();
+    }
+  });
 })();
