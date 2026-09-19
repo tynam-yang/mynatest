@@ -77,7 +77,9 @@ mynatest/
 │   ├── selector-generator.js      # 选择器生成（CSS/XPath/Playwright · 唯一性校验）
 │   ├── resource-checker.js         # 资源检查（图片/JS/CSS/字体 加载失败检测）
 │   ├── screen-capture.js           # 截图 & 录屏（可视/全页截图 · getDisplayMedia 录屏）
-│   └── table-export.js             # 表格导出（页面表格转 CSV/Excel/JSON · 复制）
+│   ├── table-export.js             # 表格导出（页面表格转 CSV/Excel/JSON · 复制）
+│   ├── checklist.js                # 测试检查清单（发布前 checklist · 自定义项 · Markdown 导出）
+│   └── snippet-manager.js          # 脚本片段管理（常用注入脚本 · 一键执行 · 自定义脚本）
 ├── icons/                          # 工具图标（16×16 PNG）
 ├── assets/                         # 静态资源（收款码等）
 ```
@@ -100,6 +102,8 @@ mynatest/
 <tr><td><b>资源检查</b></td><td>测试工具</td><td>检测页面中图片/JS/CSS/字体的加载失败（404 等）；capture-phase error 监听 + PerformanceObserver 补充 + document.fonts</td></tr>
 <tr><td><b>截图 & 录屏</b></td><td>开发工具</td><td>可见区域截图（captureVisibleTab）+ 全页截图（chrome.debugger Page.captureScreenshot）+ 录屏（getDisplayMedia + MediaRecorder）</td></tr>
 <tr><td><b>表格导出</b></td><td>数据工具</td><td>扫描页面所有 &lt;table&gt;，逐个导出 CSV（UTF-8 BOM）/ Excel / JSON（表头自动识别为对象键）；支持一键复制</td></tr>
+<tr><td><b>测试检查清单</b></td><td>测试工具</td><td>发布前 checklist：内置 7 组 24 项模板（功能/接口/兼容/安全/性能/上线/文档）；所有清单项支持行内编辑与删除（含内置项，持久化）；自定义项添加；进度条跟踪；一键复制 Markdown</td></tr>
+<tr><td><b>脚本片段</b></td><td>开发工具</td><td>常用注入脚本管理：内置 8 个预设（解除右键/复制限制、显示边框、密码明文、禁用 CSS、图片信息、灰阶、加载耗时、超大图高亮）；一键注入执行（MAIN world eval）并回显返回值；自定义脚本增删改（持久化）</td></tr>
 <tr><td><b>时间戳转换</b></td><td>开发工具</td><td>时间与时间戳互转，支持秒/毫秒级</td></tr>
 <tr><td><b>JSON 格式化</b></td><td>开发工具</td><td>格式化 / 压缩 / 转义 / 反转义</td></tr>
 <tr><td><b>数据对比</b></td><td>开发工具</td><td>JSON / 文本行级 diff</td></tr>

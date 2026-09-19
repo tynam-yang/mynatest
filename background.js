@@ -20,6 +20,16 @@ chrome.runtime.onConnect.addListener((port) => {
   if (port.name === 'sidepanel') {
     sidepanelPorts.add(port);
     port.onDisconnect.addListener(() => sidepanelPorts.delete(port));
+    // 接收 sidepanel 通过 Port 发来的请求（如脚本片段注入）
+    // 走 Port 而非 onMessage 一击式回调，避免 SW 冷启动时 "The message port closed before a response was received"
+    port.onMessage.addListener(async (msg) => {
+      if (!msg || !msg.type || !msg.reqId) return;
+      if (msg.type === 'script-snippet:run') {
+        const res = await runSnippetInPage(msg.code, msg.name)
+          .catch((e) => ({ ok: false, error: String(e?.message || e) }));
+        try { port.postMessage({ type: 'script-snippet:result', reqId: msg.reqId, res }); } catch (_) {}
+      }
+    });
     recentRequests.forEach((msg) => { try { port.postMessage(msg); } catch (_) {} });
     // 推送最近的 vitals / resources 缓存
     if (latestVitals && (latestVitals.lcp || latestVitals.inp || latestVitals.cls)) {
@@ -241,6 +251,13 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     return true;
   }
 
+  if (msg.type === 'script-snippet:run') {
+    runSnippetInPage(msg.code, msg.name).then(safeSend).catch((e) => {
+      safeSend({ ok: false, error: String(e?.message || e) });
+    });
+    return true;
+  }
+
   if (msg.type === 'screen-capture:start-recording') {
     startRecording(msg.tabId).then(safeSend).catch((e) => {
       safeSend({ ok: false, error: String(e?.message || e) });
@@ -339,6 +356,34 @@ async function extractPageTables() {
     return { ok: true, tables };
   } catch (e) {
     return { ok: false, error: '无法访问页面：' + String(e?.message || e) };
+  }
+}
+
+// ========== 脚本片段管理 ==========
+// 在页面 MAIN world 中执行任意代码字符串（eval 受页面自身 CSP 管辖，通常可用）
+async function runSnippetInPage(code, name) {
+  let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  if (!tab?.id) [tab] = await chrome.tabs.query({ active: true });
+  if (!tab?.id) return { ok: false, error: '无活跃标签页' };
+
+  const url = tab.url || '';
+  if (/^(chrome|edge|about|chrome-extension|chrome-web-store):\/\//i.test(url)) {
+    return { ok: false, error: '浏览器内部页面无法注入脚本，请在普通网页上操作' };
+  }
+
+  try {
+    const results = await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      world: 'MAIN',
+      func: (src) => {
+        return eval(src);
+      },
+      args: [code]
+    });
+    const result = results?.[0]?.result;
+    return { ok: true, result };
+  } catch (e) {
+    return { ok: false, error: `执行失败：${String(e?.message || e)}` };
   }
 }
 

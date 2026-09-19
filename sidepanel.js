@@ -80,11 +80,46 @@ async function init() {
   // 关键：MV3 SW 空闲 ~30 秒会被挂起，Port 随之断开，必须自动重连，
   // 否则之后的所有捕获消息都会丢失（背景会缓冲断线期间的消息并在重连时回放）
   let relayPort = null;
+  let reqSeq = 0;
+  const pendingRequests = new Map(); // reqId -> resolve
+  function ensureRelay() {
+    if (relayPort) return relayPort;
+    connectRelay();
+    return relayPort;
+  }
+  // 走 Port 的请求/响应（比 chrome.runtime.sendMessage 一击式回调更可靠，
+  // 不会出现 "The message port closed before a response was received"）
+  window.MynaRequest = function (type, payload, timeout = 15000) {
+    return new Promise((resolve) => {
+      const reqId = ++reqSeq;
+      pendingRequests.set(reqId, resolve);
+      const port = ensureRelay();
+      if (!port) { pendingRequests.delete(reqId); resolve({ ok: false, error: '通道未连接，请刷新扩展后重试' }); return; }
+      try {
+        port.postMessage(Object.assign({ type, reqId }, payload));
+      } catch (e) {
+        pendingRequests.delete(reqId);
+        resolve({ ok: false, error: '发送失败：' + String(e?.message || e) });
+        return;
+      }
+      setTimeout(() => {
+        if (pendingRequests.has(reqId)) {
+          pendingRequests.delete(reqId);
+          resolve({ ok: false, error: '请求超时，请刷新页面后重试' });
+        }
+      }, timeout);
+    });
+  };
   function connectRelay() {
     try {
       relayPort = chrome.runtime.connect({ name: 'sidepanel' });
       relayPort.onMessage.addListener((msg) => {
         if (!msg || !msg.type) return;
+        if (msg.type === 'script-snippet:result') {
+          const r = pendingRequests.get(msg.reqId);
+          if (r) { pendingRequests.delete(msg.reqId); r(msg.res); }
+          return;
+        }
         if (msg.type === 'network:request') { eventBus.emit('network:request', msg.payload); return; }
         if (msg.type === 'snapshot:picked') { eventBus.emit('snapshot:picked', msg.payload); return; }
         if (msg.type === 'bug-report:screenshot-ready') { eventBus.emit('bug-report:screenshot-ready', msg.payload); return; }
