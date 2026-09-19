@@ -54,12 +54,12 @@
       <div class="ck-add-row">
         <input type="text" id="ckAddInput" class="ck-add-input" placeholder="添加自定义检查项…">
         <select id="ckAddGroup" class="ck-add-group"></select>
-        <button class="btn sc-small-btn" id="ckAddBtn">➕ 添加</button>
+        <button class="btn" id="ckAddBtn">➕ 添加</button>
       </div>
 
       <div class="ck-actions">
-        <button class="btn sc-small-btn" id="ckResetBtn">🗑 重置勾选</button>
-        <button class="btn sc-small-btn" id="ckCopyBtn">📋 复制 Markdown</button>
+        <button class="btn" id="ckResetBtn">🗑 重置勾选</button>
+        <button class="btn" id="ckCopyBtn">📋 复制 Markdown</button>
       </div>
     `;
 

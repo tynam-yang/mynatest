@@ -79,7 +79,11 @@ mynatest/
 │   ├── screen-capture.js           # 截图 & 录屏（可视/全页截图 · getDisplayMedia 录屏）
 │   ├── table-export.js             # 表格导出（页面表格转 CSV/Excel/JSON · 复制）
 │   ├── checklist.js                # 测试检查清单（发布前 checklist · 自定义项 · Markdown 导出）
-│   └── snippet-manager.js          # 脚本片段管理（常用注入脚本 · 一键执行 · 自定义脚本）
+│   ├── snippet-manager.js          # 脚本片段管理（常用注入脚本 · 一键执行 · 自定义脚本）
+│   ├── api-docs.js                 # 接口文档生成（捕获请求 → Markdown / OpenAPI 3.0）
+│   ├── keyboard-nav.js             # 键盘导航测试（焦点链扫描 · Enter/Space/Esc/Tab 行为监控）
+│   ├── timing-breakdown.js         # 请求耗时分解（DNS/TCP/TLS/TTFB/下载 各阶段明细）
+│   └── upload-audit.js             # 上传漏洞辅助（绕过载荷 · polyglot · 大小边界 · 检查清单）
 ├── icons/                          # 工具图标（16×16 PNG）
 ├── assets/                         # 静态资源（收款码等）
 ```
@@ -104,6 +108,10 @@ mynatest/
 <tr><td><b>表格导出</b></td><td>数据工具</td><td>扫描页面所有 &lt;table&gt;，逐个导出 CSV（UTF-8 BOM）/ Excel / JSON（表头自动识别为对象键）；支持一键复制</td></tr>
 <tr><td><b>测试检查清单</b></td><td>测试工具</td><td>发布前 checklist：内置 7 组 24 项模板（功能/接口/兼容/安全/性能/上线/文档）；所有清单项支持行内编辑与删除（含内置项，持久化）；自定义项添加；进度条跟踪；一键复制 Markdown</td></tr>
 <tr><td><b>脚本片段</b></td><td>开发工具</td><td>常用注入脚本管理：内置 8 个预设（解除右键/复制限制、显示边框、密码明文、禁用 CSS、图片信息、灰阶、加载耗时、超大图高亮）；一键注入执行（MAIN world eval）并回显返回值；自定义脚本增删改（持久化）</td></tr>
+<tr><td><b>接口文档生成</b></td><td>网络工具</td><td>实时捕获接口请求（去重聚合），勾选后一键生成 Markdown 文档（Query/请求头/请求体/响应头）或 OpenAPI 3.0 JSON（自动推导 schema，可直接导入 Swagger/Apifox）；支持复制与下载</td></tr>
+<tr><td><b>键盘导航测试</b></td><td>测试工具</td><td>扫描页面全部可聚焦元素（标记无 aria-label/text 名称、tabindex&gt;0 等可访问性问题）；开启监控后实时记录 Tab/Enter/Space/Esc 按键行为、目标元素与默认动作是否被 preventDefault 拦截</td></tr>
+<tr><td><b>请求耗时分解</b></td><td>网络工具</td><td>基于 Performance API 分解每个请求的 DNS / TCP / TLS / TTFB / 内容下载各阶段耗时；彩色分段条可视化、总量占比条、均值与最慢请求摘要、全列排序；含文档导航时序</td></tr>
+<tr><td><b>上传漏洞辅助</b></td><td>测试工具</td><td>文件上传测试辅助：12 种文件名/扩展名绕过清单（双扩展、大小写、截断、路径穿越等）一键复制；GIF/SVG/HTML polyglot 载荷生成下载；10 项上传点安全检查清单（仅授权测试）</td></tr>
 <tr><td><b>时间戳转换</b></td><td>开发工具</td><td>时间与时间戳互转，支持秒/毫秒级</td></tr>
 <tr><td><b>JSON 格式化</b></td><td>开发工具</td><td>格式化 / 压缩 / 转义 / 反转义</td></tr>
 <tr><td><b>数据对比</b></td><td>开发工具</td><td>JSON / 文本行级 diff</td></tr>

@@ -228,7 +228,30 @@ function renderTabs() {
     btn.addEventListener('click', () => activateTab(tool.meta.id));
     tabsEl.appendChild(btn);
   });
+  bindTabTooltip();
   bindTabDrag();
+}
+
+// 侧边栏 hover 时在按钮右侧显示工具名称（tabs 容器有滚动裁剪，需用全局 fixed 定位 tooltip）
+function bindTabTooltip() {
+  let tip = document.getElementById('sp-tooltip');
+  if (!tip) {
+    tip = document.createElement('div');
+    tip.id = 'sp-tooltip';
+    document.body.appendChild(tip);
+  }
+  document.querySelectorAll('.sp-tab').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      tip.textContent = el.dataset.tooltip || '';
+      const r = el.getBoundingClientRect();
+      tip.style.top = (r.top + r.height / 2) + 'px';
+      tip.style.left = (r.right + 8) + 'px';
+      tip.classList.add('show');
+    });
+    el.addEventListener('mouseleave', () => {
+      tip.classList.remove('show');
+    });
+  });
 }
 
 function bindTabDrag() {

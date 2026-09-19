@@ -35,17 +35,10 @@ body {
 }
 
 .app-logo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #1a73e8, #6366f1);
-  color: #fff;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  flex-shrink: 0;
 }
 
 .app-title h1 {
