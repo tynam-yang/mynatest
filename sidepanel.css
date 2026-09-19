@@ -4280,3 +4280,166 @@ html, body {
   flex: none;
   width: 150px;
 }
+
+/* ========== 代码生成 (code-generator) ========== */
+.cg-section {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+
+.cg-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+
+.cg-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cg-capture-btn {
+  padding: 4px 10px;
+  font-size: 11px;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.cg-capture-btn:hover {
+  background: #f0f7ff;
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.cg-capture-btn.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  animation: pulse 1.2s infinite;
+}
+
+.cg-options {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+.cg-options label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.cg-options input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+.cg-tabs {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.cg-tab-bar {
+  display: flex;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+
+.cg-tab-btn {
+  padding: 8px 10px;
+  border: none;
+  background: none;
+  font-size: 11px;
+  color: var(--text-light);
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.cg-tab-btn:hover {
+  color: var(--primary);
+  background: rgba(26, 115, 232, 0.06);
+}
+
+.cg-tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  font-weight: 600;
+  background: #fff;
+}
+
+.cg-tab-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.cg-code-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  background: #f8f9fa;
+  border-bottom: 1px solid var(--border);
+}
+
+.cg-code-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.cg-code-actions .btn {
+  padding: 4px 10px;
+  font-size: 11px;
+  flex: none;
+}
+
+.cg-code-pre {
+  margin: 0;
+  padding: 10px 12px;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  max-height: 420px;
+  overflow: auto;
+  white-space: pre;
+  color: var(--text);
+  background: #fff;
+  tab-size: 2;
+}
+
+.cg-empty {
+  padding: 30px 12px;
+  text-align: center;
+  color: var(--text-light);
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px dashed var(--border);
+}
+
+.cg-empty-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.cg-empty-text {
+  font-size: 12px;
+}

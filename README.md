@@ -71,33 +71,41 @@ mynatest/
 │   ├── user-generator.js          # 用户信息随机生成（55 字段可选 · 9 分类 · 文本/JSON/YAML 导出）
 │   ├── file-generator.js          # 文件生成（自定义大小/类型/二进制 · 自动下载）
 │   ├── vehicle-generator.js       # 车辆信息随机生成（33 字段 · 5 分类）
-│   └── contract-generator.js      # 合同 & 票据信息随机生成（32 字段 · 6 分类）
+│   ├── contract-generator.js      # 合同 & 票据信息随机生成（32 字段 · 6 分类）
+│   └── code-generator.js          # 请求转代码（cURL/fetch/axios/Python requests/Playwright）
 ├── icons/                          # 工具图标（16×16 PNG）
 ├── assets/                         # 静态资源（收款码等）
 ```
 
 ## 现有工具
 
-| 工具 | 分类 | 说明 |
-|------|------|------|
-| **请求对比** | 网络工具 | 捕获两次接口响应 → 自动 diff（JSON 路径级 / 行级文本） |
-| **轻量压测** | 网络工具 | 捕获接口一键填入；数据统计、响应断言、响应查看、报告下载 |
-| **JWT 解析** | 网络工具 | 解码 JWT 的 Header / Payload |
-| **时间戳转换** | 开发工具 | 时间与时间戳互转，支持秒/毫秒级 |
-| **JSON 格式化** | 开发工具 | 格式化 / 压缩 / 转义 / 反转义 |
-| **数据对比** | 开发工具 | JSON / 文本行级 diff |
-| **Cookie/Storage 管理** | 开发工具 | 登录态快照切换 |
-| **正则测试** | 开发工具 | 实时匹配结果，内置邮箱/手机号/IP 等 18 个常用正则速查 |
-| **环境横幅** | 开发工具 | 域名规则匹配 + 页面顶部彩色横幅，防误操作生产 |
-| **Mock 拦截器** | 测试工具 | 拦截指定 URL 返回自定义响应；多套场景一键切换 |
-| **链接检查** | 测试工具 | 批量扫描页面 a 标签，校验可访问性与跳转地址 |
-| **快照对比** | 测试工具 | 捕获元素基准图，自动像素比对 UI 变更；差异高亮红色标注 |
-| **IP 地址生成** | 数据生成 | 随机生成 IPv4/IPv6；显示本机内外网 IP |
-| **UA 生成** | 数据生成 | 随机生成 User-Agent（多浏览器 × 多平台）；显示本机当前 UA |
-| **用户信息生成** | 数据生成 | 55 字段数据；支持文本/JSON/YAML 导出 |
-| **文件生成** | 数据生成 | 自定义文件（文本/二进制/BMP）；生成后自动下载 |
-| **车辆信息生成** | 数据生成 | 33 字段车辆信息；支持畸形车牌/异常 VIN/违章记录/驾驶证信息 |
-| **合同票据生成** | 数据生成 | 32 字段合同票据 |
+<table>
+<colgroup>
+  <col>
+  <col style="width:5em;white-space:nowrap">
+  <col style="word-break:break-word">
+</colgroup>
+<tr><th>工具</th><th>分类</th><th>说明</th></tr>
+<tr><td><b>请求对比</b></td><td>网络工具</td><td>捕获两次接口响应 → 自动 diff（JSON 路径级 / 行级文本）</td></tr>
+<tr><td><b>轻量压测</b></td><td>网络工具</td><td>捕获接口一键填入；数据统计、响应断言、响应查看、报告下载</td></tr>
+<tr><td><b>JWT 解析</b></td><td>网络工具</td><td>解码 JWT 的 Header / Payload</td></tr>
+<tr><td><b>请求转代码</b></td><td>网络工具</td><td>捕获请求一键生成 cURL、fetch、axios、Python requests、Playwright</td></tr>
+<tr><td><b>时间戳转换</b></td><td>开发工具</td><td>时间与时间戳互转，支持秒/毫秒级</td></tr>
+<tr><td><b>JSON 格式化</b></td><td>开发工具</td><td>格式化 / 压缩 / 转义 / 反转义</td></tr>
+<tr><td><b>数据对比</b></td><td>开发工具</td><td>JSON / 文本行级 diff</td></tr>
+<tr><td><b>Cookie/Storage 管理</b></td><td>开发工具</td><td>登录态快照切换</td></tr>
+<tr><td><b>正则测试</b></td><td>开发工具</td><td>实时匹配结果，内置邮箱/手机号/IP 等 18 个常用正则速查</td></tr>
+<tr><td><b>环境横幅</b></td><td>开发工具</td><td>域名规则匹配 + 页面顶部彩色横幅，防误操作生产</td></tr>
+<tr><td><b>Mock 拦截器</b></td><td>测试工具</td><td>拦截指定 URL 返回自定义响应；多套场景一键切换</td></tr>
+<tr><td><b>链接检查</b></td><td>测试工具</td><td>批量扫描页面 a 标签，校验可访问性与跳转地址</td></tr>
+<tr><td><b>快照对比</b></td><td>测试工具</td><td>捕获元素基准图，自动像素比对 UI 变更；差异高亮红色标注</td></tr>
+<tr><td><b>IP 地址生成</b></td><td>数据生成</td><td>随机生成 IPv4/IPv6；显示本机内外网 IP</td></tr>
+<tr><td><b>UA 生成</b></td><td>数据生成</td><td>随机生成 User-Agent（多浏览器 × 多平台）；显示本机当前 UA</td></tr>
+<tr><td><b>用户信息生成</b></td><td>数据生成</td><td>55 字段数据；支持文本/JSON/YAML 导出</td></tr>
+<tr><td><b>文件生成</b></td><td>数据生成</td><td>自定义文件（文本/二进制/BMP）；生成后自动下载</td></tr>
+<tr><td><b>车辆信息生成</b></td><td>数据生成</td><td>33 字段车辆信息；支持畸形车牌/异常 VIN/违章记录/驾驶证信息</td></tr>
+<tr><td><b>合同票据生成</b></td><td>数据生成</td><td>32 字段合同票据</td></tr>
+</table>
 
 ## 新增工具（插件化）
 
