@@ -9,7 +9,7 @@
     name: '表格导出',
     desc: '页面表格一键导出 CSV / Excel / JSON，支持复制',
     iconUrl: 'icons/table-export.png',
-    category: 'data',
+    category: 'data-gen',
     categoryName: '数据工具'
   };
 
