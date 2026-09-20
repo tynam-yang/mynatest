@@ -82,6 +82,11 @@
       "matches": ["http://*/*", "https://*/*"],
       "js": ["content/screen-recorder.js"],
       "run_at": "document_idle"
+    },
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content/color-picker.js"],
+      "run_at": "document_idle"
     }
   ],
 

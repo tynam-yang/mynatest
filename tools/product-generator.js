@@ -278,7 +278,8 @@
 
   // ========== configUI 辅助模板（和 vehicle-generator 风格一致） ==========
   function _tplCheckboxes(name, options, selected) {
-    const set = new Set(selected || []);
+    const arr = Array.isArray(selected) ? selected : [];
+    const set = new Set(arr);
     return `<div class="ug-cfg-row"><div class="ug-checkbox-group" data-cfg-key="${name}">
       ${options.map(opt => `<label><input type="checkbox" value="${opt}" ${set.has(opt) ? 'checked' : ''}>${opt}</label>`).join('')}
     </div></div>`;

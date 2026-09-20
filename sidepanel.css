@@ -6110,3 +6110,172 @@ html, body {
 
 .up-row .up-copy { margin-left: auto; }
 
+/* ============ 像素标尺 / 测量&取色 共用 ============ */
+
+/* 工具描述文字 */
+.ru-desc, .me-desc {
+  font-size: 12px;
+  color: var(--text-secondary, #666);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+/* 操作按钮排 */
+.ru-actions, .me-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.ru-actions .ug-btn-primary, .me-actions .ug-btn-primary { flex: 1; }
+
+/* 次要按钮（停止） */
+.ru-btn-secondary {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--text-secondary, #666);
+  font-size: 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.ru-btn-secondary:hover:not(:disabled) {
+  background: #f5f5f5;
+  color: var(--text-primary);
+}
+.ru-btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* 状态提示 */
+.ru-status, .me-status {
+  font-size: 11px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+.ru-status-idle, .me-status-idle {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+.ru-status-active, .me-status-active {
+  background: #dcfce7;
+  color: #166534;
+}
+.ru-status-error, .me-status-error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* 快捷操作 KV 行 */
+.ru-kv {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--border, #e5e7eb);
+}
+.ru-kv:last-child { border-bottom: none; }
+.ru-kv-k {
+  flex: 0 0 80px;
+  color: var(--text-secondary, #666);
+  font-weight: 500;
+}
+.ru-kv-v {
+  flex: 1;
+  color: var(--text-primary);
+}
+
+/* ============ 像素标尺 / 取色器 共用 ============ */
+
+/* 模式切换按钮排 */
+.rt-mode-row {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.rt-mode-btn {
+  flex: 1;
+  padding: 7px 10px;
+  border: none;
+  background: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--text-secondary, #666);
+  border-right: 1px solid var(--border);
+  transition: all 0.15s ease;
+}
+.rt-mode-btn:last-child { border-right: none; }
+.rt-mode-btn:hover { background: #f9fafb; }
+.rt-mode-btn.active {
+  background: #8B5CF6;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 颜色历史列表 */
+.me-color-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.me-color-empty {
+  font-size: 12px;
+  color: var(--text-secondary, #999);
+  text-align: center;
+  padding: 12px 0;
+}
+.me-color-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  transition: background 0.15s;
+}
+.me-color-item:hover { background: #f9fafb; }
+.me-color-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.me-color-info {
+  flex: 1;
+  min-width: 0;
+}
+.me-color-hex {
+  font-size: 12px;
+  font-weight: 600;
+  font-family: Menlo, Consolas, monospace;
+  color: var(--text-primary);
+  cursor: pointer;
+  line-height: 1.2;
+}
+.me-color-hex:hover { color: #8B5CF6; }
+.me-color-rgb {
+  font-size: 11px;
+  color: var(--text-secondary, #888);
+  font-family: Menlo, Consolas, monospace;
+}
+.me-color-copy {
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.6;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+.me-color-copy:hover {
+  opacity: 1;
+  background: #f3f4f6;
+}
+
+

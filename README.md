@@ -52,7 +52,7 @@ mynatest/
 │   ├── mock-interceptor-main.js   # Mock：MAIN world 独立 hook fetch/XHR
 │   ├── mock-interceptor-bridge.js # Mock：ISOLATED world 读 storage → postMessage 下发配置
 │   └── snapshot-picker.js         # 快照：元素选择器 + 自动比对 + DOM 徽章
-├── tools/                          # ⭐ 所有工具集中在这里（全局 IIFE 自注册）
+├── tools/                          # 所有工具集中在这里（全局 IIFE 自注册）
 │   ├── request-diff.js            # 请求对比
 │   ├── stress-test.js             # 轻量压测
 │   ├── timestamp.js               # 时间戳转换
@@ -66,24 +66,26 @@ mynatest/
 │   ├── mock-interceptor.js        # 接口 Mock 拦截器
 │   ├── link-checker.js            # 链接可用性检查
 │   ├── snapshot-diff.js           # 元素快照对比
-│   ├── ip-generator.js            # IP 地址生成 + 本机 IP
-│   ├── ua-generator.js            # User-Agent 随机生成 + 本机 UA
-│   ├── user-generator.js          # 用户信息随机生成（55 字段可选 · 9 分类 · 文本/JSON/YAML 导出）
-│   ├── file-generator.js          # 文件生成（自定义大小/类型/二进制 · 自动下载）
-│   ├── vehicle-generator.js       # 车辆信息随机生成（33 字段 · 5 分类）
-│   ├── contract-generator.js      # 合同 & 票据信息随机生成（32 字段 · 6 分类）
-│   ├── code-generator.js          # 请求转代码（cURL/fetch/axios/Python requests/Playwright）
-│   ├── web-vitals.js              # 性能面板（LCP/CLS/INP · 慢请求 · 资源瀑布图 · 大小分布）
-│   ├── selector-generator.js      # 选择器生成（CSS/XPath/Playwright · 唯一性校验）
-│   ├── resource-checker.js         # 资源检查（图片/JS/CSS/字体 加载失败检测）
-│   ├── screen-capture.js           # 截图 & 录屏（可视/全页截图 · getDisplayMedia 录屏）
-│   ├── table-export.js             # 表格导出（页面表格转 CSV/Excel/JSON · 复制）
-│   ├── checklist.js                # 测试检查清单（发布前 checklist · 自定义项 · Markdown 导出）
-│   ├── snippet-manager.js          # 脚本片段管理（常用注入脚本 · 一键执行 · 自定义脚本）
-│   ├── api-docs.js                 # 接口文档生成（捕获请求 → Markdown / OpenAPI 3.0）
-│   ├── keyboard-nav.js             # 键盘导航测试（焦点链扫描 · Enter/Space/Esc/Tab 行为监控）
-│   ├── timing-breakdown.js         # 请求耗时分解（DNS/TCP/TLS/TTFB/下载 各阶段明细）
-│   └── upload-audit.js             # 上传漏洞辅助（绕过载荷 · polyglot · 大小边界 · 检查清单）
+│   ├── ip-generator.js            # IP 地址生成
+│   ├── ua-generator.js            # User-Agent 生成
+│   ├── user-generator.js          # 用户信息生成
+│   ├── file-generator.js          # 文件生成
+│   ├── vehicle-generator.js       # 车辆信息生成
+│   ├── contract-generator.js      # 合同票据生成
+│   ├── product-generator.js       # 商品信息生成
+│   ├── color-picker-tool.js       # 取色器
+│   ├── code-generator.js          # 请求转代码
+│   ├── web-vitals.js              # 性能面板
+│   ├── selector-generator.js      # 选择器生成
+│   ├── resource-checker.js         # 资源检查
+│   ├── screen-capture.js           # 截图录屏
+│   ├── table-export.js             # 表格导出
+│   ├── checklist.js                # 测试检查清单
+│   ├── snippet-manager.js          # 脚本片段管理
+│   ├── api-docs.js                 # 接口文档生成
+│   ├── keyboard-nav.js             # 键盘导航测试
+│   ├── timing-breakdown.js         # 请求耗时分解
+│   └── upload-audit.js             # 上传漏洞辅助
 ├── icons/                          # 工具图标（16×16 PNG）
 ├── assets/                         # 静态资源（收款码等）
 ```
@@ -92,41 +94,44 @@ mynatest/
 
 <table>
 <colgroup>
-  <col>
-  <col style="width:5em;white-space:nowrap">
-  <col style="word-break:break-word">
+  <col style="min-width:6em">
+  <col style="width:6em;white-space:nowrap">
+  <col style="min-width:20em;word-break:break-word">
 </colgroup>
 <tr><th>工具</th><th>分类</th><th>说明</th></tr>
-<tr><td><b>请求对比</b></td><td>网络工具</td><td>捕获两次接口响应 → 自动 diff（JSON 路径级 / 行级文本）</td></tr>
-<tr><td><b>轻量压测</b></td><td>网络工具</td><td>捕获接口一键填入；数据统计、响应断言、响应查看、报告下载</td></tr>
-<tr><td><b>JWT 解析</b></td><td>网络工具</td><td>解码 JWT 的 Header / Payload</td></tr>
-<tr><td><b>请求转代码</b></td><td>网络工具</td><td>捕获请求一键生成 cURL、fetch、axios、Python requests、Playwright</td></tr>
-<tr><td><b>性能面板</b></td><td>网络工具</td><td>LCP/CLS/INP 实时监控；慢请求 TOP 10；资源瀑布图（DNS/TCP/TTFB/Download 分段）；资源大小按类型分布</td></tr>
-<tr><td><b>选择器生成</b></td><td>测试工具</td><td>点击页面元素生成 CSS / XPath / Playwright 选择器；自动校验唯一性；逐级增强直到唯一</td></tr>
-<tr><td><b>资源检查</b></td><td>测试工具</td><td>检测页面中图片/JS/CSS/字体的加载失败（404 等）；capture-phase error 监听 + PerformanceObserver 补充 + document.fonts</td></tr>
-<tr><td><b>截图 & 录屏</b></td><td>开发工具</td><td>可见区域截图（captureVisibleTab）+ 全页截图（chrome.debugger Page.captureScreenshot）+ 录屏（getDisplayMedia + MediaRecorder）</td></tr>
-<tr><td><b>表格导出</b></td><td>数据工具</td><td>扫描页面所有 &lt;table&gt;，逐个导出 CSV（UTF-8 BOM）/ Excel / JSON（表头自动识别为对象键）；支持一键复制</td></tr>
-<tr><td><b>测试检查清单</b></td><td>测试工具</td><td>发布前 checklist：内置 7 组 24 项模板（功能/接口/兼容/安全/性能/上线/文档）；所有清单项支持行内编辑与删除（含内置项，持久化）；自定义项添加；进度条跟踪；一键复制 Markdown</td></tr>
-<tr><td><b>脚本片段</b></td><td>开发工具</td><td>常用注入脚本管理：内置 8 个预设（解除右键/复制限制、显示边框、密码明文、禁用 CSS、图片信息、灰阶、加载耗时、超大图高亮）；一键注入执行（MAIN world eval）并回显返回值；自定义脚本增删改（持久化）</td></tr>
-<tr><td><b>接口文档生成</b></td><td>网络工具</td><td>实时捕获接口请求（去重聚合），勾选后一键生成 Markdown 文档（Query/请求头/请求体/响应头）或 OpenAPI 3.0 JSON（自动推导 schema，可直接导入 Swagger/Apifox）；支持复制与下载</td></tr>
-<tr><td><b>键盘导航测试</b></td><td>测试工具</td><td>扫描页面全部可聚焦元素（标记无 aria-label/text 名称、tabindex&gt;0 等可访问性问题）；开启监控后实时记录 Tab/Enter/Space/Esc 按键行为、目标元素与默认动作是否被 preventDefault 拦截</td></tr>
-<tr><td><b>请求耗时分解</b></td><td>网络工具</td><td>基于 Performance API 分解每个请求的 DNS / TCP / TLS / TTFB / 内容下载各阶段耗时；彩色分段条可视化、总量占比条、均值与最慢请求摘要、全列排序；含文档导航时序</td></tr>
-<tr><td><b>上传漏洞辅助</b></td><td>测试工具</td><td>文件上传测试辅助：12 种文件名/扩展名绕过清单（双扩展、大小写、截断、路径穿越等）一键复制；GIF/SVG/HTML polyglot 载荷生成下载；10 项上传点安全检查清单（仅授权测试）</td></tr>
-<tr><td><b>时间戳转换</b></td><td>开发工具</td><td>时间与时间戳互转，支持秒/毫秒级</td></tr>
-<tr><td><b>JSON 格式化</b></td><td>开发工具</td><td>格式化 / 压缩 / 转义 / 反转义</td></tr>
-<tr><td><b>数据对比</b></td><td>开发工具</td><td>JSON / 文本行级 diff</td></tr>
-<tr><td><b>Cookie/Storage 管理</b></td><td>开发工具</td><td>登录态快照切换</td></tr>
-<tr><td><b>正则测试</b></td><td>开发工具</td><td>实时匹配结果，内置邮箱/手机号/IP 等 18 个常用正则速查</td></tr>
-<tr><td><b>环境横幅</b></td><td>开发工具</td><td>域名规则匹配 + 页面顶部彩色横幅，防误操作生产</td></tr>
-<tr><td><b>Mock 拦截器</b></td><td>测试工具</td><td>拦截指定 URL 返回自定义响应；多套场景一键切换</td></tr>
-<tr><td><b>链接检查</b></td><td>测试工具</td><td>批量扫描页面 a 标签，校验可访问性与跳转地址</td></tr>
-<tr><td><b>快照对比</b></td><td>测试工具</td><td>捕获元素基准图，自动像素比对 UI 变更；差异高亮红色标注</td></tr>
-<tr><td><b>IP 地址生成</b></td><td>数据生成</td><td>随机生成 IPv4/IPv6；显示本机内外网 IP</td></tr>
-<tr><td><b>UA 生成</b></td><td>数据生成</td><td>随机生成 User-Agent（多浏览器 × 多平台）；显示本机当前 UA</td></tr>
-<tr><td><b>用户信息生成</b></td><td>数据生成</td><td>55 字段数据；支持文本/JSON/YAML 导出</td></tr>
-<tr><td><b>文件生成</b></td><td>数据生成</td><td>自定义文件（文本/二进制/BMP）；生成后自动下载</td></tr>
-<tr><td><b>车辆信息生成</b></td><td>数据生成</td><td>33 字段车辆信息；支持畸形车牌/异常 VIN/违章记录/驾驶证信息</td></tr>
-<tr><td><b>合同票据生成</b></td><td>数据生成</td><td>32 字段合同票据</td></tr>
+<tr><td><b>请求对比</b></td><td nowrap>网络工具</td><td>捕获两次接口响应 → 自动 diff（JSON 路径级 / 行级文本）</td></tr>
+<tr><td><b>轻量压测</b></td><td nowrap>网络工具</td><td>捕获接口一键填入；数据统计、响应断言、响应查看、报告下载</td></tr>
+<tr><td><b>请求转代码</b></td><td nowrap>网络工具</td><td>捕获请求一键生成 cURL、fetch、axios、Python requests、Playwright</td></tr>
+<tr><td><b>性能面板</b></td><td nowrap>网络工具</td><td>LCP/CLS/INP 实时监控；慢请求 TOP 10；资源瀑布图；资源大小按类型分布</td></tr>
+<tr><td><b>接口文档生成</b></td><td nowrap>网络工具</td><td>实时捕获接口请求，勾选后一键生成 Markdown 文档或 OpenAPI 3.0 JSON</td></tr>
+<tr><td><b>请求耗时分解</b></td><td nowrap>网络工具</td><td>基于 Performance API 分解每个请求的 DNS / TCP / TLS / TTFB / 内容下载各阶段耗时</td></tr>
+<tr><td><b>时间戳转换</b></td><td nowrap>开发工具</td><td>时间与时间戳互转，支持秒/毫秒级</td></tr>
+<tr><td><b>JSON 格式化</b></td><td nowrap>开发工具</td><td>格式化 / 压缩 / 转义 / 反转义</td></tr>
+<tr><td><b>数据对比</b></td><td nowrap>开发工具</td><td>JSON / 文本行级 diff</td></tr>
+<tr><td><b>Cookie/Storage 管理</b></td><td nowrap>开发工具</td><td>登录态快照切换</td></tr>
+<tr><td><b>正则测试</b></td><td nowrap>开发工具</td><td>实时匹配结果，内置邮箱/手机号/IP 等常用正则速查</td></tr>
+<tr><td><b>环境横幅</b></td><td nowrap>开发工具</td><td>域名规则匹配 + 页面顶部彩色横幅</td></tr>
+<tr><td><b>截图 & 录屏</b></td><td nowrap>开发工具</td><td>可见区域截图 + 全页截图 + 录屏</td></tr>
+<tr><td><b>脚本片段</b></td><td nowrap>开发工具</td><td>常用注入脚本管理：内置预设 + 自定义；一键注入执行</td></tr>
+<tr><td><b>取色器</b></td><td nowrap>开发工具</td><td>拾取页面任意像素颜色</td></tr>
+<tr><td><b>JWT 解析</b></td><td nowrap>网络工具</td><td>解码 JWT 的 Header / Payload</td></tr>
+<tr><td><b>Bug 报告助手</b></td><td nowrap>测试工具</td><td>页面框选区域 + Canvas 标注（箭头/矩形/文字/序号）+ 环境信息采集（URL/UserAgent/分辨率）</td></tr>
+<tr><td><b>Mock 拦截器</b></td><td nowrap>测试工具</td><td>拦截指定 URL 返回自定义响应；多套场景一键切换</td></tr>
+<tr><td><b>链接检查</b></td><td nowrap>测试工具</td><td>批量扫描页面 a 标签，校验可访问性与跳转地址</td></tr>
+<tr><td><b>快照对比</b></td><td nowrap>测试工具</td><td>捕获元素基准图，自动像素比对 UI 变更；差异高亮红色标注</td></tr>
+<tr><td><b>选择器生成</b></td><td nowrap>测试工具</td><td>点击页面元素生成 CSS/XPath/Playwright 选择器；自动校验唯一性；逐级增强直到唯一</td></tr>
+<tr><td><b>资源检查</b></td><td nowrap>测试工具</td><td>检测页面中图片/JS/CSS/字体的加载失败（404 等）</td></tr>
+<tr><td><b>键盘导航测试</b></td><td nowrap>测试工具</td><td>扫描页面全部可聚焦元素；监控 Tab/Enter/Space/Esc 按键行为是否被 preventDefault 拦截</td></tr>
+<tr><td><b>测试检查清单</b></td><td nowrap>测试工具</td><td>发布前 checklist：内置 7 组 24 项模板（功能/接口/兼容/安全/性能/上线/文档）；自定义项添加；进度条跟踪</td></tr>
+<tr><td><b>上传漏洞辅助</b></td><td nowrap>测试工具</td><td>文件上传测试辅助：文件名/扩展名绕过清单一键复制；上传点安全检查清单（仅授权测试）</td></tr>
+<tr><td><b>IP 地址生成</b></td><td nowrap>数据工具</td><td>随机生成 IPv4/IPv6；显示本机内外网 IP</td></tr>
+<tr><td><b>UA 生成</b></td><td nowrap>数据工具</td><td>随机生成 User-Agent（多浏览器 × 多平台）；显示本机当前 UA</td></tr>
+<tr><td><b>用户信息生成</b></td><td nowrap>数据工具</td><td>用户信息随机生成；支持文本/JSON/YAML 导出</td></tr>
+<tr><td><b>文件生成</b></td><td nowrap>数据工具</td><td>自定义文件（文本/二进制/BMP）；生成后自动下载</td></tr>
+<tr><td><b>商品信息生成</b></td><td nowrap>数据工具</td><td>商品电商数据随机生成（名称/编码/类目/价格/SKU/图片/视频/状态/物流等）</td></tr>
+<tr><td><b>车辆信息生成</b></td><td nowrap>数据工具</td><td>车辆信息随机生成（车牌/VIN/颜色/品牌/证件/车主/驾驶证等）</td></tr>
+<tr><td><b>合同票据生成</b></td><td nowrap>数据工具</td><td>合同票据信息随机生成（合同主体/甲乙双方/金额/日期/票据/备注）</td></tr>
+<tr><td><b>表格导出</b></td><td nowrap>数据工具</td><td>扫描页面所有 &lt;table&gt;，逐个导出 CSV/Excel/JSON</td></tr>
 </table>
 
 ## 新增工具（插件化）
