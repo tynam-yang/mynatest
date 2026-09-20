@@ -829,7 +829,7 @@
       icon: '🚗',
       iconUrl: 'icons/vehicle-generator.png',
       category: 'data-gen',
-      categoryName: '数据生成'
+      categoryName: '数据工具'
     },
     fieldConfig: {
       keyLang: 'zh',

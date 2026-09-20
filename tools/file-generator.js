@@ -10,7 +10,7 @@
     icon: '📄',
     iconUrl: 'icons/file-generator.png',
     category: 'data-gen',
-    categoryName: '数据生成'
+    categoryName: '数据工具'
   };
 
   // 默认文件类型（按分类）

@@ -396,7 +396,7 @@
     desc: '商品 SPU/SKU 全字段随机生成（基础/类目/价格/库存/图文/物流），含边界 & 异常数据场景',
     iconUrl: 'icons/product-generator.png',
     category: 'data',
-    categoryName: '数据生成',
+    categoryName: '数据工具',
   };
 
   function _renderCfgRow(field) {

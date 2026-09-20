@@ -10,7 +10,7 @@
     icon: '🌐',
     iconUrl: 'icons/ip-generator.png',
     category: 'data-gen',
-    categoryName: '数据生成'
+    categoryName: '数据工具'
   };
 
   // ========== 随机 IP 生成 ==========
