@@ -16,6 +16,9 @@
           <span class="version">v1.0.0</span>
         </div>
       </div>
+      <button id="themeBtn" class="theme-btn" title="切换深色/浅色主题">
+        <span id="themeEmoji"></span>
+      </button>
     </header>
 
     <!-- Tab 导航 -->
@@ -216,23 +219,30 @@
   </div>
 
   <!-- 顺序加载 -->
+  <!-- 核心库 -->
   <script src="core/storage.js"></script>
   <script src="core/diff.js"></script>
   <script src="core/utils.js"></script>
+  <!-- SheetJS (Excel 解析) -->
+  <script src="vendor/xlsx.full.min.js"></script>
 
   <!-- 网络工具 -->
   <script src="tools/request-diff.js"></script>
   <script src="tools/stress-test.js"></script>
-  <script src="tools/jwt-parser.js"></script>
   <script src="tools/mock-interceptor.js"></script>
   <script src="tools/code-generator.js"></script>
   <script src="tools/api-docs.js"></script>
   <script src="tools/timing-breakdown.js"></script>
 
-  <!-- 开发工具 -->
-  <script src="tools/timestamp.js"></script>
+  <!-- 格式转换 -->
   <script src="tools/json-formatter.js"></script>
   <script src="tools/data-diff.js"></script>
+  <script src="tools/timestamp.js"></script>
+  <script src="tools/excel-json-tool.js"></script>
+  <script src="tools/table-export.js"></script>
+
+  <!-- 开发工具 -->
+  <script src="tools/jwt-parser.js"></script>
   <script src="tools/storage-manager.js"></script>
   <script src="tools/regex-tester.js"></script>
   <script src="tools/env-banner.js"></script>
@@ -258,8 +268,10 @@
   <script src="tools/product-generator.js"></script>
   <script src="tools/vehicle-generator.js"></script>
   <script src="tools/contract-generator.js"></script>
-  <script src="tools/table-export.js"></script>
 
   <script src="options.js"></script>
 </body>
+
+
+
 </html>

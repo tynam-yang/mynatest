@@ -11,8 +11,8 @@
     name: '数据对比',
     desc: 'JSON / 文本差异对比，支持左右、上下布局切换',
     iconUrl: 'icons/data-diff.png',
-    category: 'dev',
-    categoryName: '开发工具'
+    category: 'format',
+    categoryName: '格式转换'
   };
 
   // 跨工具切换保留草稿与设置

@@ -10,28 +10,38 @@
 
   <aside class="sp-sidebar">
     <nav class="sp-tabs" id="tabs"></nav>
+    <button id="themeBtn" class="sp-theme-toggle" title="主题切换">
+      <span class="sp-theme-emoji" id="themeEmoji"></span>
+    </button>
     <button id="settingsBtn" class="sp-sidebar-btn" title="设置">⚙️</button>
   </aside>
 
-  <!-- 顺序加载：先加载共享模块，再加载工具模块，最后框架 -->
+  <!-- 顺序加载 -->
+  <!-- 核心库 -->
   <script src="core/storage.js"></script>
   <script src="core/diff.js"></script>
   <script src="core/utils.js"></script>
+  <!-- SheetJS (Excel 解析) -->
+  <script src="vendor/xlsx.full.min.js"></script>
 
   <!-- 网络工具 -->
   <script src="tools/request-diff.js"></script>
   <script src="tools/stress-test.js"></script>
-  <script src="tools/jwt-parser.js"></script>
   <script src="tools/mock-interceptor.js"></script>
   <script src="tools/code-generator.js"></script>
-  <script src="tools/web-vitals.js"></script>
   <script src="tools/api-docs.js"></script>
   <script src="tools/timing-breakdown.js"></script>
+  <script src="tools/web-vitals.js"></script>
 
-  <!-- 开发工具 -->
-  <script src="tools/timestamp.js"></script>
+  <!-- 格式转换 -->
   <script src="tools/json-formatter.js"></script>
   <script src="tools/data-diff.js"></script>
+  <script src="tools/timestamp.js"></script>
+  <script src="tools/excel-json-tool.js"></script>
+  <script src="tools/table-export.js"></script>
+
+  <!-- 开发工具 -->
+  <script src="tools/jwt-parser.js"></script>
   <script src="tools/storage-manager.js"></script>
   <script src="tools/regex-tester.js"></script>
   <script src="tools/env-banner.js"></script>
@@ -57,8 +67,10 @@
   <script src="tools/product-generator.js"></script>
   <script src="tools/vehicle-generator.js"></script>
   <script src="tools/contract-generator.js"></script>
-  <script src="tools/table-export.js"></script>
 
   <script src="sidepanel.js"></script>
 </body>
+
+
+
 </html>

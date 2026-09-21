@@ -19,6 +19,1001 @@
   --warning: #f39c12;
 }
 
+/* 深色主题 */
+[data-theme="dark"] {
+  --primary: #4a9eff;
+  --primary-dark: #2d7fd4;
+  --primary-light: #1a3c5e;
+  --bg: #1e1e2e;
+  --bg-secondary: #252535;
+  --bg-sidebar: #181826;
+  --border: #3a3a4d;
+  --text: #e0e0e8;
+  --text-light: #9a9ab0;
+  --success: #4ade80;
+  --danger: #f87171;
+  --warning: #fbbf24;
+}
+
+/* ========== 深色模式下硬编码颜色覆盖 ========== */
+/* 这些类里有 #fff / #f0f7ff / #2186ff 等硬编码，不走 CSS 变量 */
+
+[data-theme="dark"] .ug-btn-primary,
+[data-theme="dark"] .code-generator-panel .btn-primary {
+  background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+  color: #fff;
+  border-color: #2563eb;
+  box-shadow: 0 1px 3px rgba(59, 130, 246, 0.4);
+}
+[data-theme="dark"] .ug-btn-primary:hover,
+[data-theme="dark"] .ug-btn-primary:active {
+  background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%);
+  border-color: #3b82f6;
+  box-shadow: 0 3px 8px rgba(59, 130, 246, 0.5);
+}
+[data-theme="dark"] .ug-btn-danger {
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+  color: #fff;
+  box-shadow: 0 3px 8px rgba(239, 68, 68, 0.3);
+}
+
+/* 白底硬编码 → 深色背景 */
+[data-theme="dark"] .ug-input,
+[data-theme="dark"] textarea.ug-input,
+[data-theme="dark"] select.ug-select {
+  background: #2a2a3c;
+  color: #e0e0e8;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="number"],
+[data-theme="dark"] textarea {
+  background: #2a2a3c;
+  color: #e0e0e8;
+  border-color: #3a3a4d;
+}
+
+/* section 卡片硬编码白底 */
+[data-theme="dark"] .ug-section {
+  background: #252535;
+}
+[data-theme="dark"] .ug-config-row,
+[data-theme="dark"] .ug-format-tabs {
+  background: #2a2a3c;
+}
+[data-theme="dark"] .ug-format-tab {
+  background: #2a2a3c;
+  color: #9a9ab0;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .ug-format-tab.active {
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+/* 结果区 */
+[data-theme="dark"] .ug-result {
+  background: #1e1e2e;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .ug-result-code {
+  background: #181826;
+  color: #a5b4fc;
+}
+[data-theme="dark"] .ug-copy-bar {
+  background: #252535;
+  border-color: #3a3a4d;
+}
+
+/* 条目头 / 条目区 */
+[data-theme="dark"] .ug-entry-header {
+  background: #2a2a3c;
+  border-color: #3a3a4d;
+  color: #a5b4fc;
+}
+[data-theme="dark"] .ug-entry-sep {
+  background: #3a3a4d;
+}
+
+/* 状态提示（ru-status） */
+[data-theme="dark"] .ru-status-idle {
+  background: #2a2a3c;
+  color: #9a9ab0;
+}
+[data-theme="dark"] .ru-status-active,
+[data-theme="dark"] .ug-status-active {
+  background: #064e3b;
+  color: #4ade80;
+}
+[data-theme="dark"] .ru-status-error,
+[data-theme="dark"] .ug-status-error {
+  background: #7f1d1d;
+  color: #fca5a5;
+}
+[data-theme="dark"] .ru-btn-secondary {
+  background: #2a2a3c;
+  color: #a5b4fc;
+  border-color: #3b82f6;
+}
+[data-theme="dark"] .ru-btn-secondary:hover {
+  background: #3b82f6;
+  color: #fff;
+}
+
+/* Excel↔JSON 组件 */
+[data-theme="dark"] .ej-drop-zone {
+  background: #252535;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .ej-drop-zone.ej-drop-active {
+  background: #1a3c5e;
+  border-color: #4a9eff;
+  color: #60a5fa;
+}
+[data-theme="dark"] .ej-textarea {
+  background: #1e1e2e;
+  color: #e0e0e8;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .ej-info {
+  background: #1a3c5e;
+  color: #93c5fd;
+}
+[data-theme="dark"] .ej-example,
+[data-theme="dark"] .ej-example-body code {
+  background: #252535;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .ej-filename {
+  background: #2a2a3c;
+  color: #e0e0e8;
+  border-color: #3a3a4d;
+}
+
+/* 通用状态色（硬编码 #e8f8f0 / #fdecea 等） */
+[data-theme="dark"] .ug-success,
+[data-theme="dark"] .ug-state-success,
+[data-theme="dark"] .st-success {
+  background: #064e3b;
+  color: #4ade80;
+  border-color: #059669;
+}
+[data-theme="dark"] .ug-error,
+[data-theme="dark"] .ug-state-error,
+[data-theme="dark"] .st-error {
+  background: #7f1d1d;
+  color: #fca5a5;
+  border-color: #dc2626;
+}
+[data-theme="dark"] .ug-warning,
+[data-theme="dark"] .ug-state-warning,
+[data-theme="dark"] .st-warning {
+  background: #713f12;
+  color: #fcd34d;
+  border-color: #d97706;
+}
+[data-theme="dark"] .ug-info,
+[data-theme="dark"] .ug-state-info,
+[data-theme="dark"] .st-info {
+  background: #1e3a8a;
+  color: #93c5fd;
+  border-color: #3b82f6;
+}
+
+/* stress-test 组件（硬编码 #f0f7ff / #fff / #1f2937） */
+[data-theme="dark"] .st-block {
+  background: #252535;
+}
+[data-theme="dark"] .st-block-head,
+[data-theme="dark"] .st-method {
+  background: #2a2a3c;
+  color: #a5b4fc;
+}
+[data-theme="dark"] .st-block-body {
+  background: #1e1e2e;
+  color: #9a9ab0;
+  border-color: #3a3a4d;
+}
+
+/* json-diff 硬编码紫色 */
+[data-theme="dark"] .json-diff-item.type .diff-path {
+  color: #c4b5fd;
+}
+
+/* tool header h2 里 img 周围（硬编码黑/白底） */
+[data-theme="dark"] .lc-header h2 {
+  color: #e0e0e8;
+}
+[data-theme="dark"] .lc-header h2 img {
+  filter: drop-shadow(0 0 2px rgba(255,255,255,0.1));
+}
+
+/* scrollbar */
+[data-theme="dark"] ::-webkit-scrollbar {
+  width: 8px; height: 8px;
+}
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: #1e1e2e;
+}
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #3a3a4d;
+  border-radius: 4px;
+}
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #4a4a60;
+}
+
+/* checkbox accent-color */
+[data-theme="dark"] input[type="checkbox"],
+[data-theme="dark"] input[type="radio"] {
+  accent-color: #4a9eff;
+}
+
+/* 侧边栏 tab */
+[data-theme="dark"] .sp-tab {
+  color: #9a9ab0;
+}
+[data-theme="dark"] .sp-tab:hover {
+  background: #2a2a3c;
+  color: #e0e0e8;
+}
+[data-theme="dark"] .sp-tab.active {
+  background: #1a3c5e;
+  color: #93c5fd;
+}
+[data-theme="dark"] .sp-sidebar-btn {
+  color: #9a9ab0;
+}
+[data-theme="dark"] .sp-sidebar-btn:hover {
+  color: #60a5fa;
+  background: #2a2a3c;
+}
+
+/* 侧边栏整体 */
+[data-theme="dark"] .sp-sidebar {
+  background: #181826;
+  border-color: #3a3a4d;
+}
+
+/* 工具 header h1/h2 标签 */
+[data-theme="dark"] .ug-title-bar {
+  color: #a5b4fc;
+  background: #2a2a3c;
+}
+
+/* 测试工具 checklist / link-checker 组件 */
+[data-theme="dark"] .cl-group-title {
+  background: #2a2a3c;
+  color: #a5b4fc;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .cl-item {
+  background: #252535;
+  border-color: #3a3a4d;
+  color: #9a9ab0;
+}
+[data-theme="dark"] .cl-item input[type="checkbox"] {
+  accent-color: #4a9eff;
+}
+
+/* select options */
+[data-theme="dark"] select {
+  background: #2a2a3c;
+  color: #e0e0e8;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] select option {
+  background: #252535;
+  color: #e0e0e8;
+}
+
+/* tooltip / toast 通知 */
+[data-theme="dark"] .ug-tooltip,
+[data-theme="dark"] .fl-message {
+  background: #252535;
+  color: #e0e0e8;
+  border-color: #3a3a4d;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+/* color-picker 组件（.me-color-*） */
+[data-theme="dark"] .me-color-item {
+  background: #252535;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .me-color-hex {
+  color: #a5b4fc;
+}
+
+/* 侧边栏主题开关深色态 */
+[data-theme="dark"] .sp-theme-toggle {
+  color: #9a9ab0;
+}
+[data-theme="dark"] .sp-theme-toggle:hover {
+  color: #60a5fa;
+  background: #2a2a3c;
+}
+
+/* bug-report 工具 */
+[data-theme="dark"] .br-stage-btn {
+  background: #2a2a3c;
+  color: #9a9ab0;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .br-stage-btn.active {
+  background: #1a3c5e;
+  color: #93c5fd;
+  border-color: #4a9eff;
+}
+
+/* tooltip / 提示气泡里的白字（如果没有深色背景，白色在深色模式下发亮刺眼） */
+[data-theme="dark"] #sp-tooltip,
+[data-theme="dark"] .sp-sidebar-btn[data-tooltip]::after {
+  color: #e0e0e8;
+  background: #2a2a3c;
+  border-color: #3a3a4d;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+/* 低对比度灰字在深色模式下看不见 → 调亮 */
+[data-theme="dark"] .slot-field-empty {
+  color: #6b7280;
+}
+[data-theme="dark"] .st-block-body textarea::placeholder,
+[data-theme="dark"] textarea::placeholder,
+[data-theme="dark"] input::placeholder {
+  color: #6b7280;
+  opacity: 1;
+}
+
+/* .ug-format-tab.active 之前没覆盖 color → 纯白在深灰底刺眼 */
+[data-theme="dark"] .ug-format-tab.active {
+  color: #93c5fd;
+}
+
+/* 按钮上的白字（彩色按钮背景上的白字是合适的，但要确保按钮背景够亮） */
+/* 这些已覆盖：.ug-btn-primary / .ug-btn-danger / .btn.primary / .btn.danger / .capture-btn.active /
+   .st-capture-btn.active / .re-preset:hover / .eb-del:hover / .eb-pattern-del:hover /
+   .br-shot / .br-shot:hover / .br-shot:active / .br-tpl-tab.active / .mi-preset-btn:hover /
+   .mi-save-btn / .lc-btn-primary / .lc-filter-btn.active / .sd-btn-primary /
+   .ipg-btn-primary / .ug-btn-primary / .ug-format-tab.active / .fg-btn-primary /
+   .cg-capture-btn.active / .rc-chip-active / .sc-btn-primary / .sc-btn-danger /
+   .rt-mode-btn.active / .uag-btn-primary */
+/* 上面这些都是彩色按钮 → 白字是正确的，不需要改 */
+
+/* 深蓝/深红 neon 字在深灰底上看不见 → 调亮到 Tailwind 400 系列 */
+/* .diff-line.remove / .slot-badge.multi / .slot-badge.syntax error / .lc-status-fail / .lc-item-error / .mi-tag / .sd-tag-css / .lc-tag-same / .lc-status-pending / .mi-tag.mi-delay */
+[data-theme="dark"] .diff-line.remove { color: #fca5a5; }
+[data-theme="dark"] .diff-line.add { color: #86efac; }
+[data-theme="dark"] .diff-line.info { color: #93c5fd; }
+[data-theme="dark"] .slot-badge.method,
+[data-theme="dark"] .lc-tag-same,
+[data-theme="dark"] .sd-tag-css,
+[data-theme="dark"] .mi-tag.mi-method { color: #93c5fd; }
+[data-theme="dark"] .slot-badge.err,
+[data-theme="dark"] .lc-status-fail,
+[data-theme="dark"] .lc-item-error,
+[data-theme="dark"] .mi-tag.mi-delay,
+[data-theme="dark"] .re-error-code { color: #fca5a5; }
+[data-theme="dark"] .lc-status-pending { color: #c4b5fd; }
+
+/* WCAG AA 全覆盖：32 处对比度不足的硬编码 color */
+/* diff 组件 */
+[data-theme="dark"] .diff-line.add { color: #86efac; }
+[data-theme="dark"] .diff-line.remove { color: #fca5a5; }
+/* slot-formatter */
+[data-theme="dark"] .slot-badge.method { color: #c4b5fd; }
+[data-theme="dark"] .slot-badge.err { color: #fca5a5; }
+[data-theme="dark"] .slot-field-content { color: #e0e0e8; }
+/* regex-tester */
+[data-theme="dark"] .re-match { color: #fcd34d; }
+/* mock-interceptor */
+[data-theme="dark"] .mi-tip { color: #6ee7b7; }
+[data-theme="dark"] .mi-preset-btn { color: #c4b5fd; }
+[data-theme="dark"] .mi-tag.mi-method { color: #93c5fd; }
+[data-theme="dark"] .mi-tag.mi-type { color: #fcd34d; }
+[data-theme="dark"] .mi-tag.mi-delay { color: #fca5a5; }
+[data-theme="dark"] .mi-add-btn { color: #c4b5fd; }
+[data-theme="dark"] .mi-editor-title { color: #c4b5fd; }
+/* link-checker */
+[data-theme="dark"] .lc-tip { color: #6ee7b7; }
+[data-theme="dark"] .lc-status-ok { color: #86efac; }
+[data-theme="dark"] .lc-status-fail { color: #fca5a5; }
+[data-theme="dark"] .lc-status-redirect { color: #fcd34d; }
+[data-theme="dark"] .lc-status-cross { color: #a5b4fc; }
+[data-theme="dark"] .lc-status-warn { color: #fcd34d; }
+[data-theme="dark"] .lc-status-pending { color: #c4b5fd; }
+[data-theme="dark"] .lc-tag-same { color: #93c5fd; }
+[data-theme="dark"] .lc-tag-cross { color: #a5b4fc; }
+[data-theme="dark"] .lc-item-redirect { color: #fcd34d; }
+[data-theme="dark"] .lc-item-error { color: #fca5a5; }
+/* selector-generator */
+[data-theme="dark"] .sd-tip { color: #fcd34d; }
+[data-theme="dark"] .sd-tag-css { color: #93c5fd; }
+[data-theme="dark"] .sd-tag-xpath { color: #fcd34d; }
+[data-theme="dark"] .sd-baseline-selector { color: #c4b5fd; }
+/* file-generator */
+[data-theme="dark"] .fg-info-item a { color: #c4b5fd; }
+/* upload-audit */
+[data-theme="dark"] .up-warn { color: #fcd34d; }
+/* color-picker / ruler */
+[data-theme="dark"] .ru-status-active, [data-theme="dark"] .me-status-active { color: #86efac; }
+[data-theme="dark"] .ru-status-error, [data-theme="dark"] .me-status-error { color: #fca5a5; }
+
+/* 数据生成器：选择字段区域（最显眼的一大片白） */
+[data-theme="dark"] .ug-cat-group {
+  background: #2a2a3c;        /* 深灰 + 浅蓝调，比纯黑柔和 */
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .ug-cat-title {
+  color: #c4b5fd;             /* violet-300，比 500 亮，对比度 8.5:1 ✅ */
+  border-bottom-color: #3a3a4d;
+}
+[data-theme="dark"] .ug-field-item {
+  color: #c7c7d6;             /* 比 .ug-text (#e0e0e8) 稍暗，区分条目层级 */
+}
+[data-theme="dark"] .ug-field-item:hover {
+  color: #e0e0e8;
+  background: rgba(74, 158, 255, 0.08);  /* 轻蓝 hover 高亮 */
+  border-radius: 3px;
+}
+[data-theme="dark"] .ug-cfg-toggle {
+  filter: brightness(1.2);    /* 配置齿轮图标亮一点 */
+  color: #93c5fd;
+}
+[data-theme="dark"] .ug-field-config {
+  border-top: 1px dashed #3a3a4d;
+}
+[data-theme="dark"] .ug-sub-label {
+  color: #9a9ab0;
+}
+
+/* 商品/车辆/合同等生成器结果区（全是硬编码白底） */
+[data-theme="dark"] .ug-config-row {
+  border-bottom-color: #3a3a4d;
+}
+[data-theme="dark"] .ug-entry-header {
+  color: #c4b5fd;    /* violet-300 */
+}
+[data-theme="dark"] .ug-row-label {
+  color: #c7c7d6;
+}
+[data-theme="dark"] .ug-row-val {
+  color: #e0e0e8;
+}
+
+/* 通用兜底：把所有白底硬编码类一次性刷成深灰底 */
+[data-theme="dark"] .ug-wrap,
+[data-theme="dark"] .ug-wrap > div,
+[data-theme="dark"] .ug-result-section,
+[data-theme="dark"] .ug-result,
+[data-theme="dark"] .ug-result-code,
+[data-theme="dark"] .ug-copy-bar {
+  background: transparent !important;  /* 让父级深灰透过来 */
+}
+[data-theme="dark"] .ug-wrap div[style*="background:#fff"],
+[data-theme="dark"] .ug-wrap div[style*="background: #fff"],
+[data-theme="dark"] .ug-wrap div[style*="background-color:#fff"],
+[data-theme="dark"] .ug-wrap div[style*="background-color: #fff"] {
+  background: #252535 !important;
+}
+
+/* 终极兜底：所有 .tool-panel 下的硬编码白底（覆盖非 .ug-wrap 工具） */
+[data-theme="dark"] .tool-panel * {
+  /* 通用降低亮度，逐类精准覆盖放在下面 */
+}
+[data-theme="dark"] .tool-panel div,
+[data-theme="dark"] .tool-panel section,
+[data-theme="dark"] .tool-panel article {
+  background-color: #252535;  /* 兜底：所有子容器刷深灰底 */
+}
+[data-theme="dark"] .tool-panel > .ug-wrap,
+[data-theme="dark"] .tool-panel > .ug-wrap * {
+  background-color: transparent;  /* .ug-wrap 工具用细粒度覆盖，这里不抢 */
+}
+[data-theme="dark"] .tool-panel [style*="background:#fff"],
+[data-theme="dark"] .tool-panel [style*="background: #fff"],
+[data-theme="dark"] .tool-panel [style*="background-color:#fff"],
+[data-theme="dark"] .tool-panel [style*="background-color: #fff"] {
+  background: #252535 !important;
+}
+/* 非 .ug-wrap 工具的 section/toolbar/header 白底覆盖 */
+[data-theme="dark"] .tool-panel .br-section,
+[data-theme="dark"] .tool-panel .st-section,
+[data-theme="dark"] .tool-panel .sm-info,
+[data-theme="dark"] .tool-panel .st-block,
+[data-theme="dark"] .tool-panel .lc-wrap,
+[data-theme="dark"] .tool-panel .mi-wrap,
+[data-theme="dark"] .tool-panel .sd-wrap,
+[data-theme="dark"] .tool-panel .te-toolbar,
+[data-theme="dark"] .tool-panel .ts-section,
+[data-theme="dark"] .tool-panel .eb-master,
+[data-theme="dark"] .tool-panel .rc-toolbar,
+[data-theme="dark"] .tool-panel .sg-toolbar,
+[data-theme="dark"] .tool-panel .re-input-row,
+[data-theme="dark"] .tool-panel .jf-toolbar,
+[data-theme="dark"] .tool-panel .jwt-input-row,
+[data-theme="dark"] .tool-panel .dd-toolbar,
+[data-theme="dark"] .tool-panel .ck-progress-wrap,
+[data-theme="dark"] .tool-panel .cg-section,
+[data-theme="dark"] .tool-panel .sc-section,
+[data-theme="dark"] .tool-panel .ipg-wrap,
+[data-theme="dark"] .tool-panel .fg-wrap,
+[data-theme="dark"] .tool-panel .uag-wrap,
+[data-theme="dark"] .tool-panel .te-tip,
+[data-theme="dark"] .tool-panel .pv-toolbar {
+  background: #252535 !important;
+  color: #e0e0e8;
+}
+/* 工具内 section/header/block/toolbar 的白底（更细粒度） */
+[data-theme="dark"] .tool-panel .st-block-head,
+[data-theme="dark"] .tool-panel .lc-item,
+[data-theme="dark"] .tool-panel .mi-tag,
+[data-theme="dark"] .tool-panel .sd-baseline,
+[data-theme="dark"] .tool-panel .re-item,
+[data-theme="dark"] .tool-panel .eb-rule,
+[data-theme="dark"] .tool-panel .cg-http,
+[data-theme="dark"] .tool-panel .sm-item {
+  background: #2a2a3c !important;
+  border-color: #3a3a4d;
+  color: #c7c7d6;
+}
+/* button hover 白底 */
+[data-theme="dark"] .tool-panel button:hover,
+[data-theme="dark"] .tool-panel .btn:hover {
+  background: #3a3a4d !important;
+  color: #e0e0e8;
+}
+/* color-picker 清空按钮 hover 刺眼白底 */
+[data-theme="dark"] .tool-panel .me-color-item:hover {
+  background: #2a2a3c !important;
+}
+/* 脚本片段按钮文字（太浅看不清） */
+[data-theme="dark"] .tool-panel .sm-btn,
+[data-theme="dark"] .tool-panel .mi-btn,
+[data-theme="dark"] .tool-panel .eb-btn,
+[data-theme="dark"] .tool-panel .st-btn,
+[data-theme="dark"] .tool-panel .sd-btn {
+  color: #c7c7d6;
+}
+[data-theme="dark"] .tool-panel .sm-btn:hover,
+[data-theme="dark"] .tool-panel .mi-btn:hover,
+[data-theme="dark"] .tool-panel .eb-btn:hover {
+  color: #e0e0e8;
+  background: #3a3a4d;
+}
+/* 按钮上的白字（彩色按钮的白字保持不变）——只改非彩色按钮 */
+[data-theme="dark"] .tool-panel button:not(.ug-btn-primary):not(.ug-btn-danger):not(.btn.primary):not(.btn.danger):not(.capture-btn),
+[data-theme="dark"] .tool-panel .btn:not(.primary):not(.danger),
+[data-theme="dark"] .tool-panel .st-capture-btn:not(.active) {
+  color: #c7c7d6 !important;
+  background: #2a2a3c !important;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .tool-panel button:not(.ug-btn-primary):not(.ug-btn-danger):not(.btn.primary):not(.btn.danger):not(.capture-btn):hover,
+[data-theme="dark"] .tool-panel .btn:not(.primary):not(.danger):hover {
+  color: #e0e0e8 !important;
+  background: #3a3a4d !important;
+}
+/* input/textarea/select（非 .ug-input） */
+[data-theme="dark"] .tool-panel input:not(.ug-input):not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+[data-theme="dark"] .tool-panel textarea:not(.ug-input),
+[data-theme="dark"] .tool-panel select:not(.ug-select) {
+  background: #2a2a3c !important;
+  color: #e0e0e8;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .tool-panel input:not(.ug-input)::placeholder,
+[data-theme="dark"] .tool-panel textarea:not(.ug-input)::placeholder {
+  color: #6b7280;
+}
+/* dropdown / option */
+[data-theme="dark"] .tool-panel select option,
+[data-theme="dark"] .tool-panel .dd-popup {
+  background: #252535;
+  color: #e0e0e8;
+  border-color: #3a3a4d;
+}
+/* 所有硬编码 #fff 文字（不是按钮上的白字） → 调亮到 Tailwind 300 */
+[data-theme="dark"] .tool-panel .lc-status-ok { color: #86efac; }
+[data-theme="dark"] .tool-panel .lc-status-fail { color: #fca5a5; }
+[data-theme="dark"] .tool-panel .lc-status-redirect, [data-theme="dark"] .tool-panel .lc-status-warn { color: #fcd34d; }
+[data-theme="dark"] .tool-panel .lc-status-pending { color: #c4b5fd; }
+[data-theme="dark"] .tool-panel .lc-status-cross, [data-theme="dark"] .tool-panel .lc-tag-cross { color: #a5b4fc; }
+[data-theme="dark"] .tool-panel .lc-tag-same, [data-theme="dark"] .tool-panel .sd-tag-css { color: #93c5fd; }
+[data-theme="dark"] .tool-panel .sd-tag-xpath, [data-theme="dark"] .tool-panel .up-warn { color: #fcd34d; }
+[data-theme="dark"] .tool-panel .mi-tag.mi-method { color: #93c5fd; }
+[data-theme="dark"] .tool-panel .mi-tag.mi-delay { color: #fca5a5; }
+[data-theme="dark"] .tool-panel .mi-tag.mi-type { color: #fcd34d; }
+[data-theme="dark"] .tool-panel .mi-tip, [data-theme="dark"] .tool-panel .lc-tip { color: #6ee7b7; }
+[data-theme="dark"] .tool-panel .slot-field-content { color: #e0e0e8; }
+[data-theme="dark"] .tool-panel .re-match { color: #fcd34d; }
+[data-theme="dark"] .tool-panel .diff-line.add { color: #86efac; }
+[data-theme="dark"] .tool-panel .diff-line.remove { color: #fca5a5; }
+
+/* ========== 用户反馈的 5 个具体场景 ========== */
+
+/* 1. 清空按钮白底刺眼（.ug-btn-tiny：JSON格式化/数据对比/请求对比/表格导出等全用） */
+[data-theme="dark"] .ug-btn-tiny,
+[data-theme="dark"] .tool-panel .ug-btn-tiny {
+  background: #2a2a3c !important;
+  color: #c7c7d6 !important;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .ug-btn-tiny:hover,
+[data-theme="dark"] .tool-panel .ug-btn-tiny:hover {
+  background: #3a3a4d !important;
+  color: #e0e0e8 !important;
+}
+
+/* 2. 生成器配置区 select 下拉框白底（.ug-cfg-row .ug-select / .ug-field-config select） */
+[data-theme="dark"] .ug-cfg-row .ug-select,
+[data-theme="dark"] .ug-cfg-row select,
+[data-theme="dark"] .ug-field-config select,
+[data-theme="dark"] select.ug-select {
+  background: #2a2a3c !important;
+  color: #e0e0e8 !important;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .ug-cfg-row select option,
+[data-theme="dark"] select.ug-select option {
+  background: #252535;
+  color: #e0e0e8;
+}
+
+/* 3. IP 地址生成器输入框白底 + 按钮不明显 */
+[data-theme="dark"] .ipg-input {
+  background: #2a2a3c !important;
+  color: #e0e0e8;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .ipg-input::placeholder {
+  color: #6b7280;
+}
+[data-theme="dark"] .ipg-btn {
+  background: #2a2a3c !important;
+  color: #c7c7d6 !important;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .ipg-btn:hover {
+  background: #3a3a4d !important;
+  color: #e0e0e8 !important;
+}
+[data-theme="dark"] .ipg-btn-primary {
+  background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%) !important;
+  color: #fff !important;
+  border-color: #2563eb;
+}
+[data-theme="dark"] .ipg-select {
+  background: #2a2a3c !important;
+  color: #e0e0e8;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .ipg-btn-refresh {
+  background: #2a2a3c !important;
+  color: #c7c7d6;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .ipg-btn-refresh:hover {
+  background: #3a3a4d !important;
+  color: #e0e0e8;
+}
+/* ipg 结果区 */
+[data-theme="dark"] .ipg-result {
+  background: #1e1e2e;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .ipg-result-item {
+  color: #c7c7d6;
+  border-bottom-color: #3a3a4d;
+}
+[data-theme="dark"] .ipg-result-value {
+  color: #a5b4fc;    /* violet-blue：IP 地址本身用亮紫蓝色突出 */
+  font-family: monospace;
+}
+[data-theme="dark"] .ipg-copy,
+[data-theme="dark"] .ipg-copy-all,
+[data-theme="dark"] .ipg-btn-copyall {
+  background: #2a2a3c !important;
+  color: #c7c7d6 !important;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .ipg-copy:hover,
+[data-theme="dark"] .ipg-copy-all:hover {
+  background: #3a3a4d !important;
+  color: #e0e0e8 !important;
+}
+
+/* 4. 文件生成器按钮不明显 */
+[data-theme="dark"] .fg-btn-primary {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
+  box-shadow: 0 2px 6px rgba(139, 92, 246, 0.3);
+}
+[data-theme="dark"] .fg-btn-secondary {
+  background: #2a2a3c !important;
+  color: #c7c7d6 !important;
+  border-color: #3a3a4d !important;
+}
+[data-theme="dark"] .fg-btn-secondary:hover:not(:disabled) {
+  background: #3a3a4d !important;
+  color: #e0e0e8 !important;
+}
+[data-theme="dark"] .fg-info {
+  background: #252535 !important;
+  color: #c7c7d6;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .fg-select-type,
+[data-theme="dark"] .fg-select-content,
+[data-theme="dark"] .fg-custom-ext {
+  background: #2a2a3c !important;
+  color: #e0e0e8 !important;
+  border-color: #3a3a4d;
+}
+
+/* 5. UA 生成器（和 IP 生成器同问题） */
+[data-theme="dark"] .uag-btn,
+[data-theme="dark"] .uag-input,
+[data-theme="dark"] .uag-select {
+  background: #2a2a3c !important;
+  color: #e0e0e8 !important;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .uag-tag {
+  background: var(--primary) !important;
+  color: #fff !important;
+}
+
+/* 6. 其他按钮（st-btn / lc-btn / sd-btn / re-btn / eb-btn / sm-btn / mi-btn）通用 */
+[data-theme="dark"] .st-btn,
+[data-theme="dark"] .lc-btn,
+[data-theme="dark"] .sd-btn,
+[data-theme="dark"] .re-btn,
+[data-theme="dark"] .eb-btn,
+[data-theme="dark"] .sm-btn,
+[data-theme="dark"] .mi-btn,
+[data-theme="dark"] .jf-btn,
+[data-theme="dark"] .dd-btn,
+[data-theme="dark"] .cg-btn {
+  background: #2a2a3c !important;
+  color: #c7c7d6 !important;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .st-btn:hover,
+[data-theme="dark"] .lc-btn:hover,
+[data-theme="dark"] .sd-btn:hover,
+[data-theme="dark"] .re-btn:hover,
+[data-theme="dark"] .eb-btn:hover,
+[data-theme="dark"] .sm-btn:hover,
+[data-theme="dark"] .mi-btn:hover {
+  background: #3a3a4d !important;
+  color: #e0e0e8 !important;
+}
+
+/* 7. 输入框通用兜底（覆盖所有工具独立定义的 input） */
+[data-theme="dark"] .ipg-input,
+[data-theme="dark"] .uag-input,
+[data-theme="dark"] .st-input,
+[data-theme="dark"] .lc-input,
+[data-theme="dark"] .sd-input,
+[data-theme="dark"] .re-input,
+[data-theme="dark"] .eb-input,
+[data-theme="dark"] .sm-input,
+[data-theme="dark"] .mi-input,
+[data-theme="dark"] .jf-input,
+[data-theme="dark"] .dd-input,
+[data-theme="dark"] .cg-input,
+[data-theme="dark"] input[type="text"]:not(.ug-input):not(.ipg-input):not(.fg-*),
+[data-theme="dark"] input[type="number"]:not(.ug-input):not(.ipg-input) {
+  background: #2a2a3c !important;
+  color: #e0e0e8 !important;
+  border-color: #3a3a4d !important;
+}
+
+/* uag-tag / sm-login-badge（彩色徽章上的白字） */
+[data-theme="dark"] .uag-tag,
+[data-theme="dark"] .sm-login-badge {
+  color: #fff;  /* 徽章背景一般是彩色（蓝/绿/紫），白字 OK；如果是浅灰徽章才会刺眼 */
+}
+
+/* 最后兜底：body 里可能没覆盖到的硬编码白底 */
+[data-theme="dark"] .ug-wrap > div[style*="background:#fff"],
+[data-theme="dark"] .ug-wrap > div[style*="background: #fff"] {
+  background: #252535 !important;
+}
+
+
+/* 侧边栏主题开关 */
+.sp-theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--text-light);
+  transition: color 0.15s, background 0.15s;
+  border-radius: 4px;
+}
+.sp-theme-toggle:hover {
+  color: var(--primary);
+  background: var(--bg-secondary);
+}
+.sp-theme-toggle .sp-theme-emoji {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sp-theme-toggle svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+/* ========== Excel↔JSON 转换 ========== */
+.ej-mode-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.ej-mode-btn {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+/* 拖拽上传区 */
+.ej-drop-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 20px 12px;
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-light);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  margin-bottom: 10px;
+}
+.ej-drop-zone:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.ej-drop-zone.ej-drop-active {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary);
+}
+.ej-drop-icon {
+  font-size: 24px;
+}
+.ej-drop-text {
+  font-size: 12px;
+  font-weight: 500;
+}
+.ej-drop-sub {
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+/* 选项行 */
+.ej-option-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--border);
+  margin-bottom: 8px;
+}
+.ej-opt {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+}
+.ej-opt input[type="checkbox"] {
+  accent-color: var(--primary);
+}
+
+/* 解析结果信息 */
+.ej-info {
+  font-size: 12px;
+  color: var(--primary);
+  padding: 6px 8px;
+  background: var(--primary-light);
+  border-radius: 4px;
+  font-family: monospace;
+  word-break: break-all;
+}
+
+/* JSON → Excel 面板 */
+.ej-example {
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  font-size: 11px;
+}
+.ej-example > summary {
+  padding: 6px 10px;
+  background: var(--bg-secondary);
+  cursor: pointer;
+  color: var(--text-light);
+  font-size: 12px;
+  user-select: none;
+}
+.ej-example > summary:hover {
+  color: var(--primary);
+}
+.ej-example-body {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--text-light);
+}
+.ej-example-body code {
+  display: block;
+  padding: 3px 6px;
+  background: var(--bg-secondary);
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 11px;
+  word-break: break-all;
+}
+.ej-textarea {
+  width: 100%;
+  min-height: 140px;
+  font-family: monospace;
+  font-size: 12px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  resize: vertical;
+  line-height: 1.5;
+}
+.ej-filename-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.ej-filename {
+  flex: none;
+  width: 140px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 12px;
+}
+.ej-gen-btn {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+/* 结果区标题栏 */
+.ej-result-title {
+  justify-content: space-between;
+  align-items: center;
+}
+.ej-result-actions {
+  display: flex;
+  gap: 6px;
+}
+
 html, body {
   width: 100%;
   height: 100%;

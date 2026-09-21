@@ -86,6 +86,8 @@ mynatest/
 │   ├── keyboard-nav.js             # 键盘导航测试
 │   ├── timing-breakdown.js         # 请求耗时分解
 │   └── upload-audit.js             # 上传漏洞辅助
+├── vendor/                          # 第三方库（Chrome 扩展离线使用）
+│   └── xlsx.full.min.js            # SheetJS — Excel 解析 / 生成（MIT, ~880KB）
 ├── icons/                          # 工具图标（16×16 PNG）
 ├── assets/                         # 静态资源（收款码等）
 ```
@@ -100,21 +102,21 @@ mynatest/
 </colgroup>
 <tr><th>工具</th><th>分类</th><th>说明</th></tr>
 <tr><td><b>请求对比</b></td><td nowrap>网络工具</td><td>捕获两次接口响应 → 自动 diff（JSON 路径级 / 行级文本）</td></tr>
-<tr><td><b>轻量压测</b></td><td nowrap>网络工具</td><td>捕获接口一键填入；数据统计、响应断言、响应查看、报告下载</td></tr>
+<tr><td><b>轻量压测</b></td><td nowrap>测试工具</td><td>捕获接口一键填入；数据统计、响应断言、响应查看、报告下载</td></tr>
 <tr><td><b>请求转代码</b></td><td nowrap>网络工具</td><td>捕获请求一键生成 cURL、fetch、axios、Python requests、Playwright</td></tr>
 <tr><td><b>性能面板</b></td><td nowrap>网络工具</td><td>LCP/CLS/INP 实时监控；慢请求 TOP 10；资源瀑布图；资源大小按类型分布</td></tr>
 <tr><td><b>接口文档生成</b></td><td nowrap>网络工具</td><td>实时捕获接口请求，勾选后一键生成 Markdown 文档或 OpenAPI 3.0 JSON</td></tr>
 <tr><td><b>请求耗时分解</b></td><td nowrap>网络工具</td><td>基于 Performance API 分解每个请求的 DNS / TCP / TLS / TTFB / 内容下载各阶段耗时</td></tr>
-<tr><td><b>时间戳转换</b></td><td nowrap>开发工具</td><td>时间与时间戳互转，支持秒/毫秒级</td></tr>
-<tr><td><b>JSON 格式化</b></td><td nowrap>开发工具</td><td>格式化 / 压缩 / 转义 / 反转义</td></tr>
-<tr><td><b>数据对比</b></td><td nowrap>开发工具</td><td>JSON / 文本行级 diff</td></tr>
+<tr><td><b>时间戳转换</b></td><td nowrap>格式转换</td><td>时间与时间戳互转，支持秒/毫秒级</td></tr>
+<tr><td><b>JSON 格式化</b></td><td nowrap>格式转换</td><td>格式化 / 压缩 / 转义 / 反转义</td></tr>
+<tr><td><b>数据对比</b></td><td nowrap>格式转换</td><td>JSON / 文本行级 diff</td></tr>
 <tr><td><b>Cookie/Storage 管理</b></td><td nowrap>开发工具</td><td>登录态快照切换</td></tr>
 <tr><td><b>正则测试</b></td><td nowrap>开发工具</td><td>实时匹配结果，内置邮箱/手机号/IP 等常用正则速查</td></tr>
 <tr><td><b>环境横幅</b></td><td nowrap>开发工具</td><td>域名规则匹配 + 页面顶部彩色横幅</td></tr>
 <tr><td><b>截图 & 录屏</b></td><td nowrap>开发工具</td><td>可见区域截图 + 全页截图 + 录屏</td></tr>
 <tr><td><b>脚本片段</b></td><td nowrap>开发工具</td><td>常用注入脚本管理：内置预设 + 自定义；一键注入执行</td></tr>
 <tr><td><b>取色器</b></td><td nowrap>开发工具</td><td>拾取页面任意像素颜色</td></tr>
-<tr><td><b>JWT 解析</b></td><td nowrap>网络工具</td><td>解码 JWT 的 Header / Payload</td></tr>
+<tr><td><b>JWT 解析</b></td><td nowrap>开发工具</td><td>解码 JWT 的 Header / Payload</td></tr>
 <tr><td><b>Bug 报告助手</b></td><td nowrap>测试工具</td><td>页面框选区域 + Canvas 标注（箭头/矩形/文字/序号）+ 环境信息采集（URL/UserAgent/分辨率）</td></tr>
 <tr><td><b>Mock 拦截器</b></td><td nowrap>测试工具</td><td>拦截指定 URL 返回自定义响应；多套场景一键切换</td></tr>
 <tr><td><b>链接检查</b></td><td nowrap>测试工具</td><td>批量扫描页面 a 标签，校验可访问性与跳转地址</td></tr>
@@ -131,7 +133,8 @@ mynatest/
 <tr><td><b>商品信息生成</b></td><td nowrap>数据工具</td><td>商品电商数据随机生成（名称/编码/类目/价格/SKU/图片/视频/状态/物流等）</td></tr>
 <tr><td><b>车辆信息生成</b></td><td nowrap>数据工具</td><td>车辆信息随机生成（车牌/VIN/颜色/品牌/证件/车主/驾驶证等）</td></tr>
 <tr><td><b>合同票据生成</b></td><td nowrap>数据工具</td><td>合同票据信息随机生成（合同主体/甲乙双方/金额/日期/票据/备注）</td></tr>
-<tr><td><b>表格导出</b></td><td nowrap>数据工具</td><td>扫描页面所有 &lt;table&gt;，逐个导出 CSV/Excel/JSON</td></tr>
+<tr><td><b>表格导出</b></td><td nowrap>格式转换</td><td>扫描页面所有 &lt;table&gt;，逐个导出 CSV/Excel/JSON</td></tr>
+<tr><td><b>Excel↔JSON 转换</b></td><td nowrap>格式转换</td><td>.xlsx/.xls/.csv ↔ JSON 双向互转；多 Sheet 支持；首行可做 key 或纯数组</td></tr>
 </table>
 
 ## 新增工具（插件化）

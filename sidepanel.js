@@ -20,7 +20,66 @@ let currentTools = [];
 
 document.addEventListener('DOMContentLoaded', init);
 
+const _SUN_SVG = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <defs>
+    <linearGradient id="sg" x1="0" y1="0" x2="16" y2="16" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#FBBF24"/>
+    </linearGradient>
+  </defs>
+  <rect width="16" height="16" rx="4" ry="4" fill="url(#sg)"/>
+  <g fill="#ffffff">
+    <circle cx="8" cy="8" r="2.2"/>
+    <rect x="7.4" y="1.2" width="1.2" height="2.6" rx="0.6"/>
+    <rect x="7.4" y="12.2" width="1.2" height="2.6" rx="0.6"/>
+    <rect x="1.2" y="7.4" width="2.6" height="1.2" rx="0.6"/>
+    <rect x="12.2" y="7.4" width="2.6" height="1.2" rx="0.6"/>
+    <g transform="rotate(45 8 8)">
+      <rect x="7.4" y="1.2" width="1.2" height="2.6" rx="0.6"/>
+      <rect x="7.4" y="12.2" width="1.2" height="2.6" rx="0.6"/>
+    </g>
+  </g>
+</svg>`.trim();
+
+const _MOON_SVG = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <defs>
+    <linearGradient id="mg" x1="0" y1="0" x2="16" y2="16" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+  </defs>
+  <rect width="16" height="16" rx="4" ry="4" fill="url(#mg)"/>
+  <path d="M10.5 3.2a5 5 0 1 0 2.3 8.8A4 4 0 0 1 10.5 3.2Z" fill="#ffffff"/>
+  <circle cx="3.2" cy="3.5" r="0.7" fill="#ffffff"/>
+  <circle cx="12.2" cy="5.3" r="0.5" fill="#ffffff"/>
+</svg>`.trim();
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+  const emoji = document.getElementById('themeEmoji');
+  if (emoji) emoji.innerHTML = theme === 'dark' ? _MOON_SVG : _SUN_SVG;
+}
+
 async function init() {
+  // 主题初始化（必须在 DOM 渲染前应用）
+  try {
+    const result = await new Promise(r => chrome.storage.local.get(['theme'], r));
+    applyTheme(result.theme === 'dark' ? 'dark' : 'light');
+  } catch {
+    applyTheme('light');
+  }
+  // 主题切换按钮
+  const themeBtn = document.getElementById('themeBtn');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', async () => {
+      const cur = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = cur === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      chrome.storage.local.set({ theme: next });
+    });
+  }
   // 工具列表来自 tools/ 目录下各脚本注册到 window.MynaTools
   const allTools = window.MynaTools || [];
 

@@ -9,8 +9,8 @@
     name: 'JWT 解析',
     desc: '解码 JWT 的 Header 和 Payload',
     iconUrl: 'icons/jwt-parser.png',
-    category: 'network',
-    categoryName: '网络工具'
+    category: 'dev',
+    categoryName: '开发工具'
   };
 
   function base64UrlDecode(str) {

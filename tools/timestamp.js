@@ -8,8 +8,8 @@
     name: '时间戳转换',
     desc: '时间与时间戳互转，支持秒/毫秒级',
     iconUrl: 'icons/timestamp.png',
-    category: 'dev',
-    categoryName: '开发工具'
+    category: 'format',
+    categoryName: '格式转换'
   };
 
   let tickTimer = null;

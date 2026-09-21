@@ -8,8 +8,8 @@
     name: 'JSON 格式化',
     desc: '格式化 / 压缩 / 转义 JSON',
     iconUrl: 'icons/json-formatter.png',
-    category: 'dev',
-    categoryName: '开发工具'
+    category: 'format',
+    categoryName: '格式转换'
   };
 
   function render(container) {
