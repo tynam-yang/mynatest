@@ -8298,3 +8298,181 @@ html, body {
 }
 
 
+
+/* ============================================
+   Cron 表达式生成器 (.cr-*)
+   ============================================ */
+.cr-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.cr-block {
+  margin: 6px 0;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fafafa;
+}
+.cr-actions {
+  margin-top: 8px;
+  text-align: right;
+}
+.cr-expr-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.cr-expr-input {
+  flex: 1;
+  min-width: 180px;
+  font-family: Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 5px 8px;
+}
+.cr-natural {
+  margin-top: 6px;
+  min-height: 0;
+}
+.cr-nat-chip {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: #ede9fe;       /* violet-100 */
+  color: #6d28d9;            /* violet-700 */
+  font-size: 11px;
+  font-weight: 500;
+}
+.cr-status {
+  margin-top: 6px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: Menlo, Monaco, Consolas, monospace;
+}
+.cr-status-ok { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+.cr-status-warn { background: #fef9c3; color: #a16207; border: 1px solid #fde047; }
+.cr-status-error { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+
+.cr-next {
+  max-height: 280px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cr-next-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11.5px;
+  background: #fff;
+  border: 1px solid var(--border);
+}
+.cr-next-idx {
+  flex: none;
+  width: 28px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  font-family: Menlo, Monaco, Consolas, monospace;
+}
+.cr-next-time {
+  flex: 1;
+  font-family: Menlo, Monaco, Consolas, monospace;
+  color: var(--text-primary);
+}
+.cr-next-rel {
+  flex: none;
+  color: var(--text-tertiary);
+  font-size: 10.5px;
+}
+.cr-next-error {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.cr-help {
+  margin-top: 4px;
+  padding: 6px 10px;
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+  background: #fafafa;
+  font-size: 11px;
+  line-height: 1.7;
+}
+.cr-help-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  color: var(--text-secondary);
+}
+.cr-help code {
+  flex: none;
+  min-width: 60px;
+  padding: 1px 5px;
+  background: #eef2ff;        /* indigo-100 */
+  color: #4338ca;             /* indigo-700 */
+  border-radius: 3px;
+  font-family: Menlo, Monaco, Consolas, monospace;
+  font-size: 10.5px;
+}
+
+/* ===== 深色主题覆盖 ===== */
+[data-theme="dark"] .cr-block {
+  background: #2a2a3c;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .cr-expr-input {
+  background: #2a2a3c;
+  color: #e0e0e8;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .cr-nat-chip {
+  background: rgba(167, 139, 250, 0.18);  /* violet-400 半透明 */
+  color: #c4b5fd;                         /* violet-300 */
+}
+[data-theme="dark"] .cr-help {
+  background: #2a2a3c;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .cr-help code {
+  background: rgba(99, 102, 241, 0.22);  /* indigo-500 */
+  color: #a5b4fc;                         /* indigo-300 */
+}
+[data-theme="dark"] .cr-next-item {
+  background: #2a2a3c;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .cr-status-ok {
+  background: rgba(34, 197, 94, 0.15);
+  color: #86efac;             /* green-300 */
+  border-color: rgba(34, 197, 94, 0.4);
+}
+[data-theme="dark"] .cr-status-warn {
+  background: rgba(234, 179, 8, 0.15);
+  color: #fde047;             /* yellow-300 */
+  border-color: rgba(234, 179, 8, 0.4);
+}
+[data-theme="dark"] .cr-status-error {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;             /* red-300 */
+  border-color: rgba(239, 68, 68, 0.4);
+}
+[data-theme="dark"] .cr-next-error {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.4);
+}
