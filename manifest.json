@@ -108,6 +108,10 @@
     "<all_urls>"
   ],
 
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' ws: wss: http: https: data:"
+  },
+
   "web_accessible_resources": [
     {
       "resources": ["icons/*"],

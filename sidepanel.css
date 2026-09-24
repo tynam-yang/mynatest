@@ -596,7 +596,55 @@
   color: #e0e0e8 !important;
   background: #3a3a4d !important;
 }
-/* input/textarea/select（非 .ug-input） */
+
+/* WebSocket Tester — 深色模式 */
+[data-theme="dark"] .tool-panel .ws-section {
+  background: #252535;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .tool-panel .ws-url,
+[data-theme="dark"] .tool-panel .ws-proto,
+[data-theme="dark"] .tool-panel .ws-send {
+  background: #2a2a3c !important;
+  color: #e0e0e8;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .tool-panel .ws-url::placeholder,
+[data-theme="dark"] .tool-panel .ws-proto::placeholder,
+[data-theme="dark"] .tool-panel .ws-send::placeholder {
+  color: #6b7280;
+}
+[data-theme="dark"] .tool-panel .ws-send:focus,
+[data-theme="dark"] .tool-panel .ws-url:focus,
+[data-theme="dark"] .tool-panel .ws-proto:focus {
+  border-color: #6366f1;
+}
+[data-theme="dark"] .tool-panel .ws-status-badge.ws-state-idle    { background: #3a3a4d; color: #c7c7d6; }
+[data-theme="dark"] .tool-panel .ws-status-badge.ws-state-connecting { background: rgba(252, 211, 77, 0.18); color: #fcd34d; }
+[data-theme="dark"] .tool-panel .ws-status-badge.ws-state-open     { background: rgba(74, 222, 128, 0.18); color: #86efac; }
+[data-theme="dark"] .tool-panel .ws-status-badge.ws-state-closing  { background: rgba(252, 211, 77, 0.18); color: #fcd34d; }
+[data-theme="dark"] .tool-panel .ws-status-badge.ws-state-closed   { background: rgba(248, 113, 113, 0.18); color: #fca5a5; }
+[data-theme="dark"] .tool-panel .ws-status-badge.ws-state-error    { background: rgba(248, 113, 113, 0.18); color: #fca5a5; }
+[data-theme="dark"] .tool-panel .ws-log {
+  background: #1a1a2a;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .tool-panel .ws-log-empty { color: #6b7280; }
+[data-theme="dark"] .tool-panel .ws-log-item.ws-dir-send   { background: rgba(74, 222, 128, 0.06); }
+[data-theme="dark"] .tool-panel .ws-log-item.ws-dir-recv   { background: rgba(96, 165, 250, 0.06); }
+[data-theme="dark"] .tool-panel .ws-log-item.ws-dir-system { background: #20202e; }
+[data-theme="dark"] .tool-panel .ws-log-item.ws-dir-error  { background: rgba(248, 113, 113, 0.08); }
+[data-theme="dark"] .tool-panel .ws-log-item { border-bottom-color: #3a3a4d; }
+[data-theme="dark"] .tool-panel .ws-log-head { border-bottom-color: rgba(255,255,255,0.05); }
+[data-theme="dark"] .tool-panel .ws-log-ts { color: #6b7280; }
+[data-theme="dark"] .tool-panel .ws-log-dir.ws-dir-send   { color: #86efac; }
+[data-theme="dark"] .tool-panel .ws-log-dir.ws-dir-recv   { color: #93c5fd; }
+[data-theme="dark"] .tool-panel .ws-log-dir.ws-dir-system { color: #9a9ab0; }
+[data-theme="dark"] .tool-panel .ws-log-dir.ws-dir-error  { color: #fca5a5; }
+[data-theme="dark"] .tool-panel .ws-log-type { background: rgba(255,255,255,0.08); color: #c7c7d6; }
+[data-theme="dark"] .tool-panel .ws-log-body { color: #d1d5db; }
+[data-theme="dark"] .tool-panel .ws-log-count { color: #9a9ab0; }
+[data-theme="dark"] .tool-panel .ws-section-title { color: #c7c7d6; }
 [data-theme="dark"] .tool-panel input:not(.ug-input):not([type="checkbox"]):not([type="radio"]):not([type="color"]),
 [data-theme="dark"] .tool-panel textarea:not(.ug-input),
 [data-theme="dark"] .tool-panel select:not(.ug-select) {
@@ -1992,6 +2040,204 @@ html, body {
 .st-history .stress-resp-body.error {
   background: #fef5f5;
   color: var(--danger);
+}
+
+/* ========== WebSocket Tester Tool ========== */
+.ws-section {
+  margin-bottom: 16px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+}
+
+.ws-section:last-child {
+  margin-bottom: 0;
+}
+
+.ws-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  gap: 8px;
+}
+
+.ws-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.ws-toggle {
+  font-size: 11px;
+  color: var(--primary);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.ws-toggle:hover { color: var(--primary-hover); }
+
+.ws-row {
+  margin-bottom: 8px;
+}
+
+.ws-url,
+.ws-proto {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+  background: #fff;
+  color: var(--text);
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.ws-url:focus,
+.ws-proto:focus {
+  border-color: var(--primary);
+}
+
+.ws-send {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+  background: #fff;
+  color: var(--text);
+  box-sizing: border-box;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.ws-send:focus { border-color: var(--primary); }
+
+.ws-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.ws-actions .btn {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+.ws-status-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #f3f4f6;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.ws-state-idle    { background: #f3f4f6; color: #6b7280; }
+.ws-state-connecting { background: #fef3c7; color: #92400e; }
+.ws-state-open     { background: #dcfce7; color: #166534; }
+.ws-state-closing  { background: #fef3c7; color: #92400e; }
+.ws-state-closed   { background: #fee2e2; color: #991b1b; }
+.ws-state-error    { background: #fee2e2; color: #991b1b; }
+
+.ws-heart-btn.active {
+  background: #22c55e !important;
+  color: #fff !important;
+  border-color: #16a34a;
+}
+
+/* 日志区 */
+.ws-log {
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fafafa;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11.5px;
+}
+
+.ws-log-empty {
+  padding: 20px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+.ws-log-item {
+  border-bottom: 1px solid #eceff4;
+}
+
+.ws-log-item:last-child { border-bottom: none; }
+
+.ws-log-item.ws-dir-send { background: #f0fdf4; }
+.ws-log-item.ws-dir-recv { background: #eff6ff; }
+.ws-log-item.ws-dir-system { background: #f8fafc; }
+.ws-log-item.ws-dir-error { background: #fef2f2; }
+
+.ws-log-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+
+.ws-log-ts { color: #9ca3af; font-size: 10.5px; }
+.ws-log-dir { font-weight: 600; font-size: 11px; }
+.ws-log-type { font-size: 10px; color: #6b7280; background: rgba(0,0,0,0.04); padding: 1px 5px; border-radius: 8px; }
+
+.ws-dir-send .ws-log-dir   { color: #16a34a; }
+.ws-dir-recv .ws-log-dir   { color: #2563eb; }
+.ws-dir-system .ws-log-dir { color: #6b7280; }
+.ws-dir-error .ws-log-dir  { color: #dc2626; }
+
+.ws-log-body {
+  margin: 0;
+  padding: 6px 8px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 300px;
+  overflow-y: auto;
+  line-height: 1.5;
+  color: #374151;
+}
+
+.ws-log-item.ws-expanded .ws-log-body { max-height: none; }
+
+.ws-log-ops {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ws-log-ops .btn.tiny {
+  padding: 2px 6px;
+  font-size: 11px;
+}
+
+.ws-toggle-auto {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+.ws-log-count {
+  font-size: 11px;
+  color: #9ca3af;
+  font-weight: 400;
 }
 
 /* ========== Timestamp Tool ========== */
