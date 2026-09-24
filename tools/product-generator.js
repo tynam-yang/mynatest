@@ -495,7 +495,7 @@
       desc: '商品 SPU/SKU 全字段随机生成，含异常数据场景',
       iconUrl: 'icons/product-generator.png',
       category: 'data-gen',
-      categoryName: '数据工具',
+      categoryName: '数据生成',
     },
     fieldConfig: {
       keyLang: 'zh',

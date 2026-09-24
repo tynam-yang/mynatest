@@ -896,7 +896,7 @@
       icon: '',
       iconUrl: 'icons/contract-generator.png',
       category: 'data-gen',
-      categoryName: '数据工具'
+      categoryName: '数据生成'
     },
     fieldConfig: {
       keyLang: 'zh',

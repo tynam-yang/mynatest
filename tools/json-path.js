@@ -10,8 +10,8 @@
     desc: '输入 JSON 数据，用 JSONPath 表达式提取并高亮匹配节点；支持递归下降、通配符、过滤谓词',
     icon: '🔍',
     iconUrl: 'icons/json-path.png',
-    category: 'format',
-    categoryName: '格式转换'
+    category: 'data-tool',
+    categoryName: '数据工具'
   };
 
   // ========== JSONPath 引擎（自实现，无外部依赖） ==========
@@ -433,7 +433,7 @@
     name: "MynaTest",
     version: "1.0.0",
     description: "浏览器测试辅助工具集",
-    categories: ["网络工具", "格式转换", "开发工具", "测试工具", "数据工具"],
+    categories: ["网络工具", "格式转换", "开发工具", "测试工具", "数据生成"],
     tools: [
       { id: "stress-test", name: "轻量压测", category: "network", enabled: true },
       { id: "json-formatter", name: "JSON 格式化", category: "format", enabled: true },

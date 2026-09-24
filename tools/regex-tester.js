@@ -9,8 +9,8 @@
     name: '正则测试',
     desc: '实时测试正则表达式匹配结果',
     iconUrl: 'icons/regex-tester.png',
-    category: 'dev',
-    categoryName: '开发工具'
+    category: 'data-tool',
+    categoryName: '数据工具'
   };
 
   // 常用正则速查
