@@ -2927,6 +2927,80 @@ html, body {
 [data-theme="dark"] .dm-modal-demo-out { background: #1e1e2e; color: #60a5fa; }
 [data-theme="dark"] .dm-modal-tip { color: #9a9ab0; }
 [data-theme="dark"] .dm-modal-foot { border-top-color: #3a3a4d; }
+
+/* ===== 字符统计 ===== */
+.cc-section { padding: 0; margin: 8px 0 6px; }
+.cc-input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11.5px;
+  background: #fff;
+  color: var(--text);
+  box-sizing: border-box;
+  resize: vertical;
+  line-height: 1.5;
+}
+.cc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  margin-top: 2px;
+}
+.cc-cell {
+  background: #fafafa;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 6px 8px;
+  text-align: center;
+  transition: background .15s;
+}
+.cc-cell:hover { background: #f3f4f6; }
+.cc-cell-label {
+  font-size: 10px;
+  color: #6b7280;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cc-cell-value {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.1;
+}
+.cc-foot {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 10.5px;
+  color: #6b7280;
+  padding: 6px 0;
+  border-top: 1px dashed var(--border);
+}
+.cc-foot-val {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  color: #d97706;
+  font-weight: 600;
+}
+/* 深色主题 */
+[data-theme="dark"] .tool-panel .cc-input {
+  background: #2a2a3c;
+  border-color: #3a3a4d;
+  color: #e0e0e8;
+}
+[data-theme="dark"] .tool-panel .cc-cell {
+  background: #2a2a3c;
+  border-color: #3a3a4d;
+}
+[data-theme="dark"] .tool-panel .cc-cell:hover { background: #3a3a4d; }
+[data-theme="dark"] .tool-panel .cc-cell-label { color: #9a9ab0; }
+[data-theme="dark"] .tool-panel .cc-cell-value { color: #fcd34d; }
+[data-theme="dark"] .tool-panel .cc-foot { color: #9a9ab0; border-top-color: #3a3a4d; }
+[data-theme="dark"] .tool-panel .cc-foot-val { color: #fcd34d; }
 [data-theme="dark"] .tool-panel .dm-validate {
   background: #2a2a3c;
   border-color: #3a3a4d;
