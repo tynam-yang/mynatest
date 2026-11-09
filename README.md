@@ -59,10 +59,12 @@ mynatest/
 │   ├── timestamp.js               # 时间戳转换
 │   ├── json-formatter.js          # JSON 格式化
 │   ├── excel-json-tool.js         # Excel↔JSON 转换
+│   ├── base64-tool.js             # Base64 编解码
 │   ├── cron-generator.js          # Cron 表达式
 │   ├── data-diff.js               # 数据对比
 │   ├── storage-manager.js         # Cookie/Storage 管理
 │   ├── jwt-parser.js              # JWT 解析
+│   ├── md5-tool.js                # MD5 哈希
 │   ├── regex-tester.js            # 正则测试
 │   ├── env-banner.js              # 测试环境横幅
 │   ├── bug-report.js              # Bug 报告助手
@@ -102,55 +104,51 @@ mynatest/
 
 ## 现有工具
 
-<table>
-<colgroup>
-  <col style="min-width:6em">
-  <col style="width:6em;white-space:nowrap">
-  <col style="min-width:20em;word-break:break-word">
-</colgroup>
-<tr><th>工具</th><th>分类</th><th>说明</th></tr>
-<tr><td><b>请求对比</b></td><td nowrap>网络工具</td><td>捕获两次接口响应 → 自动 diff（JSON 路径级 / 行级文本）</td></tr>
-<tr><td><b>WebSocket 测试</b></td><td nowrap>网络工具</td><td>连接 ws/wss 服务端，实时收发消息、JSON 美化、心跳保活、日志导出</td></tr>
-<tr><td><b>请求转代码</b></td><td nowrap>网络工具</td><td>捕获请求一键生成 cURL、fetch、axios、Python requests、Playwright</td></tr>
-<tr><td><b>性能面板</b></td><td nowrap>网络工具</td><td>LCP/CLS/INP 实时监控；慢请求 TOP 10；资源瀑布图；资源大小按类型分布</td></tr>
-<tr><td><b>接口文档生成</b></td><td nowrap>网络工具</td><td>实时捕获接口请求，勾选后一键生成 Markdown 文档或 OpenAPI 3.0 JSON</td></tr>
-<tr><td><b>请求耗时分解</b></td><td nowrap>网络工具</td><td>基于 Performance API 分解每个请求的 DNS / TCP / TLS / TTFB / 内容下载各阶段耗时</td></tr>
-<tr><td><b>时间戳转换</b></td><td nowrap>格式转换</td><td>时间与时间戳互转，支持秒/毫秒级</td></tr>
-<tr><td><b>JSON 格式化</b></td><td nowrap>格式转换</td><td>格式化 / 压缩 / 转义 / 反转义</td></tr>
-<tr><td><b>Excel↔JSON 转换</b></td><td nowrap>格式转换</td><td>.xlsx/.xls/.csv ↔ JSON 双向互转；多 Sheet 支持；首行可做 key 或纯数组</td></tr>
-<tr><td><b>Cron 表达式</b></td><td nowrap>格式转换</td><td>生成 / 校验 Cron 表达式；自然语言描述；预测未来执行时间</td></tr>
-<tr><td><b>Cookie/Storage 管理</b></td><td nowrap>开发工具</td><td>查看/编辑/备份/恢复 Cookie 与 Web Storage，快速切换登录态</td></tr>
-<tr><td><b>取色器</b></td><td nowrap>开发工具</td><td>拾取页面任意像素颜色，复制 HEX / RGB / HSL</td></tr>
-<tr><td><b>环境横幅</b></td><td nowrap>开发工具</td><td>域名规则匹配 + 页面顶部彩色横幅（dev/test/pre/prod）</td></tr>
-<tr><td><b>截图 & 录屏</b></td><td nowrap>开发工具</td><td>可见区域截图 + 全页截图 + 录屏</td></tr>
-<tr><td><b>脚本片段</b></td><td nowrap>开发工具</td><td>常用注入脚本管理：内置预设 + 自定义；一键注入执行</td></tr>
-<tr><td><b>JWT 解析</b></td><td nowrap>开发工具</td><td>解码 JWT 的 Header / Payload</td></tr>
-<tr><td><b>轻量压测</b></td><td nowrap>测试工具</td><td>捕获接口一键填入；数据统计、响应断言、响应查看、报告下载</td></tr>
-<tr><td><b>Bug 报告助手</b></td><td nowrap>测试工具</td><td>页面框选区域 + Canvas 标注（箭头/矩形/文字/序号）+ 环境信息采集</td></tr>
-<tr><td><b>Mock 拦截器</b></td><td nowrap>测试工具</td><td>拦截指定 URL 返回自定义响应；多套场景一键切换（500/超时/空数据）</td></tr>
-<tr><td><b>链接检查</b></td><td nowrap>测试工具</td><td>批量扫描页面 a 标签，校验可访问性与跳转地址</td></tr>
-<tr><td><b>快照对比</b></td><td nowrap>测试工具</td><td>捕获元素基准图，自动像素比对 UI 变更；差异高亮红色标注</td></tr>
-<tr><td><b>选择器生成</b></td><td nowrap>测试工具</td><td>点击页面元素生成 CSS/XPath/Playwright 选择器；自动校验唯一性；逐级增强直到唯一</td></tr>
-<tr><td><b>资源检查</b></td><td nowrap>测试工具</td><td>检测页面中图片/JS/CSS/字体的加载失败（404 等）</td></tr>
-<tr><td><b>键盘导航测试</b></td><td nowrap>测试工具</td><td>扫描页面全部可聚焦元素；监控 Tab/Enter/Space/Esc 按键行为是否被 preventDefault 拦截</td></tr>
-<tr><td><b>测试检查清单</b></td><td nowrap>测试工具</td><td>发布前 checklist：内置模板 + 自定义项 + 进度条跟踪 + Markdown 导出</td></tr>
-<tr><td><b>上传漏洞辅助</b></td><td nowrap>测试工具</td><td>文件上传测试辅助：文件名绕过清单、polyglot 载荷（仅授权测试）</td></tr>
-<tr><td><b>正则测试</b></td><td nowrap>数据工具</td><td>实时匹配结果，内置邮箱/手机号/IP 等常用正则速查</td></tr>
-<tr><td><b>数据对比</b></td><td nowrap>数据工具</td><td>JSON / 文本行级 diff，支持左右/上下布局切换</td></tr>
-<tr><td><b>表格导出</b></td><td nowrap>数据工具</td><td>扫描页面所有 &lt;table&gt;，逐个导出 CSV/Excel/JSON</td></tr>
-<tr><td><b>JSONPath 测试</b></td><td nowrap>数据工具</td><td>JSONPath 表达式提取并高亮匹配节点；递归下降 / 通配符 / 过滤谓词 / 切片</td></tr>
-<tr><td><b>敏感信息脱敏</b></td><td nowrap>数据工具</td><td>手机号/身份证/邮箱/银行卡等一键脱敏；JSON/CSV/纯文本三种输入；规则反向校验</td></tr>
-<tr><td><b>字符统计</b></td><td nowrap>数据工具</td><td>实时统计汉字/英文/数字/标点/空格/行数/单词数，以及 UTF-8 字节数</td></tr>
-<tr><td><b>手机号归属</b></td><td nowrap>数据工具</td><td>本地离线查询运营商/卡类型/虚拟运营商/卫星号段/5G 共建共享</td></tr>
-<tr><td><b>IP 地址生成</b></td><td nowrap>数据生成</td><td>随机生成 IPv4/IPv6；显示本机内外网 IP</td></tr>
-<tr><td><b>UA 生成</b></td><td nowrap>数据生成</td><td>随机生成 User-Agent（多浏览器 × 多平台）；显示本机当前 UA</td></tr>
-<tr><td><b>用户信息生成</b></td><td nowrap>数据生成</td><td>50+ 字段可选随机生成；支持文本/JSON/YAML 导出</td></tr>
-<tr><td><b>文件生成</b></td><td nowrap>数据生成</td><td>自定义文件（文本/二进制/图片等）；生成后自动下载</td></tr>
-<tr><td><b>车辆信息生成</b></td><td nowrap>数据生成</td><td>车辆信息随机生成（车牌/VIN/颜色/品牌/证件/车主/驾驶证等）</td></tr>
-<tr><td><b>合同票据生成</b></td><td nowrap>数据生成</td><td>合同票据信息随机生成（合同主体/甲乙双方/金额/日期/票据/备注）</td></tr>
-<tr><td><b>商品信息生成</b></td><td nowrap>数据生成</td><td>商品电商数据随机生成（SPU/SKU/类目/价格/SKU/物流等）；支持异常数据场景</td></tr>
-<tr><td><b>物流运单生成</b></td><td nowrap>数据生成</td><td>随机生成快递运单数据（承运商/运单号/收寄件人/物流轨迹）</td></tr>
-</table>
+| 工具 | 分类 | 说明 |
+|------|------|------|
+| **请求对比** | 网络工具 | 捕获两次接口响应 → 自动 diff（JSON 路径级 / 行级文本） |
+| **WebSocket 测试** | 网络工具 | 连接 ws/wss 服务端，实时收发消息、JSON 美化、心跳保活、日志导出 |
+| **请求转代码** | 网络工具 | 捕获请求一键生成 cURL、fetch、axios、Python requests、Playwright |
+| **性能面板** | 网络工具 | LCP/CLS/INP 实时监控；慢请求 TOP 10；资源瀑布图；资源大小按类型分布 |
+| **接口文档生成** | 网络工具 | 实时捕获接口请求，勾选后一键生成 Markdown 文档或 OpenAPI 3.0 JSON |
+| **请求耗时分解** | 网络工具 | 基于 Performance API 分解每个请求的 DNS / TCP / TLS / TTFB / 内容下载各阶段耗时 |
+| **时间戳转换** | 格式转换 | 时间与时间戳互转，支持秒/毫秒级 |
+| **JSON 格式化** | 格式转换 | 格式化 / 压缩 / 转义 / 反转义 |
+| **Excel↔JSON 转换** | 格式转换 | .xlsx/.xls/.csv ↔ JSON 双向互转；多 Sheet 支持；首行可做 key 或纯数组 |
+| **Base64 编解码** | 格式转换 | Base64 / Base64URL 编码与解码，支持中文，一键交换输入输出 |
+| **Cron 表达式** | 格式转换 | 生成 / 校验 Cron 表达式；自然语言描述；预测未来执行时间 |
+| **Cookie/Storage 管理** | 开发工具 | 查看/编辑/备份/恢复 Cookie 与 Web Storage，快速切换登录态 |
+| **取色器** | 开发工具 | 拾取页面任意像素颜色，复制 HEX / RGB / HSL |
+| **环境横幅** | 开发工具 | 域名规则匹配 + 页面顶部彩色横幅（dev/test/pre/prod） |
+| **截图 & 录屏** | 开发工具 | 可见区域截图 + 全页截图 + 录屏 |
+| **脚本片段** | 开发工具 | 常用注入脚本管理：内置预设 + 自定义；一键注入执行 |
+| **JWT 解析** | 开发工具 | 解码 JWT 的 Header / Payload |
+| **MD5 哈希** | 开发工具 | MD5 哈希计算（纯 JS 实现）；支持 32/16 位、大小写输出 |
+| **轻量压测** | 测试工具 | 捕获接口一键填入；数据统计、响应断言、响应查看、报告下载 |
+| **Bug 报告助手** | 测试工具 | 页面框选区域 + Canvas 标注（箭头/矩形/文字/序号）+ 环境信息采集 |
+| **Mock 拦截器** | 测试工具 | 拦截指定 URL 返回自定义响应；多套场景一键切换（500/超时/空数据） |
+| **链接检查** | 测试工具 | 批量扫描页面 a 标签，校验可访问性与跳转地址 |
+| **快照对比** | 测试工具 | 捕获元素基准图，自动像素比对 UI 变更；差异高亮红色标注 |
+| **选择器生成** | 测试工具 | 点击页面元素生成 CSS/XPath/Playwright 选择器；自动校验唯一性；逐级增强直到唯一 |
+| **资源检查** | 测试工具 | 检测页面中图片/JS/CSS/字体的加载失败（404 等） |
+| **键盘导航测试** | 测试工具 | 扫描页面全部可聚焦元素；监控 Tab/Enter/Space/Esc 按键行为是否被 preventDefault 拦截 |
+| **测试检查清单** | 测试工具 | 发布前 checklist：内置模板 + 自定义项 + 进度条跟踪 + Markdown 导出 |
+| **上传漏洞辅助** | 测试工具 | 文件上传测试辅助：文件名绕过清单、polyglot 载荷（仅授权测试） |
+| **正则测试** | 数据工具 | 实时匹配结果，内置邮箱/手机号/IP 等常用正则速查 |
+| **数据对比** | 数据工具 | JSON / 文本行级 diff，支持左右/上下布局切换 |
+| **表格导出** | 数据工具 | 扫描页面所有 `<table>`，逐个导出 CSV/Excel/JSON |
+| **JSONPath 测试** | 数据工具 | JSONPath 表达式提取并高亮匹配节点；递归下降 / 通配符 / 过滤谓词 / 切片 |
+| **敏感信息脱敏** | 数据工具 | 手机号/身份证/邮箱/银行卡等一键脱敏；JSON/CSV/纯文本三种输入；规则反向校验 |
+| **字符统计** | 数据工具 | 实时统计汉字/英文/数字/标点/空格/行数/单词数，以及 UTF-8 字节数 |
+| **手机号归属** | 数据工具 | 本地离线查询运营商/卡类型/虚拟运营商/卫星号段/5G 共建共享 |
+| **IP 地址生成** | 数据生成 | 随机生成 IPv4/IPv6；显示本机内外网 IP |
+| **UA 生成** | 数据生成 | 随机生成 User-Agent（多浏览器 × 多平台）；显示本机当前 UA |
+| **用户信息生成** | 数据生成 | 50+ 字段可选随机生成；支持文本/JSON/YAML 导出 |
+| **文件生成** | 数据生成 | 自定义文件（文本/二进制/图片等）；生成后自动下载 |
+| **车辆信息生成** | 数据生成 | 车辆信息随机生成（车牌/VIN/颜色/品牌/证件/车主/驾驶证等） |
+| **合同票据生成** | 数据生成 | 合同票据信息随机生成（合同主体/甲乙双方/金额/日期/票据/备注） |
+| **商品信息生成** | 数据生成 | 商品电商数据随机生成（SPU/SKU/类目/价格/SKU/物流等）；支持异常数据场景 |
+| **物流运单生成** | 数据生成 | 随机生成快递运单数据（承运商/运单号/收寄件人/物流轨迹） |
 
 ## 新增工具（插件化）
 
@@ -268,5 +266,3 @@ background.js ── Port 'sidepanel' 广播 ──→ sidepanel.js（eventBus�
 ## License
 
 MIT
-
-
