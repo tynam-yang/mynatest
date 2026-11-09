@@ -544,7 +544,9 @@
 [data-theme="dark"] .tool-panel .te-tip,
 [data-theme="dark"] .tool-panel .pv-toolbar,
 [data-theme="dark"] .tool-panel .b64-section,
-[data-theme="dark"] .tool-panel .b64-toolbar {
+[data-theme="dark"] .tool-panel .b64-toolbar,
+[data-theme="dark"] .tool-panel .md5-section,
+[data-theme="dark"] .tool-panel .md5-toolbar {
   background: #252535 !important;
   color: #e0e0e8;
 }
@@ -8792,5 +8794,156 @@ html, body {
 }
 
 [data-theme="dark"] .tool-panel .b64-status {
+  color: #9a9ab0;
+}
+
+/* ========== MD5 Tool ========== */
+.md5-section {
+  margin-bottom: 10px;
+}
+
+.md5-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 4px;
+}
+
+.md5-textarea {
+  width: 100%;
+  height: 140px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+  resize: vertical;
+  background: var(--bg-secondary);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.md5-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.md5-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0 10px;
+  flex-wrap: wrap;
+}
+
+.md5-options {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.md5-option {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+.md5-option input[type="radio"],
+.md5-option input[type="checkbox"] {
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.md5-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.md5-btns .btn {
+  padding: 7px 12px;
+  font-size: 12px;
+}
+
+.md5-result-wrap {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.md5-result {
+  flex: 1;
+  min-height: 36px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+  background: var(--bg-secondary);
+  color: var(--text);
+  word-break: break-all;
+}
+
+.md5-result:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.md5-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.md5-status {
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+.md5-len {
+  font-size: 11px;
+  color: var(--text-light);
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* MD5 Tool - 深色模式 */
+[data-theme="dark"] .tool-panel .md5-label {
+  color: #c7c7d6;
+}
+
+[data-theme="dark"] .tool-panel .md5-textarea {
+  background: #2a2a3c;
+  color: #e0e0e8;
+  border-color: #3a3a4d;
+}
+
+[data-theme="dark"] .tool-panel .md5-textarea:focus {
+  border-color: #a78bfa;
+}
+
+[data-theme="dark"] .tool-panel .md5-option {
+  color: #c7c7d6;
+}
+
+[data-theme="dark"] .tool-panel .md5-option input[type="radio"],
+[data-theme="dark"] .tool-panel .md5-option input[type="checkbox"] {
+  accent-color: #a78bfa;
+}
+
+[data-theme="dark"] .tool-panel .md5-result {
+  background: #2a2a3c;
+  color: #e0e0e8;
+  border-color: #3a3a4d;
+}
+
+[data-theme="dark"] .tool-panel .md5-status {
+  color: #9a9ab0;
+}
+
+[data-theme="dark"] .tool-panel .md5-len {
   color: #9a9ab0;
 }
