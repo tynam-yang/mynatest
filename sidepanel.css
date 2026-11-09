@@ -542,7 +542,9 @@
 [data-theme="dark"] .tool-panel .fg-wrap,
 [data-theme="dark"] .tool-panel .uag-wrap,
 [data-theme="dark"] .tool-panel .te-tip,
-[data-theme="dark"] .tool-panel .pv-toolbar {
+[data-theme="dark"] .tool-panel .pv-toolbar,
+[data-theme="dark"] .tool-panel .b64-section,
+[data-theme="dark"] .tool-panel .b64-toolbar {
   background: #252535 !important;
   color: #e0e0e8;
 }
@@ -8634,4 +8636,161 @@ html, body {
 }
 [data-theme="dark"] .pf-result-actions {
   border-top-color: #3a3a4d;
+}
+
+/* ========== Base64 Tool ========== */
+.b64-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.b64-tab {
+  flex: 1;
+  padding: 7px 12px;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--text-light);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.b64-tab:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.b64-tab.active {
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+.b64-options {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.b64-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+.b64-option input[type="radio"] {
+  accent-color: var(--primary);
+}
+
+.b64-section {
+  margin-bottom: 8px;
+}
+
+.b64-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 4px;
+}
+
+.b64-textarea {
+  width: 100%;
+  height: 140px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+  resize: vertical;
+  background: var(--bg-secondary);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.b64-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.b64-textarea[readonly] {
+  opacity: 0.85;
+}
+
+.b64-toolbar {
+  display: flex;
+  gap: 6px;
+  margin: 8px 0;
+}
+
+.b64-toolbar .btn {
+  flex: 1;
+  padding: 7px 10px;
+  font-size: 12px;
+}
+
+.b64-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.b64-status {
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+.b64-actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* Base64 Tool - 深色模式 */
+[data-theme="dark"] .tool-panel .b64-tabs {
+  border-color: #3a3a4d;
+}
+
+[data-theme="dark"] .tool-panel .b64-tab {
+  background: #2a2a3c;
+  color: #9a9ab0;
+}
+
+[data-theme="dark"] .tool-panel .b64-tab:hover {
+  background: #3a3a4d;
+  color: #e0e0e8;
+}
+
+[data-theme="dark"] .tool-panel .b64-tab.active {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  color: #1e1e2e;
+}
+
+[data-theme="dark"] .tool-panel .b64-textarea {
+  background: #2a2a3c;
+  color: #e0e0e8;
+  border-color: #3a3a4d;
+}
+
+[data-theme="dark"] .tool-panel .b64-textarea:focus {
+  border-color: #60a5fa;
+}
+
+[data-theme="dark"] .tool-panel .b64-label {
+  color: #c7c7d6;
+}
+
+[data-theme="dark"] .tool-panel .b64-option {
+  color: #c7c7d6;
+}
+
+[data-theme="dark"] .tool-panel .b64-status {
+  color: #9a9ab0;
 }
